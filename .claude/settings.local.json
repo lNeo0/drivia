@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cmd.exe *)",
+      "PowerShell($items = [System.IO.Directory]::GetFileSystemEntries\\(\"C:\\\\Users\\\\maxim\\\\Documents\\\\1-Project\\\\drivia\\\\node_modules\\\\next\"\\); $items | Select-Object -First 20)",
+      "PowerShell($items = [System.IO.Directory]::GetFileSystemEntries\\(\"C:\\\\Users\\\\maxim\\\\Documents\\\\1-Project\\\\drivia\\\\node_modules\\\\next\\\\dist\"\\); $items | Select-Object -First 30)",
+      "PowerShell($items = [System.IO.Directory]::GetFileSystemEntries\\(\"C:\\\\Users\\\\maxim\\\\Documents\\\\1-Project\\\\drivia\\\\node_modules\\\\next\\\\dist\\\\docs\"\\); $items)",
+      "PowerShell($items = [System.IO.Directory]::GetFileSystemEntries\\(\"C:\\\\Users\\\\maxim\\\\Documents\\\\1-Project\\\\drivia\\\\node_modules\\\\next\\\\dist\\\\docs\\\\01-app\"\\); $items)",
+      "PowerShell($items = [System.IO.Directory]::GetFileSystemEntries\\(\"C:\\\\Users\\\\maxim\\\\Documents\\\\1-Project\\\\drivia\\\\node_modules\\\\next\\\\dist\\\\docs\\\\01-app\\\\03-api-reference\"\\); $items)",
+      "PowerShell($items = [System.IO.Directory]::GetFileSystemEntries\\(\"C:\\\\Users\\\\maxim\\\\Documents\\\\1-Project\\\\drivia\\\\node_modules\\\\next\\\\dist\\\\docs\\\\01-app\\\\03-api-reference\\\\03-file-conventions\"\\); $items)",
+      "Read(//mnt/c/Users/maxim/Documents/1-Project/**)",
+      "Bash(npm run *)",
+      "PowerShell(Set-Location \"C:\\\\Users\\\\maxim\\\\Documents\\\\1-Project\\\\drivia\"; $env:PATH = $env:PATH + \";C:\\\\Program Files\\\\nodejs\"; node --version; npx --version)",
+      "PowerShell(node node_modules/next/dist/bin/next build 2>&1 | Select-Object -Last 30)",
+      "PowerShell(npm run *)",
+      "PowerShell(Get-Process *)",
+      "PowerShell(node -e \"const pkg = require\\('./package.json'\\); console.log\\(JSON.stringify\\({tailwindcss: pkg.dependencies?.tailwindcss || pkg.devDependencies?.tailwindcss, 'next-themes': pkg.dependencies?.['next-themes'] || pkg.devDependencies?.['next-themes']}, null, 2\\)\\)\")",
+      "PowerShell(npm install *)",
+      "PowerShell(node -e \"require\\('next-themes'\\); console.log\\('ok'\\)\")"
+    ]
+  }
+}

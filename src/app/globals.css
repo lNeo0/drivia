@@ -1,0 +1,137 @@
+@import "tailwindcss";
+
+/* Dark mode variant — triggered by .dark on <html> */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ─── Semantic tokens — light mode (default) ─── */
+:root {
+  --bg-base:        #F8F5F0;
+  --bg-surface:     #FFFFFF;
+  --bg-elevated:    #F2EDE6;
+  --bg-subtle:      #EAE4DB;
+  --border-default: #DDD6CC;
+  --border-strong:  #C8BFB3;
+  --text-primary:   #1A1612;
+  --text-secondary: #6B5A45;
+  --text-muted:     #9C8E80;
+  --accent-gold:       #A8732A;
+  --accent-gold-light: #C9A84C;
+  --accent-gold-dim:   #F0E0C0;
+  --accent-gold-glow:  #C9A84C18;
+  --success:  #2E7D52;
+  --warning:  #B8741A;
+  --danger:   #B03020;
+  --info:     #2E6A99;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+  --shadow-md: 0 8px 24px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-lg: 0 20px 60px rgba(0,0,0,0.18), 0 4px 16px rgba(0,0,0,0.10);
+  --shadow-gold: 0 0 20px var(--accent-gold-glow), 0 0 60px var(--accent-gold-glow);
+}
+
+/* ─── Dark mode overrides ─── */
+.dark {
+  --bg-base:        #0D0D0D;
+  --bg-surface:     #141414;
+  --bg-elevated:    #1C1C1C;
+  --bg-subtle:      #242424;
+  --border-default: #2A2A2A;
+  --border-strong:  #3A3A3A;
+  --text-primary:   #F5F0E8;
+  --text-secondary: #A89880;
+  --text-muted:     #6B5F52;
+  --accent-gold:       #C9A84C;
+  --accent-gold-light: #E8C97A;
+  --accent-gold-dim:   #7A5E2A;
+  --accent-gold-glow:  #C9A84C26;
+  --success:  #4CAF7A;
+  --warning:  #D48C3A;
+  --danger:   #C0442E;
+  --info:     #4A8FBF;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.25);
+  --shadow-md: 0 8px 24px rgba(0,0,0,0.35), 0 2px 8px rgba(0,0,0,0.20);
+  --shadow-lg: 0 20px 60px rgba(0,0,0,0.50), 0 4px 16px rgba(0,0,0,0.30);
+  --shadow-gold: 0 0 20px var(--accent-gold-glow), 0 0 60px var(--accent-gold-glow);
+}
+
+/* ─── Tailwind color utilities from CSS vars ─── */
+@theme inline {
+  /* Backgrounds */
+  --color-base:     var(--bg-base);
+  --color-surface:  var(--bg-surface);
+  --color-elevated: var(--bg-elevated);
+  --color-subtle:   var(--bg-subtle);
+  /* Borders */
+  --color-border:        var(--border-default);
+  --color-border-strong: var(--border-strong);
+  /* Text */
+  --color-primary:   var(--text-primary);
+  --color-secondary: var(--text-secondary);
+  --color-muted:     var(--text-muted);
+  /* Accent */
+  --color-gold:       var(--accent-gold);
+  --color-gold-light: var(--accent-gold-light);
+  --color-gold-dim:   var(--accent-gold-dim);
+  --color-gold-glow:  var(--accent-gold-glow);
+  /* Status */
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger:  var(--danger);
+  --color-info:    var(--info);
+  /* Fonts */
+  --font-display: var(--font-cormorant);
+  --font-body:    var(--font-dm-sans);
+  --font-sans:    var(--font-dm-sans);
+}
+
+/* ─── Global base styles ─── */
+html {
+  scroll-behavior: smooth;
+  /* dark class applied immediately to avoid flash */
+}
+
+body {
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 300ms ease, color 300ms ease;
+}
+
+/* ─── Scrollbar ─── */
+*, *::before, *::after {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* ─── Focus ring ─── */
+:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-gold-glow), 0 0 0 1px var(--accent-gold);
+}
+
+/* ─── Decorative grain overlay (dark only) ─── */
+.dark .grain-overlay {
+  display: block;
+}
+.grain-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 128px;
+}
+
+/* ─── Section fade separator ─── */
+.sep-fade {
+  height: 1px;
+  background: var(--border-default);
+  mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
+}
