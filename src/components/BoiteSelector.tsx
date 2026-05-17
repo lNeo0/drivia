@@ -4,11 +4,11 @@ import { useState } from 'react'
 import type { Boite } from '@/types'
 
 const boiteTypeLabel: Record<string, string> = {
-  manuelle: 'Manuelle',
-  dsg: 'DSG',
-  edc: 'EDC',
+  manuelle:    'Manuelle',
+  dsg:         'DSG',
+  edc:         'EDC',
   automatique: 'Automatique',
-  cvt: 'CVT',
+  cvt:         'CVT',
 }
 
 type Props = {
@@ -21,12 +21,7 @@ type Props = {
 }
 
 export default function BoiteSelector({
-  boites,
-  defaultSlug,
-  puissance,
-  couple,
-  consommationBase,
-  consommationReelle,
+  boites, defaultSlug, puissance, couple, consommationBase, consommationReelle,
 }: Props) {
   const defaultIdx = Math.max(0, boites.findIndex((b) => b.slug === defaultSlug))
   const [selectedIdx, setSelectedIdx] = useState(defaultIdx)
@@ -35,31 +30,53 @@ export default function BoiteSelector({
   const conso = selectedBoite.consommationOfficielle ?? consommationBase
 
   const specs = [
-    { label: 'Puissance', value: `${puissance}`, unit: 'ch', available: true },
-    { label: 'Couple', value: couple ? `${couple}` : null, unit: 'Nm', available: !!couple },
-    { label: 'Conso. officielle', value: conso.toFixed(1), unit: 'L/100', available: true },
-    { label: 'Conso. réelle est.', value: consommationReelle?.toFixed(1) ?? null, unit: 'L/100', available: !!consommationReelle },
+    { label: 'Puissance',      value: `${puissance}`,                  unit: 'ch',    available: true },
+    { label: 'Couple',         value: couple ? `${couple}` : null,     unit: 'Nm',    available: !!couple },
+    { label: 'Conso. off.',    value: conso.toFixed(1),                 unit: 'L/100', available: true },
+    { label: 'Conso. réelle',  value: consommationReelle?.toFixed(1) ?? null, unit: 'L/100', available: !!consommationReelle },
   ]
 
   return (
     <div className="space-y-6">
-      {/* Sélecteur */}
+      {/* Gearbox selector */}
       {boites.length > 1 ? (
         <div>
-          <p className="text-xs text-zinc-600 mb-3">Boîte de vitesses</p>
-          <div className="flex gap-2 flex-wrap">
+          <p className="text-[0.75rem] font-semibold uppercase tracking-[0.08em] mb-3
+            font-[family-name:var(--font-dm-sans)]"
+            style={{ color: 'var(--text-muted)' }}>
+            Boîte de vitesses
+          </p>
+          <div className="inline-flex gap-1 p-1 rounded-[10px]"
+            style={{ background: 'var(--bg-elevated)' }}>
             {boites.map((b, idx) => (
               <button
                 key={b.slug}
                 onClick={() => setSelectedIdx(idx)}
-                className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer
-                  ${idx === selectedIdx
-                    ? 'bg-accent text-white shadow-lg shadow-accent/20'
-                    : 'bg-raised text-zinc-500 hover:text-zinc-200'
-                  }`}
+                className="h-[38px] px-5 rounded-[7px] text-[0.875rem] font-semibold
+                  cursor-pointer transition-all duration-150
+                  font-[family-name:var(--font-dm-sans)]"
+                style={idx === selectedIdx ? {
+                  background: 'var(--accent-gold)',
+                  color: '#0D0D0D',
+                } : {
+                  background: 'transparent',
+                  color: 'var(--text-secondary)',
+                }}
+                onMouseEnter={(e) => {
+                  if (idx !== selectedIdx) {
+                    (e.currentTarget as HTMLElement).style.background = 'var(--bg-subtle)'
+                    ;(e.currentTarget as HTMLElement).style.color = 'var(--text-primary)'
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (idx !== selectedIdx) {
+                    (e.currentTarget as HTMLElement).style.background = 'transparent'
+                    ;(e.currentTarget as HTMLElement).style.color = 'var(--text-secondary)'
+                  }
+                }}
               >
                 {b.designation}
-                <span className={`ml-1.5 font-normal text-xs ${idx === selectedIdx ? 'text-white/60' : 'text-zinc-700'}`}>
+                <span className="ml-1.5 font-normal text-[0.75rem] opacity-60">
                   {boiteTypeLabel[b.type]}
                 </span>
               </button>
@@ -67,22 +84,33 @@ export default function BoiteSelector({
           </div>
         </div>
       ) : (
-        <div className="flex items-center gap-2 text-sm">
-          <span className="text-zinc-600">Boîte</span>
-          <span className="font-semibold text-zinc-300">{boites[0].designation}</span>
-          <span className="text-zinc-600">({boiteTypeLabel[boites[0].type]})</span>
+        <div className="flex items-center gap-2 text-[0.875rem] font-[family-name:var(--font-dm-sans)]">
+          <span style={{ color: 'var(--text-secondary)' }}>Boîte</span>
+          <span className="font-semibold" style={{ color: 'var(--text-primary)' }}>
+            {boites[0].designation}
+          </span>
+          <span style={{ color: 'var(--text-muted)' }}>({boiteTypeLabel[boites[0].type]})</span>
         </div>
       )}
 
-      {/* Grille de specs */}
+      {/* Specs grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {specs.map(({ label, value, unit, available }) => (
-          <div key={label} className="bg-raised rounded-2xl p-5 text-center">
-            <p className={`text-3xl font-bold tracking-tight ${available ? 'text-zinc-100' : 'text-zinc-700'}`}>
+          <div key={label} className="rounded-[12px] p-5 text-center"
+            style={{ background: 'var(--bg-elevated)' }}>
+            <p className="font-[family-name:var(--font-cormorant)] text-[2rem] font-bold
+              leading-none tabular-nums"
+              style={{ color: available && value ? 'var(--accent-gold)' : 'var(--text-muted)' }}>
               {available && value ? value : '—'}
             </p>
-            <p className="text-xs text-zinc-500 mt-1.5">{unit}</p>
-            <p className="text-[11px] text-zinc-600 mt-1 leading-tight">{label}</p>
+            <p className="text-[0.6875rem] mt-1.5 font-[family-name:var(--font-dm-sans)]"
+              style={{ color: 'var(--text-muted)' }}>
+              {unit}
+            </p>
+            <p className="text-[0.6875rem] mt-1 leading-tight font-[family-name:var(--font-dm-sans)]"
+              style={{ color: 'var(--text-secondary)' }}>
+              {label}
+            </p>
           </div>
         ))}
       </div>

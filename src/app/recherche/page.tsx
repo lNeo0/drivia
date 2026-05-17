@@ -12,7 +12,7 @@ export default async function RecherchePage({
   const resultats = rechercherVoitures(q)
 
   return (
-    <div className="min-h-screen bg-base text-zinc-100">
+    <div className="min-h-screen" style={{ background: 'var(--bg-base)', color: 'var(--text-primary)' }}>
       <NavBar />
 
       <div className="max-w-3xl mx-auto px-6 py-12">
@@ -20,11 +20,14 @@ export default async function RecherchePage({
           <SearchBar defaultValue={q} />
         </div>
 
-        <p className="text-sm text-zinc-600 mb-6">
+        <p className="text-[0.875rem] mb-6 font-[family-name:var(--font-dm-sans)]"
+          style={{ color: 'var(--text-secondary)' }}>
           {q ? (
             resultats.length > 0 ? (
               <>
-                <span className="text-zinc-300 font-medium">{resultats.length}</span>{' '}
+                <span style={{ color: 'var(--text-primary)' }} className="font-medium">
+                  {resultats.length}
+                </span>{' '}
                 résultat{resultats.length > 1 ? 's' : ''} pour &ldquo;{q}&rdquo;
               </>
             ) : (
@@ -32,7 +35,10 @@ export default async function RecherchePage({
             )
           ) : (
             <>
-              <span className="text-zinc-300 font-medium">{voitures.length}</span> voitures disponibles
+              <span style={{ color: 'var(--text-primary)' }} className="font-medium">
+                {voitures.length}
+              </span>{' '}
+              voitures disponibles
             </>
           )}
         </p>
@@ -45,8 +51,12 @@ export default async function RecherchePage({
           </div>
         ) : (
           <div className="text-center py-24">
-            <p className="text-zinc-500 text-lg mb-2">Aucune voiture trouvée.</p>
-            <p className="text-zinc-700 text-sm">
+            <p className="text-[1.125rem] mb-2 font-[family-name:var(--font-cormorant)] font-semibold"
+              style={{ color: 'var(--text-secondary)' }}>
+              Aucune voiture trouvée.
+            </p>
+            <p className="text-[0.875rem] font-[family-name:var(--font-dm-sans)]"
+              style={{ color: 'var(--text-muted)' }}>
               Essayez avec une marque comme &ldquo;Renault&rdquo; ou un modèle comme &ldquo;Golf&rdquo;.
             </p>
           </div>

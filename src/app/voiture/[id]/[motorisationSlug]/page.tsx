@@ -8,21 +8,26 @@ export async function generateStaticParams() {
   return getAllMotorisationParams()
 }
 
-const noteConfig: Record<number, { label: string; stars: string; bg: string; border: string; text: string }> = {
-  5: { label: 'Excellente', stars: '★★★★★', bg: 'bg-orange-950/50', border: 'border-orange-900/30', text: 'text-accent' },
-  4: { label: 'Bonne', stars: '★★★★☆', bg: 'bg-orange-950/50', border: 'border-orange-900/30', text: 'text-accent' },
-  3: { label: 'Moyenne', stars: '★★★☆☆', bg: 'bg-amber-950/50', border: 'border-amber-900/30', text: 'text-amber-400' },
-  2: { label: 'Fragile', stars: '★★☆☆☆', bg: 'bg-orange-950/50', border: 'border-orange-900/30', text: 'text-orange-500' },
-  1: { label: 'Très fragile', stars: '★☆☆☆☆', bg: 'bg-red-950/50', border: 'border-red-900/30', text: 'text-red-500' },
+const scoreConfig: Record<number, { label: string; color: string }> = {
+  5: { label: 'Excellente', color: 'var(--success)' },
+  4: { label: 'Bonne',      color: 'var(--success)' },
+  3: { label: 'Moyenne',    color: 'var(--warning)' },
+  2: { label: 'Fragile',    color: 'var(--warning)' },
+  1: { label: 'Très fragile', color: 'var(--danger)' },
+}
+
+const starsMap: Record<number, string> = {
+  5: '★★★★★', 4: '★★★★☆', 3: '★★★☆☆', 2: '★★☆☆☆', 1: '★☆☆☆☆',
 }
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="mt-14">
-      <div className="flex items-center gap-3 mb-5">
-        <div className="w-1 h-4 bg-accent rounded-full" />
-        <h2 className="text-xs font-semibold text-zinc-600 uppercase tracking-widest">{title}</h2>
-      </div>
+    <section className="mt-12">
+      <p className="text-[0.75rem] font-semibold uppercase tracking-[0.1em] mb-3
+        font-[family-name:var(--font-dm-sans)]"
+        style={{ color: 'var(--text-muted)' }}>
+        {title}
+      </p>
       {children}
     </section>
   )
@@ -45,32 +50,47 @@ export default async function MotorisationPage({
     motorisation.boites.find((b) => b.slug === boiteSlug)?.slug ?? motorisation.boites[0].slug
 
   return (
-    <div className="min-h-screen bg-base text-zinc-100">
+    <div className="min-h-screen" style={{ background: 'var(--bg-base)', color: 'var(--text-primary)' }}>
       <NavBar />
 
       <div className="max-w-3xl mx-auto px-6 py-12">
-        {/* Fil d'ariane */}
-        <nav className="flex items-center gap-2 text-sm text-zinc-600 mb-10">
-          <Link href={`/voiture/${voiture.id}`} className="hover:text-accent transition-colors">
+        {/* Breadcrumb */}
+        <nav className="flex items-center gap-2 text-[0.8125rem] mb-10
+          font-[family-name:var(--font-dm-sans)]"
+          style={{ color: 'var(--text-muted)' }}>
+          <Link href={`/voiture/${voiture.id}`}
+            className="transition-colors duration-150 hover:text-[var(--accent-gold)]"
+            style={{ color: 'var(--text-secondary)' }}>
             {voiture.marque} {voiture.modele}
           </Link>
-          <span className="text-zinc-800">/</span>
-          <span className="text-zinc-400">{motorisation.designation}</span>
+          <span style={{ color: 'var(--accent-gold)' }}>›</span>
+          <span>{motorisation.designation}</span>
         </nav>
 
-        {/* En-tête */}
+        {/* Header */}
         <div>
-          <p className="text-sm text-zinc-600 mb-2">{voiture.segment} · {voiture.annees}</p>
-          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
+          <p className="text-[0.75rem] font-semibold uppercase tracking-[0.1em] mb-3
+            font-[family-name:var(--font-dm-sans)]"
+            style={{ color: 'var(--text-muted)' }}>
+            {voiture.segment} · {voiture.annees}
+          </p>
+          <h1
+            className="font-[family-name:var(--font-cormorant)] font-semibold
+              tracking-[-0.02em] leading-[1.05]"
+            style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', color: 'var(--text-primary)' }}
+          >
             {voiture.marque}{' '}
-            <span className="font-normal text-accent">{voiture.modele}</span>{' '}
-            <span className="text-accent">{motorisation.designation}</span>
+            <em style={{ color: 'var(--accent-gold)', fontStyle: 'italic' }}>{voiture.modele}</em>{' '}
+            <span style={{ color: 'var(--text-secondary)', fontStyle: 'normal', fontWeight: 400 }}>
+              {motorisation.designation}
+            </span>
           </h1>
         </div>
 
         {/* Specs + sélecteur */}
         <Section title="Specs techniques">
-          <div className="rounded-2xl bg-surface border border-rim p-6">
+          <div className="rounded-[16px] p-6 border"
+            style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-default)', boxShadow: 'var(--shadow-sm)' }}>
             <BoiteSelector
               boites={motorisation.boites}
               defaultSlug={defaultBoiteSlug}
@@ -86,25 +106,42 @@ export default async function MotorisationPage({
         {motorisation.fiabilite ? (
           <Section title="Fiabilité de cette motorisation">
             {(() => {
-              const f = noteConfig[motorisation.fiabilite.note]
+              const f = scoreConfig[motorisation.fiabilite.note]
               return (
-                <div className={`rounded-2xl border ${f.border} ${f.bg} p-6 space-y-5`}>
-                  <div className="flex items-center gap-6">
-                    <span className={`text-7xl font-bold leading-none ${f.text}`}>
+                <div className="rounded-[16px] p-6 border"
+                  style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-default)', boxShadow: 'var(--shadow-sm)' }}>
+                  <div className="flex items-center gap-6 mb-5">
+                    <span
+                      className="font-[family-name:var(--font-cormorant)] font-bold leading-none tabular-nums"
+                      style={{ fontSize: '4.5rem', color: f.color }}
+                    >
                       {motorisation.fiabilite.note}
                     </span>
                     <div>
-                      <p className={`text-lg font-bold ${f.text}`}>{f.label} fiabilité</p>
-                      <p className={`text-base mt-1 tracking-wide ${f.text} opacity-60`}>{f.stars}</p>
+                      <p className="text-[1.125rem] font-semibold font-[family-name:var(--font-dm-sans)]"
+                        style={{ color: f.color }}>
+                        {f.label} fiabilité
+                      </p>
+                      <p className="text-[0.875rem] mt-1 tracking-wide"
+                        style={{ color: f.color, opacity: 0.5 }}>
+                        {starsMap[motorisation.fiabilite.note]}
+                      </p>
                     </div>
                   </div>
-                  <p className="text-zinc-300 text-sm leading-relaxed">{motorisation.fiabilite.avis}</p>
+                  <p className="text-[0.9375rem] leading-relaxed mb-5 font-[family-name:var(--font-dm-sans)]"
+                    style={{ color: 'var(--text-secondary)' }}>
+                    {motorisation.fiabilite.avis}
+                  </p>
                   {motorisation.fiabilite.problemesConnus.length > 0 && (
-                    <ul className="space-y-3 pt-4 border-t border-zinc-800">
+                    <ul className="space-y-3 pt-5"
+                      style={{ borderTop: '1px solid var(--border-default)' }}>
                       {motorisation.fiabilite.problemesConnus.map((p, i) => (
-                        <li key={i} className="flex gap-3 text-sm">
-                          <span className="shrink-0 mt-px text-red-500">✕</span>
-                          <span className="text-zinc-300 leading-relaxed">{p}</span>
+                        <li key={i} className="flex gap-3 text-[0.9375rem]">
+                          <span className="shrink-0 mt-0.5" style={{ color: 'var(--danger)' }}>✕</span>
+                          <span className="leading-relaxed font-[family-name:var(--font-dm-sans)]"
+                            style={{ color: 'var(--text-secondary)' }}>
+                            {p}
+                          </span>
                         </li>
                       ))}
                     </ul>
@@ -115,14 +152,16 @@ export default async function MotorisationPage({
           </Section>
         ) : (
           <Section title="Fiabilité de cette motorisation">
-            <div className="rounded-2xl bg-surface border border-rim p-8 text-center">
-              <p className="text-zinc-600 text-sm mb-3">
+            <div className="rounded-[16px] p-8 text-center border"
+              style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-default)' }}>
+              <p className="text-[0.9375rem] mb-3 font-[family-name:var(--font-dm-sans)]"
+                style={{ color: 'var(--text-muted)' }}>
                 Données détaillées non disponibles pour cette motorisation.
               </p>
-              <Link
-                href={`/voiture/${voiture.id}`}
-                className="text-sm text-accent/70 hover:text-accent transition-colors"
-              >
+              <Link href={`/voiture/${voiture.id}`}
+                className="text-[0.875rem] transition-colors duration-150
+                  font-[family-name:var(--font-dm-sans)]"
+                style={{ color: 'var(--accent-gold)' }}>
                 Voir la fiabilité générale du modèle →
               </Link>
             </div>
@@ -132,36 +171,54 @@ export default async function MotorisationPage({
         {/* Cotes marché */}
         {motorisation.cotes && motorisation.cotes.length > 0 && (
           <Section title="Cotes marché">
-            <div className="rounded-2xl bg-surface border border-rim overflow-hidden">
-              <div className="grid grid-cols-4 border-b border-rim">
+            <div className="rounded-[16px] border overflow-hidden"
+              style={{ borderColor: 'var(--border-default)' }}>
+              {/* Table header */}
+              <div className="grid grid-cols-4 border-b"
+                style={{ background: 'var(--bg-elevated)', borderColor: 'var(--border-strong)' }}>
                 {['Tranche', 'Abordable', 'Correct', 'Bon état'].map((h, i) => (
-                  <div
-                    key={h}
-                    className={`px-5 py-3.5 text-xs font-semibold text-zinc-600 uppercase tracking-wider ${i > 0 ? 'text-center' : ''}`}
-                  >
+                  <div key={h}
+                    className={`px-5 py-3.5 text-[0.75rem] font-semibold uppercase tracking-[0.08em]
+                      font-[family-name:var(--font-dm-sans)] ${i > 0 ? 'text-center' : ''}`}
+                    style={{ color: 'var(--text-muted)' }}>
                     {h}
                   </div>
                 ))}
               </div>
               {motorisation.cotes.map((c, i) => (
-                <div
-                  key={i}
-                  className={`grid grid-cols-4 border-b border-rim last:border-0 ${i % 2 === 1 ? 'bg-raised' : ''}`}
+                <div key={i}
+                  className="grid grid-cols-4 border-b last:border-0 transition-colors duration-100"
+                  style={{
+                    background: i % 2 === 1 ? 'var(--bg-elevated)' : 'var(--bg-surface)',
+                    borderColor: 'var(--border-default)',
+                  }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'var(--bg-subtle)' }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = i % 2 === 1 ? 'var(--bg-elevated)' : 'var(--bg-surface)' }}
                 >
-                  <div className="px-5 py-4 text-sm text-zinc-400">{c.label}</div>
-                  <div className="px-5 py-4 text-sm text-center text-zinc-600">
+                  <div className="px-5 py-4 text-[0.875rem] font-[family-name:var(--font-dm-sans)]"
+                    style={{ color: 'var(--text-secondary)' }}>
+                    {c.label}
+                  </div>
+                  <div className="px-5 py-4 text-center font-[family-name:var(--font-cormorant)]
+                    text-[0.9375rem] tabular-nums"
+                    style={{ color: 'var(--danger)' }}>
                     {c.prixBas.toLocaleString('fr-FR')} €
                   </div>
-                  <div className="px-5 py-4 text-sm text-center font-semibold text-zinc-200">
+                  <div className="px-5 py-4 text-center font-[family-name:var(--font-cormorant)]
+                    text-[0.9375rem] font-semibold tabular-nums"
+                    style={{ color: 'var(--warning)' }}>
                     {c.prixMoyen.toLocaleString('fr-FR')} €
                   </div>
-                  <div className="px-5 py-4 text-sm text-center text-zinc-600">
+                  <div className="px-5 py-4 text-center font-[family-name:var(--font-cormorant)]
+                    text-[0.9375rem] tabular-nums"
+                    style={{ color: 'var(--success)' }}>
                     {c.prixHaut.toLocaleString('fr-FR')} €
                   </div>
                 </div>
               ))}
             </div>
-            <p className="mt-2.5 text-xs text-zinc-700">
+            <p className="mt-2.5 text-[0.75rem] font-[family-name:var(--font-dm-sans)]"
+              style={{ color: 'var(--text-muted)' }}>
               Cotes indicatives pour la France. Prix à titre de référence uniquement.
             </p>
           </Section>
@@ -169,34 +226,59 @@ export default async function MotorisationPage({
 
         {/* Checklist */}
         <Section title="Checklist de visite">
-          <div className="rounded-2xl bg-surface border border-rim overflow-hidden">
+          <div className="rounded-[16px] border overflow-hidden"
+            style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-default)' }}>
             {motorisation.checklistSpecifique && motorisation.checklistSpecifique.length > 0 && (
-              <div className="bg-accent/5 border-b border-accent/15 p-6">
-                <p className="text-xs font-semibold text-accent uppercase tracking-wider mb-4">
+              <div className="p-6 border-b"
+                style={{ background: 'var(--accent-gold-glow)', borderColor: 'var(--accent-gold-dim)' }}>
+                <p className="text-[0.75rem] font-semibold uppercase tracking-[0.1em] mb-4
+                  font-[family-name:var(--font-dm-sans)]"
+                  style={{ color: 'var(--accent-gold)' }}>
                   Points critiques — spécifiques à ce moteur
                 </p>
                 <ul className="space-y-3">
                   {motorisation.checklistSpecifique.map((item, i) => (
-                    <li key={i} className="flex gap-3 text-sm">
-                      <span className="shrink-0 w-5 h-5 rounded-full bg-accent/20 flex items-center justify-center mt-px">
-                        <span className="text-accent text-xs font-bold leading-none">!</span>
+                    <li key={i} className="flex gap-3 text-[0.9375rem]">
+                      <span
+                        className="shrink-0 w-5 h-5 rounded-full flex items-center justify-center mt-0.5
+                          text-[0.6875rem] font-bold"
+                        style={{ background: 'var(--accent-gold-dim)', color: 'var(--accent-gold)' }}
+                      >
+                        !
                       </span>
-                      <span className="text-zinc-200 leading-relaxed">{item}</span>
+                      <span className="leading-relaxed font-[family-name:var(--font-dm-sans)]"
+                        style={{ color: 'var(--text-secondary)' }}>
+                        {item}
+                      </span>
                     </li>
                   ))}
                 </ul>
               </div>
             )}
             <div className="p-6">
-              <p className="text-xs text-zinc-600 mb-5">Points génériques de vérification</p>
+              <p className="text-[0.75rem] font-semibold uppercase tracking-[0.08em] mb-5
+                font-[family-name:var(--font-dm-sans)]"
+                style={{ color: 'var(--text-muted)' }}>
+                Points génériques de vérification
+              </p>
               <ul className="space-y-3">
                 {voiture.checklist.map((item, i) => (
-                  <li key={i} className="flex gap-4 text-sm">
-                    <span className="shrink-0 w-6 h-6 rounded-lg bg-raised border border-rim-strong
-                      flex items-center justify-center text-zinc-600 text-xs font-medium">
+                  <li key={i} className="flex gap-4 text-[0.9375rem]">
+                    <span
+                      className="shrink-0 w-6 h-6 rounded-[6px] flex items-center justify-center
+                        text-[0.75rem] font-semibold border font-[family-name:var(--font-dm-sans)]"
+                      style={{
+                        background: 'var(--bg-elevated)',
+                        borderColor: 'var(--border-strong)',
+                        color: 'var(--text-muted)',
+                      }}
+                    >
                       {i + 1}
                     </span>
-                    <span className="text-zinc-500 leading-relaxed">{item}</span>
+                    <span className="leading-relaxed font-[family-name:var(--font-dm-sans)]"
+                      style={{ color: 'var(--text-secondary)' }}>
+                      {item}
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -205,12 +287,24 @@ export default async function MotorisationPage({
         </Section>
 
         {/* Footer nav */}
-        <div className="mt-14 pt-8 border-t border-rim flex items-center justify-between text-sm">
-          <Link href={`/voiture/${voiture.id}`} className="text-zinc-600 hover:text-accent transition-colors">
+        <div className="mt-12 pt-8 flex items-center justify-between text-[0.875rem]
+          font-[family-name:var(--font-dm-sans)]"
+          style={{ borderTop: '1px solid var(--border-default)' }}>
+          <Link href={`/voiture/${voiture.id}`}
+            className="transition-colors duration-150"
+            style={{ color: 'var(--text-muted)' }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = 'var(--accent-gold)' }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = 'var(--text-muted)' }}
+          >
             ← {voiture.marque} {voiture.modele}
           </Link>
-          <Link href="/recherche" className="text-zinc-600 hover:text-accent transition-colors">
-            Toutes les voitures
+          <Link href="/recherche"
+            className="transition-colors duration-150"
+            style={{ color: 'var(--text-muted)' }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = 'var(--accent-gold)' }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = 'var(--text-muted)' }}
+          >
+            Toutes les voitures →
           </Link>
         </div>
       </div>

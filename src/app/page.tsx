@@ -9,46 +9,101 @@ export default function HomePage() {
   const vedettes = voitures.filter((v) => v.fiabilite.note >= 4).slice(0, 3)
 
   return (
-    <div className="min-h-screen bg-base text-zinc-100">
+    <div className="min-h-screen" style={{ background: 'var(--bg-base)', color: 'var(--text-primary)' }}>
       <NavBar />
 
       {/* Hero */}
-      <section className="max-w-2xl mx-auto px-6 pt-28 pb-24 text-center">
-        <div className="inline-flex items-center gap-2 bg-accent/10 border border-accent/15 rounded-full px-4 py-1.5 mb-8">
-          <span className="w-1.5 h-1.5 rounded-full bg-accent" />
-          <span className="text-xs font-medium text-accent tracking-wide">Guide achat voiture d'occasion</span>
-        </div>
+      <section className="relative max-w-2xl mx-auto px-6 pt-28 pb-24 text-center overflow-hidden">
+        {/* Radial glow */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'radial-gradient(ellipse 800px 500px at 50% 0%, var(--accent-gold-glow), transparent)',
+          }}
+          aria-hidden
+        />
 
-        <h1 className="text-5xl sm:text-6xl font-bold tracking-tight leading-[1.1] mb-6">
-          Achetez malin,{' '}
-          <span className="text-accent">conduisez confiant</span>
-        </h1>
+        <div className="relative z-10">
+          <div
+            className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-8
+              border font-[family-name:var(--font-dm-sans)]"
+            style={{
+              background: 'var(--accent-gold-dim)',
+              borderColor: 'var(--accent-gold)',
+              color: 'var(--accent-gold)',
+            }}
+          >
+            <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--accent-gold)' }} />
+            <span className="text-[0.6875rem] font-semibold uppercase tracking-[0.1em]">
+              Guide achat voiture d'occasion
+            </span>
+          </div>
 
-        <p className="text-lg text-zinc-500 leading-relaxed mb-12 max-w-md mx-auto">
-          Fiabilité, pannes fréquentes, cotes du marché et checklist de visite — pour chaque modèle.
-        </p>
+          <h1
+            className="font-[family-name:var(--font-cormorant)] font-semibold
+              tracking-[-0.02em] leading-[1.05] mb-6"
+            style={{ fontSize: 'clamp(2.5rem, 6vw, 4rem)', color: 'var(--text-primary)' }}
+          >
+            Achetez malin,{' '}
+            <em style={{ color: 'var(--accent-gold)', fontStyle: 'italic' }}>conduisez confiant</em>
+          </h1>
 
-        <SearchBar large />
+          <p
+            className="text-[1.0625rem] leading-relaxed mb-12 max-w-md mx-auto
+              font-[family-name:var(--font-dm-sans)]"
+            style={{ color: 'var(--text-secondary)' }}
+          >
+            Fiabilité, pannes fréquentes, cotes du marché et checklist de visite — pour chaque modèle.
+          </p>
 
-        <div className="mt-6 flex flex-wrap justify-center gap-2">
-          {marquesMises.map((marque) => (
-            <a
-              key={marque}
-              href={`/recherche?q=${encodeURIComponent(marque)}`}
-              className="text-sm px-4 py-1.5 rounded-full bg-surface border border-rim text-zinc-500
-                hover:border-accent/30 hover:text-accent transition-all duration-200"
-            >
-              {marque}
-            </a>
-          ))}
+          <SearchBar large />
+
+          <div className="mt-6 flex flex-wrap justify-center gap-2">
+            {marquesMises.map((marque) => (
+              <a
+                key={marque}
+                href={`/recherche?q=${encodeURIComponent(marque)}`}
+                className="text-[0.8125rem] px-4 py-1.5 rounded-full border
+                  font-[family-name:var(--font-dm-sans)] font-medium
+                  transition-all duration-150"
+                style={{
+                  background: 'var(--bg-surface)',
+                  borderColor: 'var(--border-default)',
+                  color: 'var(--text-secondary)',
+                }}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget as HTMLElement
+                  el.style.borderColor = 'var(--accent-gold-dim)'
+                  el.style.background = 'var(--bg-subtle)'
+                  el.style.color = 'var(--accent-gold)'
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget as HTMLElement
+                  el.style.borderColor = 'var(--border-default)'
+                  el.style.background = 'var(--bg-surface)'
+                  el.style.color = 'var(--text-secondary)'
+                }}
+              >
+                {marque}
+              </a>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Meilleures fiabilités */}
+      {/* Section vedettes */}
       <section className="max-w-3xl mx-auto px-6 pb-28">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-1 h-4 bg-accent rounded-full" />
-          <h2 className="text-xs font-semibold text-zinc-600 uppercase tracking-widest">
+        <div className="mb-8">
+          <p className="text-[0.75rem] font-semibold uppercase tracking-[0.1em] mb-2
+            font-[family-name:var(--font-dm-sans)]"
+            style={{ color: 'var(--text-muted)' }}>
+            Sélection
+          </p>
+          <h2
+            className="font-[family-name:var(--font-cormorant)] font-semibold
+              tracking-[-0.01em]"
+            style={{ fontSize: '2.25rem', color: 'var(--text-primary)' }}
+          >
             Meilleures fiabilités
           </h2>
         </div>
@@ -62,9 +117,13 @@ export default function HomePage() {
         <div className="mt-8 text-center">
           <a
             href="/recherche"
-            className="inline-flex items-center gap-1.5 text-sm text-zinc-600 hover:text-accent transition-colors"
+            className="inline-flex items-center gap-1.5 text-[0.875rem] font-medium
+              font-[family-name:var(--font-dm-sans)] transition-colors duration-150"
+            style={{ color: 'var(--text-secondary)' }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = 'var(--accent-gold)' }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = 'var(--text-secondary)' }}
           >
-            Voir toutes les voitures <span>→</span>
+            Voir toutes les voitures →
           </a>
         </div>
       </section>

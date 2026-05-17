@@ -8,21 +8,26 @@ export async function generateStaticParams() {
   return voitures.map((v) => ({ id: v.id }))
 }
 
-const noteConfig: Record<number, { label: string; stars: string; bg: string; border: string; text: string }> = {
-  5: { label: 'Excellente fiabilité', stars: '★★★★★', bg: 'bg-orange-950/50', border: 'border-orange-900/30', text: 'text-accent' },
-  4: { label: 'Bonne fiabilité', stars: '★★★★☆', bg: 'bg-orange-950/50', border: 'border-orange-900/30', text: 'text-accent' },
-  3: { label: 'Fiabilité moyenne', stars: '★★★☆☆', bg: 'bg-amber-950/50', border: 'border-amber-900/30', text: 'text-amber-400' },
-  2: { label: 'Fiabilité passable', stars: '★★☆☆☆', bg: 'bg-orange-950/50', border: 'border-orange-900/30', text: 'text-orange-500' },
-  1: { label: 'Fiabilité fragile', stars: '★☆☆☆☆', bg: 'bg-red-950/50', border: 'border-red-900/30', text: 'text-red-500' },
+const scoreConfig: Record<number, { label: string; bg: string; color: string }> = {
+  5: { label: 'Excellente fiabilité', bg: 'var(--success)',  color: 'var(--success)'  },
+  4: { label: 'Bonne fiabilité',      bg: 'var(--success)',  color: 'var(--success)'  },
+  3: { label: 'Fiabilité moyenne',    bg: 'var(--warning)',  color: 'var(--warning)'  },
+  2: { label: 'Fiabilité passable',   bg: 'var(--warning)',  color: 'var(--warning)'  },
+  1: { label: 'Fiabilité fragile',    bg: 'var(--danger)',   color: 'var(--danger)'   },
+}
+
+const starsMap: Record<number, string> = {
+  5: '★★★★★', 4: '★★★★☆', 3: '★★★☆☆', 2: '★★☆☆☆', 1: '★☆☆☆☆',
 }
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="mt-14">
-      <div className="flex items-center gap-3 mb-5">
-        <div className="w-1 h-4 bg-accent rounded-full" />
-        <h2 className="text-xs font-semibold text-zinc-600 uppercase tracking-widest">{title}</h2>
-      </div>
+    <section className="mt-12">
+      <p className="text-[0.75rem] font-semibold uppercase tracking-[0.1em] mb-2
+        font-[family-name:var(--font-dm-sans)]"
+        style={{ color: 'var(--text-muted)' }}>
+        {title}
+      </p>
       {children}
     </section>
   )
@@ -33,61 +38,96 @@ export default async function VoiturePage({ params }: { params: Promise<{ id: st
   const voiture = getVoitureById(id)
   if (!voiture) notFound()
 
-  const note = noteConfig[voiture.fiabilite.note]
+  const score = scoreConfig[voiture.fiabilite.note]
   const puissances = voiture.motorisations.map((m) => m.puissance)
   const pMin = Math.min(...puissances)
   const pMax = Math.max(...puissances)
 
   return (
-    <div className="min-h-screen bg-base text-zinc-100">
+    <div className="min-h-screen" style={{ background: 'var(--bg-base)', color: 'var(--text-primary)' }}>
       <NavBar />
 
       <div className="max-w-3xl mx-auto px-6 py-12">
         {/* Breadcrumb */}
         <Link
           href="/recherche"
-          className="inline-flex items-center gap-1.5 text-sm text-zinc-600 hover:text-accent transition-colors mb-10"
+          className="inline-flex items-center gap-1.5 text-[0.8125rem] font-medium mb-10
+            font-[family-name:var(--font-dm-sans)] transition-colors duration-150"
+          style={{ color: 'var(--text-muted)' }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = 'var(--accent-gold)' }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = 'var(--text-muted)' }}
         >
           ← Toutes les voitures
         </Link>
 
-        {/* En-tête */}
+        {/* Header */}
         <div>
-          <p className="text-sm text-zinc-600 mb-2">{voiture.segment} · {voiture.annees}</p>
-          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
+          <p className="text-[0.75rem] font-semibold uppercase tracking-[0.1em] mb-3
+            font-[family-name:var(--font-dm-sans)]"
+            style={{ color: 'var(--text-muted)' }}>
+            {voiture.segment} · {voiture.annees}
+          </p>
+          <h1
+            className="font-[family-name:var(--font-cormorant)] font-semibold
+              tracking-[-0.02em] leading-[1.05]"
+            style={{ fontSize: 'clamp(2.25rem, 5vw, 3.5rem)', color: 'var(--text-primary)' }}
+          >
             {voiture.marque}{' '}
-            <span className="font-normal text-accent">{voiture.modele}</span>
+            <em style={{ color: 'var(--accent-gold)', fontStyle: 'italic' }}>{voiture.modele}</em>
           </h1>
         </div>
 
-        {/* Stats rapides */}
+        {/* Quick stats */}
         <div className="mt-8 grid grid-cols-3 gap-3">
           {[
-            { label: 'Poids', value: voiture.poids, unit: 'kg' },
-            { label: 'Puissance', value: pMin === pMax ? `${pMin}` : `${pMin}–${pMax}`, unit: 'ch' },
-            { label: 'Motorisations', value: voiture.motorisations.length, unit: 'versions' },
+            { label: 'Poids',         value: voiture.poids,                                              unit: 'kg'       },
+            { label: 'Puissance',     value: pMin === pMax ? `${pMin}` : `${pMin}–${pMax}`,              unit: 'ch'       },
+            { label: 'Motorisations', value: voiture.motorisations.length,                               unit: 'versions' },
           ].map(({ label, value, unit }) => (
-            <div key={label} className="rounded-2xl bg-surface border border-rim p-5 text-center">
-              <p className="text-2xl font-bold text-zinc-100">{value}</p>
-              <p className="text-xs text-zinc-600 mt-1">{unit}</p>
-              <p className="text-xs text-zinc-700 mt-1.5">{label}</p>
+            <div key={label} className="rounded-[16px] p-5 text-center border"
+              style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-default)' }}>
+              <p className="font-[family-name:var(--font-cormorant)] text-[2rem] font-bold tabular-nums"
+                style={{ color: 'var(--accent-gold)' }}>
+                {value}
+              </p>
+              <p className="text-[0.6875rem] mt-1 font-[family-name:var(--font-dm-sans)]"
+                style={{ color: 'var(--text-muted)' }}>
+                {unit}
+              </p>
+              <p className="text-[0.6875rem] mt-1 font-[family-name:var(--font-dm-sans)]"
+                style={{ color: 'var(--text-secondary)' }}>
+                {label}
+              </p>
             </div>
           ))}
         </div>
 
-        {/* Fiabilité */}
+        {/* Fiabilité générale */}
         <Section title="Fiabilité générale">
-          <div className={`rounded-2xl border ${note.border} ${note.bg} p-6`}>
-            <div className="flex items-start justify-between mb-4">
-              <div>
-                <p className={`text-lg font-bold ${note.text}`}>{note.label}</p>
-                <p className={`text-base mt-1 tracking-wide ${note.text} opacity-60`}>{note.stars}</p>
+          <div className="rounded-[16px] p-6 border"
+            style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-default)', boxShadow: 'var(--shadow-sm)' }}>
+            <div className="flex items-start gap-6 mb-4">
+              <div className="w-16 h-16 rounded-full flex items-center justify-center shrink-0"
+                style={{ background: score.color }}>
+                <span className="text-2xl font-bold text-white font-[family-name:var(--font-cormorant)]">
+                  {voiture.fiabilite.note}
+                </span>
               </div>
-              <span className={`text-6xl font-bold ${note.text} opacity-10 leading-none`}>
-                {voiture.fiabilite.note}
-              </span>
+              <div>
+                <p className="text-[1.125rem] font-semibold font-[family-name:var(--font-dm-sans)]"
+                  style={{ color: score.color }}>
+                  {score.label}
+                </p>
+                <p className="text-[0.875rem] mt-0.5 tracking-wide"
+                  style={{ color: score.color, opacity: 0.6 }}>
+                  {starsMap[voiture.fiabilite.note]}
+                </p>
+              </div>
             </div>
-            <p className="text-zinc-300 text-sm leading-relaxed">{voiture.fiabilite.avisGeneral}</p>
+            <p className="text-[0.9375rem] leading-relaxed font-[family-name:var(--font-dm-sans)]"
+              style={{ color: 'var(--text-secondary)' }}>
+              {voiture.fiabilite.avisGeneral}
+            </p>
           </div>
         </Section>
 
@@ -95,9 +135,13 @@ export default async function VoiturePage({ params }: { params: Promise<{ id: st
         <Section title="Points sensibles">
           <ul className="space-y-2.5">
             {voiture.fiabilite.pointsSensibles.map((point, i) => (
-              <li key={i} className="flex gap-4 p-4 rounded-xl bg-surface border border-rim">
-                <span className="shrink-0 mt-px text-amber-500">▲</span>
-                <span className="text-zinc-300 text-sm leading-relaxed">{point}</span>
+              <li key={i} className="flex gap-4 p-4 rounded-[12px] border"
+                style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-default)' }}>
+                <span className="shrink-0 mt-0.5" style={{ color: 'var(--warning)' }}>▲</span>
+                <span className="text-[0.9375rem] leading-relaxed font-[family-name:var(--font-dm-sans)]"
+                  style={{ color: 'var(--text-secondary)' }}>
+                  {point}
+                </span>
               </li>
             ))}
           </ul>
@@ -107,9 +151,13 @@ export default async function VoiturePage({ params }: { params: Promise<{ id: st
         <Section title="Pannes fréquentes">
           <ul className="space-y-2.5">
             {voiture.fiabilite.pannesFrequentes.map((panne, i) => (
-              <li key={i} className="flex gap-4 p-4 rounded-xl bg-surface border border-rim">
-                <span className="shrink-0 mt-px text-red-500">✕</span>
-                <span className="text-zinc-300 text-sm leading-relaxed">{panne}</span>
+              <li key={i} className="flex gap-4 p-4 rounded-[12px] border"
+                style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-default)' }}>
+                <span className="shrink-0 mt-0.5" style={{ color: 'var(--danger)' }}>✕</span>
+                <span className="text-[0.9375rem] leading-relaxed font-[family-name:var(--font-dm-sans)]"
+                  style={{ color: 'var(--text-secondary)' }}>
+                  {panne}
+                </span>
               </li>
             ))}
           </ul>
@@ -122,24 +170,48 @@ export default async function VoiturePage({ params }: { params: Promise<{ id: st
 
         {/* Checklist */}
         <Section title="Checklist de visite">
-          <div className="rounded-2xl bg-surface border border-rim p-6">
-            <p className="text-xs text-zinc-600 mb-6">À vérifier lors de votre inspection avant achat</p>
-            <ul className="space-y-3">
+          <div className="rounded-[16px] border overflow-hidden"
+            style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-default)' }}>
+            <div className="px-6 py-4 border-b"
+              style={{ background: 'var(--bg-elevated)', borderColor: 'var(--border-default)' }}>
+              <p className="text-[0.75rem] font-semibold uppercase tracking-[0.08em]
+                font-[family-name:var(--font-dm-sans)]"
+                style={{ color: 'var(--text-muted)' }}>
+                À vérifier lors de votre inspection avant achat
+              </p>
+            </div>
+            <ul className="p-6 space-y-3">
               {voiture.checklist.map((item, i) => (
-                <li key={i} className="flex gap-4 text-sm">
-                  <span className="shrink-0 w-6 h-6 rounded-lg bg-raised border border-rim-strong
-                    flex items-center justify-center text-zinc-600 text-xs font-medium">
+                <li key={i} className="flex gap-4 text-[0.9375rem]">
+                  <span
+                    className="shrink-0 w-6 h-6 rounded-[6px] flex items-center justify-center
+                      text-[0.75rem] font-semibold border font-[family-name:var(--font-dm-sans)]"
+                    style={{
+                      background: 'var(--bg-elevated)',
+                      borderColor: 'var(--border-strong)',
+                      color: 'var(--text-muted)',
+                    }}
+                  >
                     {i + 1}
                   </span>
-                  <span className="text-zinc-400 leading-relaxed">{item}</span>
+                  <span className="leading-relaxed font-[family-name:var(--font-dm-sans)]"
+                    style={{ color: 'var(--text-secondary)' }}>
+                    {item}
+                  </span>
                 </li>
               ))}
             </ul>
           </div>
         </Section>
 
-        <div className="mt-14 pt-8 border-t border-rim text-center">
-          <Link href="/recherche" className="text-sm text-zinc-600 hover:text-accent transition-colors">
+        <div className="mt-12 pt-8 text-center" style={{ borderTop: '1px solid var(--border-default)' }}>
+          <Link href="/recherche"
+            className="text-[0.875rem] font-medium font-[family-name:var(--font-dm-sans)]
+              transition-colors duration-150"
+            style={{ color: 'var(--text-muted)' }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = 'var(--accent-gold)' }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = 'var(--text-muted)' }}
+          >
             ← Retour à toutes les voitures
           </Link>
         </div>
