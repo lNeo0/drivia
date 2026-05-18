@@ -12,6 +12,7 @@ export default function HeroImage({ src, alt }: { src?: string; alt: string }) {
         <img
           src={src}
           alt={alt}
+          referrerPolicy="no-referrer"
           className="absolute inset-0 w-full h-full object-cover object-center"
           onError={() => setError(true)}
         />

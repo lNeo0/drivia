@@ -35,6 +35,7 @@ export default function CardImage({ src, alt }: { src?: string; alt: string }) {
       <img
         src={src}
         alt={alt}
+        referrerPolicy="no-referrer"
         style={{
           width: '100%',
           height: '100%',

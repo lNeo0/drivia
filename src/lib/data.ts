@@ -29,7 +29,7 @@ export const voitures: Voiture[] = [
     annees: '2012–2020',
     segment: 'Compacte',
     poids: 1205,
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/VW_Golf_VII_1.4_TSI_BlueMotion_Technology_Comfortline_%28facelift%2C_5G1%29_%E2%80%93_Frontansicht%2C_28._M%C3%A4rz_2015%2C_Ratingen.jpg/1280px-VW_Golf_VII_1.4_TSI_BlueMotion_Technology_Comfortline_%28facelift%2C_5G1%29_%E2%80%93_Frontansicht%2C_28._M%C3%A4rz_2015%2C_Ratingen.jpg',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Volkswagen_Golf_VII_GTI_front.JPG/1280px-Volkswagen_Golf_VII_GTI_front.JPG',
     motorisations: [
       {
         slug: '10-tsi-85ch',
@@ -410,7 +410,7 @@ export const voitures: Voiture[] = [
     annees: '2013–2021',
     segment: 'Compacte',
     poids: 1210,
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/2014_Peugeot_308_SW_%28T9%29_Allure_HDi_wagon_%282015-07-24%29_01.jpg/1280px-2014_Peugeot_308_SW_%28T9%29_Allure_HDi_wagon_%282015-07-24%29_01.jpg',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Peugeot_308_II_IMG_3198.jpg/1280px-Peugeot_308_II_IMG_3198.jpg',
     motorisations: [
       {
         slug: '12-puretech-110ch',
@@ -575,7 +575,7 @@ export const voitures: Voiture[] = [
     annees: '2011–2020',
     segment: 'Citadine',
     poids: 1035,
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/2014_Toyota_Yaris_%28NCP130R%29_YRS_5-door_hatchback_%282015-08-21%29_01.jpg/1280px-2014_Toyota_Yaris_%28NCP130R%29_YRS_5-door_hatchback_%282015-08-21%29_01.jpg',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Toyota_Yaris_Hybrid_%28XP130%29_%E2%80%93_f_18062018.jpg/1280px-Toyota_Yaris_Hybrid_%28XP130%29_%E2%80%93_f_18062018.jpg',
     motorisations: [
       {
         slug: '10-vvti-69ch',
