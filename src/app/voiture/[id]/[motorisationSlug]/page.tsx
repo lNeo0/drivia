@@ -91,14 +91,14 @@ export default async function MotorisationPage({
 
       <div className="max-w-3xl mx-auto px-6 py-12">
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-2 text-[0.8125rem] mb-10 font-body">
-          <Link href={`/voiture/${voiture.id}`}
-            className="text-secondary hover:text-gold transition-colors duration-150">
-            {voiture.marque} {voiture.modele}
-          </Link>
-          <span className="text-gold">›</span>
-          <span className="text-muted">{motorisation.designation}</span>
-        </nav>
+        <Link
+          href={`/voiture/${voiture.id}`}
+          className="inline-flex items-center gap-1.5 text-[0.8125rem] font-medium mb-10
+            font-body text-muted hover:text-secondary transition-colors duration-150"
+        >
+          <span style={{ color: 'var(--accent-gold)' }}>‹</span>
+          {voiture.marque} {voiture.modele}
+        </Link>
 
         {/* Header */}
         <div>
@@ -256,12 +256,16 @@ export default async function MotorisationPage({
         <div className="mt-12 pt-8 flex items-center justify-between text-[0.875rem]
           font-body border-t border-rim">
           <Link href={`/voiture/${voiture.id}`}
-            className="text-muted hover:text-gold transition-colors duration-150">
-            ← {voiture.marque} {voiture.modele}
+            className="inline-flex items-center gap-1.5 text-muted hover:text-secondary
+              transition-colors duration-150">
+            <span style={{ color: 'var(--accent-gold)' }}>‹</span>
+            {voiture.marque} {voiture.modele}
           </Link>
-          <Link href="/recherche"
-            className="text-muted hover:text-gold transition-colors duration-150">
-            Toutes les voitures →
+          <Link href="/voitures"
+            className="inline-flex items-center gap-1.5 text-muted hover:text-secondary
+              transition-colors duration-150">
+            Toutes les voitures
+            <span style={{ color: 'var(--accent-gold)' }}>›</span>
           </Link>
         </div>
       </div>

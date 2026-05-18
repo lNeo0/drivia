@@ -4,6 +4,7 @@ import NavBar from '@/components/NavBar'
 import MotorisationCards from '@/components/MotorisationCards'
 import { getVoitureById, voitures } from '@/lib/data'
 import { getReliabilityColor } from '@/lib/reliability'
+import { getScoreAchat } from '@/lib/score'
 
 export async function generateStaticParams() {
   return voitures.map((v) => ({ id: v.id }))
@@ -31,6 +32,7 @@ export default async function VoiturePage({ params }: { params: Promise<{ id: st
   if (!voiture) notFound()
 
   const color = getReliabilityColor(voiture.fiabilite.note)
+  const score = getScoreAchat(voiture)
   const puissances = voiture.motorisations.map((m) => m.puissance)
   const pMin = Math.min(...puissances)
   const pMax = Math.max(...puissances)
@@ -42,11 +44,12 @@ export default async function VoiturePage({ params }: { params: Promise<{ id: st
       <div className="max-w-3xl mx-auto px-6 py-12">
         {/* Breadcrumb */}
         <Link
-          href="/recherche"
+          href="/voitures"
           className="inline-flex items-center gap-1.5 text-[0.8125rem] font-medium mb-10
-            font-body text-muted hover:text-gold transition-colors duration-150"
+            font-body text-muted hover:text-secondary transition-colors duration-150"
         >
-          ← Toutes les voitures
+          <span style={{ color: 'var(--accent-gold)' }}>‹</span>
+          Toutes les voitures
         </Link>
 
         {/* Header */}
@@ -60,6 +63,20 @@ export default async function VoiturePage({ params }: { params: Promise<{ id: st
             {voiture.marque}{' '}
             <em className="text-gold not-italic">{voiture.modele}</em>
           </h1>
+          <div className="mt-4">
+            <span
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full
+                text-[0.8125rem] font-semibold font-body"
+              style={{
+                color: score.color,
+                background: score.bg,
+                border: `1px solid ${score.border}`,
+              }}
+            >
+              <span className="text-[0.875rem] leading-none">{score.icon}</span>
+              {score.label}
+            </span>
+          </div>
         </div>
 
         {/* Quick stats */}
@@ -173,10 +190,11 @@ export default async function VoiturePage({ params }: { params: Promise<{ id: st
         </Section>
 
         <div className="mt-12 pt-8 text-center border-t border-rim">
-          <Link href="/recherche"
-            className="text-[0.875rem] font-medium font-body text-muted
-              hover:text-gold transition-colors duration-150">
-            ← Retour à toutes les voitures
+          <Link href="/voitures"
+            className="inline-flex items-center gap-1.5 text-[0.875rem] font-medium font-body
+              text-muted hover:text-secondary transition-colors duration-150">
+            <span style={{ color: 'var(--accent-gold)' }}>‹</span>
+            Retour à toutes les voitures
           </Link>
         </div>
       </div>

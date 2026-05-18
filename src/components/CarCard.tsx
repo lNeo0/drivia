@@ -1,11 +1,13 @@
 import Link from 'next/link'
 import type { Voiture } from '@/types'
 import { getReliabilityColor } from '@/lib/reliability'
+import { getScoreAchat } from '@/lib/score'
 
 type Props = { voiture: Voiture }
 
 export default function CarCard({ voiture }: Props) {
   const color = getReliabilityColor(voiture.fiabilite.note)
+  const score = getScoreAchat(voiture)
   const puissances = voiture.motorisations.map((m) => m.puissance)
   const pMin = Math.min(...puissances)
   const pMax = Math.max(...puissances)
@@ -79,18 +81,33 @@ export default function CarCard({ voiture }: Props) {
           {voiture.fiabilite.avisGeneral}
         </p>
 
-        {/* CTA */}
-        <span
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-[10px]
-            font-body font-semibold uppercase
-            text-[#C9A84C] border border-[#7A5E2A]
-            group-hover:bg-[#C9A84C] group-hover:text-[#0D0D0D] group-hover:border-[#C9A84C]
-            transition-all duration-150"
-          style={{ fontSize: '0.75rem', letterSpacing: '0.06em' }}
-        >
-          Voir la fiche
-          <span className="group-hover:translate-x-0.5 transition-transform duration-150">→</span>
-        </span>
+        {/* Bottom row: score badge + CTA */}
+        <div className="flex items-center justify-between gap-3">
+          <span
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full
+              text-[0.6875rem] font-semibold font-body"
+            style={{
+              color: score.color,
+              background: score.bg,
+              border: `1px solid ${score.border}`,
+            }}
+          >
+            <span className="text-[0.75rem] leading-none">{score.icon}</span>
+            {score.label}
+          </span>
+
+          <span
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-[10px]
+              font-body font-semibold uppercase
+              text-[#C9A84C] border border-[#7A5E2A]
+              group-hover:bg-[#C9A84C] group-hover:text-[#0D0D0D] group-hover:border-[#C9A84C]
+              transition-all duration-150"
+            style={{ fontSize: '0.75rem', letterSpacing: '0.06em' }}
+          >
+            Voir la fiche
+            <span className="group-hover:translate-x-0.5 transition-transform duration-150">→</span>
+          </span>
+        </div>
       </div>
     </Link>
   )
