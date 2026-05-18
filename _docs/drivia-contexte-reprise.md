@@ -131,4 +131,4 @@ https://github.com/lNeo0/drivia
 
 ---
 
-*Dernière mise à jour : Session 2 — Live search fonctionnel, prompt B (checklist interactive) à lancer*
+*Dernière mise à jour : Session 2 — Live search ✅, checklist interactive ✅, prochaine étape : Prompt C (filtres + toutes les voitures)*

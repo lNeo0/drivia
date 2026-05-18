@@ -441,3 +441,28 @@ après "Fiabilité de cette motorisation" et avant la checklist.
 - "golf" → dropdown "Volkswagen Golf 7 · 2012–2020" ✅
 - "vw" → alias reconnu, même résultat ✅
 - "bm" dans NavSearch → dropdown dans la barre de nav ✅
+
+---
+
+## PROMPT B — Checklist interactive
+**Session :** 2 | **Statut :** ✅ Exécuté avec succès
+
+**Composants créés/modifiés :**
+- `src/components/ChecklistInteractive.tsx` — checklist cochable avec localStorage
+- `src/components/BoiteSelector.tsx` — patch CustomEvent pour coordination boîte/checklist
+
+**Fonctionnalités :**
+- Items cochables (button), état via Set<string> React
+- Points critiques : label "CRITIQUE", fond or, bordure gauche or → grise au check
+- Points génériques : badge numéroté → ✓ doré au check
+- Compteur "X / Y points vérifiés" + barre 4px animée
+- Message "✓ Inspection complète" quand tout est coché
+- localStorage : clé drivia-checklist-[voitureId]-[motorisationSlug]
+- Bouton "Réinitialiser" visible si au moins 1 item coché
+- Confirmation window.confirm() si changement de boîte avec checklist en cours
+
+**Résultat observé (via Claude in Chrome) :**
+- Compteur "1 / 23 points vérifiés" mis à jour instantanément ✅
+- Barre de progression dorée fonctionnelle ✅
+- Item coché : ✓ doré + texte barré + fond assombri ✅
+- Points critiques bien distincts visuellement ✅

@@ -22,7 +22,7 @@ export default function NavBar() {
 
         <nav className="flex items-center gap-4">
           <Link
-            href="/recherche"
+            href="/voitures"
             className="hidden md:block text-sm font-medium text-[var(--text-secondary)]
               hover:text-[var(--text-primary)] transition-colors duration-150
               font-[family-name:var(--font-dm-sans)]"
