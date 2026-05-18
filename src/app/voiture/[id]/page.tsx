@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import NavBar from '@/components/NavBar'
 import MotorisationCards from '@/components/MotorisationCards'
+import HeroImage from '@/components/HeroImage'
 import { getVoitureById, voitures } from '@/lib/data'
 import { getReliabilityColor } from '@/lib/reliability'
 import { getScoreAchat } from '@/lib/score'
@@ -41,44 +42,47 @@ export default async function VoiturePage({ params }: { params: Promise<{ id: st
     <div className="min-h-screen bg-base text-primary">
       <NavBar />
 
-      <div className="max-w-3xl mx-auto px-6 py-12">
-        {/* Breadcrumb */}
-        <Link
-          href="/voitures"
-          className="inline-flex items-center gap-1.5 text-[0.8125rem] font-medium mb-10
-            font-body text-muted hover:text-secondary transition-colors duration-150"
-        >
-          <span style={{ color: 'var(--accent-gold)' }}>‹</span>
-          Toutes les voitures
-        </Link>
-
-        {/* Header */}
-        <div>
-          <p className="text-[0.75rem] font-semibold uppercase tracking-[0.1em] mb-3
-            text-muted font-body">
-            {voiture.segment} · {voiture.annees}
-          </p>
-          <h1 className="font-display font-semibold tracking-[-0.02em] leading-[1.05] text-primary"
-            style={{ fontSize: 'clamp(2.25rem, 5vw, 3.5rem)' }}>
-            {voiture.marque}{' '}
-            <em className="text-gold not-italic">{voiture.modele}</em>
-          </h1>
-          <div className="mt-4">
-            <span
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full
-                text-[0.8125rem] font-semibold font-body"
-              style={{
-                color: score.color,
-                background: score.bg,
-                border: `1px solid ${score.border}`,
-              }}
+      {/* Hero */}
+      <div className="relative h-[220px] md:h-[320px]">
+        <HeroImage src={voiture.image} alt={`${voiture.marque} ${voiture.modele}`} />
+        <div className="absolute inset-0 flex flex-col justify-end pointer-events-none">
+          <div className="max-w-3xl mx-auto w-full px-6 pb-8 pointer-events-auto">
+            <Link
+              href="/voitures"
+              className="inline-flex items-center gap-1.5 text-[0.8125rem] font-medium mb-4
+                font-body text-white/55 hover:text-white/85 transition-colors duration-150"
             >
-              <span className="text-[0.875rem] leading-none">{score.icon}</span>
-              {score.label}
-            </span>
+              <span style={{ color: 'var(--accent-gold)' }}>‹</span>
+              Toutes les voitures
+            </Link>
+            <p className="text-[0.75rem] font-semibold uppercase tracking-[0.1em] mb-2
+              font-body" style={{ color: 'rgba(255,255,255,0.45)' }}>
+              {voiture.segment} · {voiture.annees}
+            </p>
+            <h1 className="font-display font-semibold tracking-[-0.02em] leading-[1.05]"
+              style={{ fontSize: 'clamp(2.25rem, 5vw, 3.5rem)', color: '#FFFFFF' }}>
+              {voiture.marque}{' '}
+              <em className="not-italic" style={{ color: 'var(--accent-gold)' }}>{voiture.modele}</em>
+            </h1>
+            <div className="mt-3">
+              <span
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full
+                  text-[0.8125rem] font-semibold font-body"
+                style={{
+                  color: score.color,
+                  background: score.bg,
+                  border: `1px solid ${score.border}`,
+                }}
+              >
+                <span className="text-[0.875rem] leading-none">{score.icon}</span>
+                {score.label}
+              </span>
+            </div>
           </div>
         </div>
+      </div>
 
+      <div className="max-w-3xl mx-auto px-6 pt-10 pb-12">
         {/* Quick stats */}
         <div className="mt-8 grid grid-cols-3 gap-3">
           {[

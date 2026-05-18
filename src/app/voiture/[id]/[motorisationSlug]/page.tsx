@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import NavBar from '@/components/NavBar'
+import HeroImage from '@/components/HeroImage'
 import BoiteSelector from '@/components/BoiteSelector'
 import OptionsSection from '@/components/OptionsSection'
 import ReprogSection from '@/components/ReprogSection'
@@ -89,31 +90,29 @@ export default async function MotorisationPage({
       <NavBar />
       <AnchorNav anchors={anchors} />
 
-      <div className="max-w-3xl mx-auto px-6 py-12">
-        {/* Breadcrumb */}
-        <Link
-          href={`/voiture/${voiture.id}`}
-          className="inline-flex items-center gap-1.5 text-[0.8125rem] font-medium mb-10
-            font-body text-muted hover:text-secondary transition-colors duration-150"
-        >
-          <span style={{ color: 'var(--accent-gold)' }}>‹</span>
-          {voiture.marque} {voiture.modele}
-        </Link>
-
-        {/* Header */}
-        <div>
-          <p className="text-[0.75rem] font-semibold uppercase tracking-[0.1em] mb-3
-            text-muted font-body">
-            {voiture.segment} · {voiture.annees}
-          </p>
-          <h1 className="font-display font-semibold tracking-[-0.02em] leading-[1.05] text-primary"
-            style={{ fontSize: 'clamp(2rem, 5vw, 3rem)' }}>
-            {voiture.marque}{' '}
-            <em className="text-gold not-italic">{voiture.modele}</em>{' '}
-            <span className="text-secondary font-normal">{motorisation.designation}</span>
-          </h1>
+      {/* Hero */}
+      <div className="relative h-[160px] md:h-[200px]">
+        <HeroImage src={voiture.image} alt={`${voiture.marque} ${voiture.modele}`} />
+        <div className="absolute inset-0 flex flex-col justify-end pointer-events-none">
+          <div className="max-w-3xl mx-auto w-full px-6 pb-6 pointer-events-auto">
+            <Link
+              href={`/voiture/${voiture.id}`}
+              className="inline-flex items-center gap-1.5 text-[0.8125rem] font-medium mb-2
+                font-body text-white/55 hover:text-white/85 transition-colors duration-150"
+            >
+              <span style={{ color: 'var(--accent-gold)' }}>‹</span>
+              {voiture.marque} {voiture.modele}
+            </Link>
+            <h1 className="font-display font-semibold tracking-[-0.02em] leading-[1.05]"
+              style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', color: '#FFFFFF' }}>
+              <em className="not-italic" style={{ color: 'var(--accent-gold)' }}>{voiture.modele}</em>{' '}
+              <span style={{ color: 'rgba(255,255,255,0.75)', fontWeight: 400 }}>{motorisation.designation}</span>
+            </h1>
+          </div>
         </div>
+      </div>
 
+      <div className="max-w-3xl mx-auto px-6 pt-8 pb-12">
         {/* Specs + sélecteur */}
         <Section id="specs" title="Specs techniques">
           <div className="rounded-2xl p-6 border border-rim bg-surface"

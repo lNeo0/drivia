@@ -2,6 +2,7 @@ import Link from 'next/link'
 import type { Voiture } from '@/types'
 import { getReliabilityColor } from '@/lib/reliability'
 import { getScoreAchat } from '@/lib/score'
+import CardImage from '@/components/CardImage'
 
 type Props = { voiture: Voiture }
 
@@ -19,6 +20,7 @@ export default function CarCard({ voiture }: Props) {
       className="group block rounded-2xl overflow-hidden card-hover
         bg-surface border border-rim"
     >
+      <CardImage src={voiture.image} alt={`${voiture.marque} ${voiture.modele}`} />
       <div className="p-6">
         {/* Header */}
         <div className="flex items-start justify-between gap-4 mb-4">
