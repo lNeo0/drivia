@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ path: string[] }> }
-) {
-  const { path } = await params
-  const url = `https://upload.wikimedia.org/${path.join('/')}`
+export async function GET(request: NextRequest) {
+  const pathname = request.nextUrl.pathname
+  const prefix = '/api/img/'
+  const wikimediaPath = pathname.slice(prefix.length)
+  const url = `https://upload.wikimedia.org/${wikimediaPath}`
 
   try {
     const response = await fetch(url, {
