@@ -29,7 +29,7 @@ export const voitures: Voiture[] = [
     annees: '2012–2020',
     segment: 'Compacte',
     poids: 1205,
-    image: '/api/img/wikipedia/commons/thumb/9/9d/Volkswagen_Golf_VII_GTI_front.JPG/1280px-Volkswagen_Golf_VII_GTI_front.JPG',
+    image: '/api/img/wikipedia/commons/thumb/6/6e/Volkswagen_Golf_VII_GTI_%28side%29_white.JPG/960px-Volkswagen_Golf_VII_GTI_%28side%29_white.JPG',
     motorisations: [
       {
         slug: '10-tsi-85ch',
@@ -253,7 +253,7 @@ export const voitures: Voiture[] = [
     annees: '2012–2019',
     segment: 'Citadine',
     poids: 1095,
-    image: '/api/img/wikipedia/commons/thumb/9/9a/Renault_Clio_IV_Facelift_IMG_0482.jpg/1280px-Renault_Clio_IV_Facelift_IMG_0482.jpg',
+    image: '/api/img/wikipedia/commons/thumb/6/65/Renault_Clio-IV_Black.JPG/960px-Renault_Clio-IV_Black.JPG',
     motorisations: [
       {
         slug: '09-tce-75ch',
@@ -410,7 +410,7 @@ export const voitures: Voiture[] = [
     annees: '2013–2021',
     segment: 'Compacte',
     poids: 1210,
-    image: '/api/img/wikipedia/commons/thumb/f/f7/Peugeot_308_II_IMG_3198.jpg/1280px-Peugeot_308_II_IMG_3198.jpg',
+    image: '/api/img/wikipedia/commons/thumb/3/37/2020_-_Peugeot_308_II_%28B%29_-_55.jpg/960px-2020_-_Peugeot_308_II_%28B%29_-_55.jpg',
     motorisations: [
       {
         slug: '12-puretech-110ch',
@@ -575,7 +575,7 @@ export const voitures: Voiture[] = [
     annees: '2011–2020',
     segment: 'Citadine',
     poids: 1035,
-    image: '/api/img/wikipedia/commons/thumb/6/64/Toyota_Yaris_Hybrid_%28XP130%29_%E2%80%93_f_18062018.jpg/1280px-Toyota_Yaris_Hybrid_%28XP130%29_%E2%80%93_f_18062018.jpg',
+    image: '/api/img/wikipedia/commons/thumb/4/45/DSC00769_Toyota_Yaris%2C_Carabinieri%2C_Front_Left.jpg/960px-DSC00769_Toyota_Yaris%2C_Carabinieri%2C_Front_Left.jpg',
     motorisations: [
       {
         slug: '10-vvti-69ch',
@@ -662,7 +662,7 @@ export const voitures: Voiture[] = [
     annees: '2012–2019',
     segment: 'Berline premium',
     poids: 1440,
-    image: '/api/img/wikipedia/commons/thumb/6/6a/2012_BMW_328i_%28F30%29_luxury_sedan_%282012-10-28%29_02.jpg/1280px-2012_BMW_328i_%28F30%29_luxury_sedan_%282012-10-28%29_02.jpg',
+    image: '/api/img/wikipedia/commons/thumb/6/64/BMW_3_SERIES_SEDAN_%28F30%29_China.jpg/960px-BMW_3_SERIES_SEDAN_%28F30%29_China.jpg',
     motorisations: [
       {
         slug: '316i-136ch',
@@ -798,7 +798,7 @@ export const voitures: Voiture[] = [
     annees: '2012–2020',
     segment: 'Citadine économique',
     poids: 975,
-    image: '/api/img/wikipedia/commons/thumb/1/1b/Dacia_Sandero_II_IMG_0709.jpg/1280px-Dacia_Sandero_II_IMG_0709.jpg',
+    image: '/api/img/wikipedia/commons/thumb/a/a4/Dacia_-_Sandero_Stepway_-_Mondial_de_l%27Automobile_de_Paris_2012_-_007.jpg/960px-Dacia_-_Sandero_Stepway_-_Mondial_de_l%27Automobile_de_Paris_2012_-_007.jpg',
     motorisations: [
       {
         slug: '10-sce-65ch',
@@ -893,7 +893,7 @@ export const voitures: Voiture[] = [
     annees: '2017–2023',
     segment: 'Citadine',
     poids: 1060,
-    image: '/api/img/wikipedia/commons/thumb/1/1e/2017_Ford_Fiesta_%28C1%29_ST-Line_5-door_hatchback_%282018-09-07%29_01.jpg/1280px-2017_Ford_Fiesta_%28C1%29_ST-Line_5-door_hatchback_%282018-09-07%29_01.jpg',
+    image: '/api/img/wikipedia/commons/thumb/7/7d/2017_Ford_Fiesta_Zetec_Turbo_1.0_Front.jpg/960px-2017_Ford_Fiesta_Zetec_Turbo_1.0_Front.jpg',
     motorisations: [
       {
         slug: '11-tivct-75ch',
@@ -991,7 +991,7 @@ export const voitures: Voiture[] = [
     annees: '2007–2013',
     segment: 'Sportive',
     poids: 1580,
-    image: '/api/img/wikipedia/commons/thumb/c/c9/BMW_M3_E92_--_03-25-2010.jpg/1280px-BMW_M3_E92_--_03-25-2010.jpg',
+    image: '/api/img/wikipedia/commons/thumb/0/06/BMW_M3_Coup%C3%A9_%28E92%29_Washington_DC_Metro_Area%2C_USA.jpg/960px-BMW_M3_Coup%C3%A9_%28E92%29_Washington_DC_Metro_Area%2C_USA.jpg',
     motorisations: [
       {
         slug: 'v8-s65-420ch',
@@ -1128,7 +1128,7 @@ export const voitures: Voiture[] = [
     annees: '2016–2023',
     segment: 'Citadine',
     poids: 1050,
-    image: '/api/img/wikipedia/commons/thumb/9/95/2019_Citro%C3%ABn_C3_Flair_PureTech_82_in_Emerald_Crystal%2C_front_8.26.19.jpg/1280px-2019_Citro%C3%ABn_C3_Flair_PureTech_82_in_Emerald_Crystal%2C_front_8.26.19.jpg',
+    image: '/api/img/wikipedia/commons/thumb/5/54/2019_Citro%C3%ABn_C3_1.6_VTi_Shine_%28Brazil%29.jpg/960px-2019_Citro%C3%ABn_C3_1.6_VTi_Shine_%28Brazil%29.jpg',
     motorisations: [
       {
         slug: '12-puretech-82ch',
