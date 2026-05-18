@@ -1203,15 +1203,27 @@ export const voitures: Voiture[] = [
   },
 ]
 
+const SEARCH_ALIASES: Record<string, string> = {
+  vw:   'volkswagen',
+  reno: 'renault',
+  bm:   'bmw',
+  daf:  'dacia',
+}
+
+function normalise(s: string): string {
+  return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+}
+
 export function rechercherVoitures(query: string): Voiture[] {
-  const q = query.toLowerCase().trim()
+  const q = normalise(query).trim()
   if (!q) return voitures
-  return voitures.filter(
-    (v) =>
-      v.marque.toLowerCase().includes(q) ||
-      v.modele.toLowerCase().includes(q) ||
-      v.segment.toLowerCase().includes(q)
-  )
+
+  const parts = q.split(/\s+/).map(p => SEARCH_ALIASES[p] ?? p)
+
+  return voitures.filter(v => {
+    const haystack = [v.marque, v.modele, v.segment].map(normalise).join(' ')
+    return parts.every(part => haystack.includes(part))
+  })
 }
 
 export function getVoitureById(id: string): Voiture | undefined {

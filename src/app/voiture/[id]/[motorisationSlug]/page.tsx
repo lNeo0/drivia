@@ -4,6 +4,8 @@ import NavBar from '@/components/NavBar'
 import BoiteSelector from '@/components/BoiteSelector'
 import OptionsSection from '@/components/OptionsSection'
 import ReprogSection from '@/components/ReprogSection'
+import AnchorNav from '@/components/AnchorNav'
+import type { AnchorItem } from '@/components/AnchorNav'
 import { getVoitureEtMotorisation, getAllMotorisationParams } from '@/lib/data'
 
 export async function generateStaticParams() {
@@ -22,9 +24,21 @@ const starsMap: Record<number, string> = {
   5: '★★★★★', 4: '★★★★☆', 3: '★★★☆☆', 2: '★★☆☆☆', 1: '★☆☆☆☆',
 }
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({
+  title,
+  id,
+  children,
+}: {
+  title: string
+  id?: string
+  children: React.ReactNode
+}) {
   return (
-    <section className="mt-12">
+    <section
+      id={id}
+      className="mt-12"
+      style={id ? { scrollMarginTop: '120px' } : undefined}
+    >
       <p className="text-[0.75rem] font-semibold uppercase tracking-[0.1em] mb-3
         text-muted font-body">
         {title}
@@ -50,9 +64,29 @@ export default async function MotorisationPage({
   const defaultBoiteSlug =
     motorisation.boites.find((b) => b.slug === boiteSlug)?.slug ?? motorisation.boites[0].slug
 
+  // Build anchor list — only include sections that exist in the page
+  const anchors: AnchorItem[] = [
+    { id: 'specs',     label: 'Specs' },
+    { id: 'fiabilite', label: 'Fiabilité' },
+    ...(motorisation.fiabilite?.problemesConnus.length
+      ? [{ id: 'pannes', label: 'Pannes' }]
+      : []),
+    ...(motorisation.options?.length
+      ? [{ id: 'options', label: 'Options' }]
+      : []),
+    ...(motorisation.potentielReprog
+      ? [{ id: 'reprog', label: 'Reprog' }]
+      : []),
+    ...(motorisation.cotes?.length
+      ? [{ id: 'cotes', label: 'Cotes' }]
+      : []),
+    { id: 'checklist', label: 'Checklist' },
+  ]
+
   return (
     <div className="min-h-screen bg-base text-primary">
       <NavBar />
+      <AnchorNav anchors={anchors} />
 
       <div className="max-w-3xl mx-auto px-6 py-12">
         {/* Breadcrumb */}
@@ -80,7 +114,7 @@ export default async function MotorisationPage({
         </div>
 
         {/* Specs + sélecteur */}
-        <Section title="Specs techniques">
+        <Section id="specs" title="Specs techniques">
           <div className="rounded-2xl p-6 border border-rim bg-surface"
             style={{ boxShadow: 'var(--shadow-sm)' }}>
             <BoiteSelector
@@ -94,9 +128,9 @@ export default async function MotorisationPage({
           </div>
         </Section>
 
-        {/* Fiabilité motorisation */}
+        {/* Fiabilité motorisation — score + avis uniquement */}
         {motorisation.fiabilite ? (
-          <Section title="Fiabilité de cette motorisation">
+          <Section id="fiabilite" title="Fiabilité de cette motorisation">
             {(() => {
               const f = scoreConfig[motorisation.fiabilite.note]
               return (
@@ -117,25 +151,15 @@ export default async function MotorisationPage({
                       </p>
                     </div>
                   </div>
-                  <p className="text-[0.9375rem] leading-relaxed mb-5 font-body text-secondary">
+                  <p className="text-[0.9375rem] leading-relaxed font-body text-secondary">
                     {motorisation.fiabilite.avis}
                   </p>
-                  {motorisation.fiabilite.problemesConnus.length > 0 && (
-                    <ul className="space-y-3 pt-5 border-t border-rim">
-                      {motorisation.fiabilite.problemesConnus.map((p, i) => (
-                        <li key={i} className="flex gap-3 text-[0.9375rem]">
-                          <span className="shrink-0 mt-0.5 text-danger">✕</span>
-                          <span className="leading-relaxed font-body text-secondary">{p}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
                 </div>
               )
             })()}
           </Section>
         ) : (
-          <Section title="Fiabilité de cette motorisation">
+          <Section id="fiabilite" title="Fiabilité de cette motorisation">
             <div className="rounded-2xl p-8 text-center border border-rim bg-surface">
               <p className="text-[0.9375rem] mb-3 font-body text-muted">
                 Données détaillées non disponibles pour cette motorisation.
@@ -149,23 +173,37 @@ export default async function MotorisationPage({
           </Section>
         )}
 
+        {/* Problèmes connus — section distincte pour l'ancre */}
+        {motorisation.fiabilite && motorisation.fiabilite.problemesConnus.length > 0 && (
+          <Section id="pannes" title="Problèmes connus">
+            <ul className="space-y-2.5">
+              {motorisation.fiabilite.problemesConnus.map((p, i) => (
+                <li key={i} className="flex gap-4 p-4 rounded-[12px] border border-rim bg-surface">
+                  <span className="shrink-0 mt-0.5 text-danger">✕</span>
+                  <span className="text-[0.9375rem] leading-relaxed font-body text-secondary">{p}</span>
+                </li>
+              ))}
+            </ul>
+          </Section>
+        )}
+
         {/* Options */}
         {motorisation.options && motorisation.options.length > 0 && (
-          <Section title="Options à vérifier">
+          <Section id="options" title="Options à vérifier">
             <OptionsSection options={motorisation.options} />
           </Section>
         )}
 
         {/* Potentiel de reprog */}
         {motorisation.potentielReprog && (
-          <Section title="Potentiel de reprogrammation">
+          <Section id="reprog" title="Potentiel de reprogrammation">
             <ReprogSection reprog={motorisation.potentielReprog} />
           </Section>
         )}
 
         {/* Cotes marché */}
         {motorisation.cotes && motorisation.cotes.length > 0 && (
-          <Section title="Cotes marché">
+          <Section id="cotes" title="Cotes marché">
             <div className="rounded-2xl border border-rim overflow-hidden">
               <div className="grid grid-cols-4 border-b border-rim-strong bg-elevated">
                 {['Tranche', 'Abordable', 'Correct', 'Bon état'].map((h, i) => (
@@ -204,7 +242,7 @@ export default async function MotorisationPage({
         )}
 
         {/* Checklist */}
-        <Section title="Checklist de visite">
+        <Section id="checklist" title="Checklist de visite">
           <div className="rounded-2xl border border-rim bg-surface overflow-hidden">
             {motorisation.checklistSpecifique && motorisation.checklistSpecifique.length > 0 && (
               <div className="p-6 border-b bg-gold-dim"

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { ThemeToggle } from './ThemeToggle'
+import NavSearch from './NavSearch'
 
 export default function NavBar() {
   return (
@@ -19,15 +20,16 @@ export default function NavBar() {
           Drivia
         </Link>
 
-        <nav className="flex items-center gap-6">
+        <nav className="flex items-center gap-4">
           <Link
             href="/recherche"
-            className="text-sm font-medium text-[var(--text-secondary)]
+            className="hidden md:block text-sm font-medium text-[var(--text-secondary)]
               hover:text-[var(--text-primary)] transition-colors duration-150
               font-[family-name:var(--font-dm-sans)]"
           >
             Toutes les voitures
           </Link>
+          <NavSearch />
           <ThemeToggle />
         </nav>
       </div>

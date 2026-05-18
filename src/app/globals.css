@@ -130,6 +130,9 @@ body {
   mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
 }
 
+/* ─── Hide scrollbar ─── */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
 /* ─── Card hover ─── */
 .card-hover {
   transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;

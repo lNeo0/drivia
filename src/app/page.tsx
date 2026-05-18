@@ -13,7 +13,7 @@ export default function HomePage() {
       <NavBar />
 
       {/* Hero */}
-      <section className="relative max-w-2xl mx-auto px-6 pt-28 pb-24 text-center overflow-hidden">
+      <section className="relative max-w-2xl mx-auto px-6 pt-28 pb-24 text-center">
         {/* Radial glow */}
         <div
           className="absolute inset-0 pointer-events-none"
