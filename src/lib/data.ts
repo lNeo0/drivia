@@ -92,6 +92,54 @@ export const voitures: Voiture[] = [
           "Vérifier l'état de la vanne EGR (nettoyage récent dans le carnet ?)",
           "Demander si des injections de produit nettoyant ont été faites",
         ],
+        options: [
+          {
+            nom: 'Radar de recul',
+            description: 'Capteurs de stationnement arrière',
+            importance: 'interessante',
+            avis: "Utile au quotidien, vérifier le bon fonctionnement des 4 capteurs lors de la visite.",
+          },
+          {
+            nom: 'GPS natif',
+            description: "Système de navigation d'origine",
+            importance: 'inutile',
+            avis: "Vieilli et lent. Préférez CarPlay/Android Auto si disponible, ou un support téléphone.",
+          },
+          {
+            nom: 'Régulateur de vitesse adaptatif',
+            description: 'ACC avec maintien de distance',
+            importance: 'interessante',
+            avis: "Appréciable sur autoroute. Vérifier le bon fonctionnement du radar avant.",
+          },
+        ],
+        potentielReprog: {
+          typeMoteur: 'turbo',
+          avisGeneral:
+            "Le 1.6 TDI répond bien à la reprog — gains modérés mais réels, surtout en couple. Améliore la souplesse en ville sans dégrader la fiabilité si réalisée sérieusement.",
+          stages: [
+            {
+              nom: 'Stage 1',
+              puissanceGain: 25,
+              coupleGain: 60,
+              puissanceFinal: 115,
+              coupleFinal: 310,
+              cout: '300 – 500 €',
+              avis: "Bon rapport qualité/prix. Le moteur gagne vraiment en souplesse. À faire chez un préparateur reconnu uniquement.",
+            },
+            {
+              nom: 'Stage 2',
+              puissanceGain: 35,
+              coupleGain: 80,
+              puissanceFinal: 125,
+              coupleFinal: 330,
+              cout: '800 – 1 200 €',
+              avis: "Nécessite échangeur et modifications. Peu pertinent sur ce moteur — préférez le Stage 1.",
+            },
+          ],
+          recommandation: 'selon_usage',
+          raisonRecommandation:
+            "Stage 1 intéressant pour un usage quotidien — le couple supplémentaire se ressent vraiment. Stage 2 non recommandé sur ce moteur.",
+        },
       },
       {
         slug: '20-tdi-150ch',
@@ -127,6 +175,54 @@ export const voitures: Voiture[] = [
           "Contrôler l'état du turbo : pas de jeu axial, pas de fumée bleue",
           "Vérifier l'étanchéité des injecteurs (traces de gasoil ?)",
         ],
+        options: [
+          {
+            nom: 'DSG7 (boîte automatique)',
+            description: 'Boîte à double embrayage 7 rapports',
+            importance: 'interessante',
+            avis: "Confortable mais surveiller les saccades à froid. Préférez la BVM6 si vous aimez conduire.",
+          },
+          {
+            nom: 'Phares full LED',
+            description: 'Éclairage LED adaptatif',
+            importance: 'interessante',
+            avis: "Vraie différence de sécurité la nuit. À privilégier si disponible.",
+          },
+          {
+            nom: 'Toit ouvrant panoramique',
+            description: 'Toit vitré électrique',
+            importance: 'inutile',
+            avis: "Source de pannes potentielles sur les exemplaires anciens. Tester l'ouverture/fermeture lors de la visite.",
+          },
+        ],
+        potentielReprog: {
+          typeMoteur: 'turbo',
+          avisGeneral:
+            "Le 2.0 TDI est une base excellente pour la reprog. Gains significatifs en puissance et couple avec un impact minimal sur la fiabilité si réalisée correctement.",
+          stages: [
+            {
+              nom: 'Stage 1',
+              puissanceGain: 40,
+              coupleGain: 80,
+              puissanceFinal: 190,
+              coupleFinal: 420,
+              cout: '350 – 600 €',
+              avis: "Très recommandé. Le moteur passe dans une autre dimension en souplesse et reprise. ROI excellent.",
+            },
+            {
+              nom: 'Stage 2',
+              puissanceGain: 60,
+              coupleGain: 110,
+              puissanceFinal: 210,
+              coupleFinal: 450,
+              cout: '900 – 1 500 €',
+              avis: "Possible avec échangeur et downpipe. Risque accru sur l'embrayage et la boîte DSG. Réservé aux passionnés.",
+            },
+          ],
+          recommandation: 'oui',
+          raisonRecommandation:
+            "Le 2.0 TDI est l'un des meilleurs moteurs à reprogrammer. Stage 1 fortement recommandé pour quiconque veut plus de dynamisme sans sacrifier la fiabilité.",
+        },
       },
     ],
     fiabilite: {
@@ -200,6 +296,39 @@ export const voitures: Voiture[] = [
           "Faire un essai à froid : écouter les claquements moteur",
           "Scanner l'ECU : vérifier les codes d'erreur effacés récemment",
         ],
+        options: [
+          {
+            nom: 'Climatisation automatique',
+            description: 'Climatisation bi-zone automatique',
+            importance: 'interessante',
+            avis: "Confort réel. Tester le compresseur lors de la visite.",
+          },
+          {
+            nom: 'GPS R-Link',
+            description: 'Système multimédia Renault intégré',
+            importance: 'inutile',
+            avis: "Très vieilli et peu réactif. Ignorez-le, un support téléphone avec CarPlay vaut bien mieux.",
+          },
+        ],
+        potentielReprog: {
+          typeMoteur: 'turbo',
+          avisGeneral:
+            "Le 0.9 TCe est reprogrammable mais les gains restent limités par la petite taille du turbo. Intérêt modéré sur une citadine.",
+          stages: [
+            {
+              nom: 'Stage 1',
+              puissanceGain: 15,
+              coupleGain: 30,
+              puissanceFinal: 105,
+              coupleFinal: 175,
+              cout: '250 – 400 €',
+              avis: "Gain perceptible en ville mais modeste. À faire uniquement si vous gardez longtemps le véhicule.",
+            },
+          ],
+          recommandation: 'selon_usage',
+          raisonRecommandation:
+            "Intérêt limité sur une citadine. Budget mieux investi dans l'entretien ou des pneumatiques de qualité.",
+        },
       },
       {
         slug: '12-tce-120ch',
@@ -372,6 +501,48 @@ export const voitures: Voiture[] = [
           "Essai sur autoroute : vérifier la puissance en côte à pleine charge",
           "Contrôler les soufflets de cardan (fuite de graisse = remplacement coûteux)",
         ],
+        options: [
+          {
+            nom: 'Pack GT Line',
+            description: 'Sellerie, inserts, look sportif extérieur',
+            importance: 'interessante',
+            avis: "Ajoute du caractère sans impacter la fiabilité. Apprécié à la revente.",
+          },
+          {
+            nom: 'Vitres surteintées',
+            description: "Vitres arrière teintées d'usine",
+            importance: 'inutile',
+            avis: "Agréable en été mais aucun impact sur la valeur de revente.",
+          },
+        ],
+        potentielReprog: {
+          typeMoteur: 'turbo',
+          avisGeneral:
+            "Le 2.0 BlueHDi répond très bien à la reprog. Un des meilleurs rapports gains/prix du marché des compactes diesel.",
+          stages: [
+            {
+              nom: 'Stage 1',
+              puissanceGain: 35,
+              coupleGain: 70,
+              puissanceFinal: 185,
+              coupleFinal: 440,
+              cout: '300 – 550 €',
+              avis: "Excellente transformation. Le moteur perd son côté mou et gagne en plaisir de conduite. Recommandé.",
+            },
+            {
+              nom: 'Stage 2',
+              puissanceGain: 55,
+              coupleGain: 100,
+              puissanceFinal: 205,
+              coupleFinal: 470,
+              cout: '800 – 1 300 €',
+              avis: "Possible mais surveiller l'embrayage. Réservé à un usage non quotidien.",
+            },
+          ],
+          recommandation: 'oui',
+          raisonRecommandation:
+            "Le 2.0 BlueHDi est une excellente base. Stage 1 très recommandé — transforme vraiment le caractère de la voiture.",
+        },
       },
     ],
     fiabilite: {
@@ -409,6 +580,14 @@ export const voitures: Voiture[] = [
         puissance: 69,
         consommationOfficielle: 5.0,
         boites: [{ slug: 'bvm5', designation: 'BVM5', type: 'manuelle' }],
+        options: [
+          {
+            nom: 'Climatisation',
+            description: 'Climatisation manuelle',
+            importance: 'indispensable',
+            avis: "Indispensable pour la revente. Vérifier le bon fonctionnement.",
+          },
+        ],
       },
       {
         slug: '133-vvti-99ch',
@@ -428,6 +607,20 @@ export const voitures: Voiture[] = [
         puissance: 100,
         consommationOfficielle: 3.8,
         boites: [{ slug: 'cvt', designation: 'CVT e-CVT', type: 'cvt' }],
+        options: [
+          {
+            nom: 'Pack Design',
+            description: 'Jantes alliage, inserts colorés',
+            importance: 'interessante',
+            avis: "Esthétique uniquement. Vérifier l'état des jantes.",
+          },
+          {
+            nom: 'Caméra de recul',
+            description: 'Caméra arrière intégrée',
+            importance: 'indispensable',
+            avis: "Très utile sur une citadine. Vérifier la qualité de l'image — les caméras vieillissent mal.",
+          },
+        ],
       },
       {
         slug: '14-d4d-90ch',
@@ -511,6 +704,54 @@ export const voitures: Voiture[] = [
           { slug: 'bvm6', designation: 'BVM6', type: 'manuelle' },
           { slug: 'zf8', designation: 'ZF8 Steptronic', type: 'automatique', consommationOfficielle: 4.4 },
         ],
+        options: [
+          {
+            nom: 'Pack M Sport',
+            description: 'Jantes, carrosserie, volant M, sièges sport',
+            importance: 'indispensable',
+            avis: "Très recherché à la revente — une F30 sans Pack M perd 15-20% de valeur. À privilégier absolument.",
+          },
+          {
+            nom: 'GPS Professional',
+            description: 'iDrive avec carte HD et mise à jour',
+            importance: 'interessante',
+            avis: "Bien plus agréable que le système de base. Vérifier la version du logiciel.",
+          },
+          {
+            nom: 'Toit ouvrant',
+            description: 'Toit ouvrant électrique panoramique',
+            importance: 'inutile',
+            avis: "Source de fuites potentielles. Tester systématiquement lors de la visite.",
+          },
+        ],
+        potentielReprog: {
+          typeMoteur: 'turbo',
+          avisGeneral:
+            "Le 318d B47 est une très bonne base de reprog. Gains sérieux en couple, transforme le caractère de la voiture.",
+          stages: [
+            {
+              nom: 'Stage 1',
+              puissanceGain: 35,
+              coupleGain: 80,
+              puissanceFinal: 178,
+              coupleFinal: 460,
+              cout: '350 – 600 €',
+              avis: "Excellent. Le moteur devient vraiment plaisant — les reprises sont dans une autre catégorie.",
+            },
+            {
+              nom: 'Stage 2',
+              puissanceGain: 55,
+              coupleGain: 110,
+              puissanceFinal: 198,
+              coupleFinal: 490,
+              cout: '900 – 1 500 €',
+              avis: "Possible avec échangeur. Surveiller l'embrayage et la boîte automatique si équipée.",
+            },
+          ],
+          recommandation: 'oui',
+          raisonRecommandation:
+            "Stage 1 fortement recommandé. Le 318d devient un moteur vraiment agréable et économique à la fois.",
+        },
       },
       {
         slug: '320d-190ch',
@@ -568,6 +809,39 @@ export const voitures: Voiture[] = [
         puissance: 90,
         consommationOfficielle: 5.0,
         boites: [{ slug: 'bvm5', designation: 'BVM5', type: 'manuelle' }],
+        options: [
+          {
+            nom: 'Climatisation',
+            description: 'Climatisation manuelle',
+            importance: 'indispensable',
+            avis: "Première option à vérifier — impacte fortement la valeur de revente.",
+          },
+          {
+            nom: 'GPS MediaNav',
+            description: 'GPS Dacia intégré',
+            importance: 'inutile',
+            avis: "Dépassé. Un support téléphone fait mieux pour 20€.",
+          },
+        ],
+        potentielReprog: {
+          typeMoteur: 'turbo',
+          avisGeneral:
+            "Le 0.9 TCe Renault se reprogramme facilement. Gains modestes mais réels sur une plateforme économique.",
+          stages: [
+            {
+              nom: 'Stage 1',
+              puissanceGain: 15,
+              coupleGain: 35,
+              puissanceFinal: 105,
+              coupleFinal: 170,
+              cout: '250 – 400 €',
+              avis: "Transforme agréablement le moteur pour un usage quotidien. Coût raisonnable.",
+            },
+          ],
+          recommandation: 'selon_usage',
+          raisonRecommandation:
+            "Intéressant si vous gardez le véhicule longtemps. Peu pertinent si vous comptez revendre rapidement.",
+        },
       },
       {
         slug: '15-dci-75ch',
@@ -629,6 +903,39 @@ export const voitures: Voiture[] = [
         puissance: 95,
         consommationOfficielle: 5.1,
         boites: [{ slug: 'bvm6', designation: 'BVM6', type: 'manuelle' }],
+        options: [
+          {
+            nom: 'B&O Audio',
+            description: 'Système audio Bang & Olufsen',
+            importance: 'inutile',
+            avis: "Bonne qualité mais pas worth le surprix en occasion.",
+          },
+          {
+            nom: 'Aide au stationnement',
+            description: 'Capteurs avant et arrière',
+            importance: 'interessante',
+            avis: "Utile sur une citadine urbaine. Tester les 6 capteurs.",
+          },
+        ],
+        potentielReprog: {
+          typeMoteur: 'turbo',
+          avisGeneral:
+            "Le 1.0 EcoBoost Ford est l'un des moteurs 3 cylindres les plus aboutis du marché. Il répond très bien à la reprog malgré sa petite cylindrée.",
+          stages: [
+            {
+              nom: 'Stage 1',
+              puissanceGain: 25,
+              coupleGain: 50,
+              puissanceFinal: 120,
+              coupleFinal: 220,
+              cout: '300 – 500 €',
+              avis: "Très bonne transformation. Le moteur perd son côté creux à bas régime. Recommandé.",
+            },
+          ],
+          recommandation: 'oui',
+          raisonRecommandation:
+            "Le 1.0 EcoBoost est une excellente base. Stage 1 recommandé — rapport qualité/prix très bon sur ce moteur.",
+        },
       },
       {
         slug: '10-ecoboost-125ch',
@@ -671,6 +978,142 @@ export const voitures: Voiture[] = [
   },
 
   {
+    id: 'bmw-m3-e92',
+    marque: 'BMW',
+    modele: 'M3 E92',
+    annees: '2007–2013',
+    segment: 'Sportive',
+    poids: 1580,
+    motorisations: [
+      {
+        slug: 'v8-s65-420ch',
+        designation: 'V8 S65 420ch',
+        type: 'essence',
+        puissance: 420,
+        couple: 400,
+        consommationOfficielle: 12.4,
+        consommationReelle: 14.0,
+        boites: [
+          { slug: 'bvm6', designation: 'BVM6', type: 'manuelle' },
+          { slug: 'dkg7', designation: 'DKG7', type: 'dsg' },
+        ],
+        fiabilite: {
+          note: 3,
+          avis:
+            "Le V8 S65 est une mécanique d'exception — à haut régime, il est irremplaçable. Mais il exige des vidanges toutes les 7 000 km maximum (pas les 15 000 km préconisés par BMW) et un remplacement préventif des coussinets de bielles. La boîte manuelle est plus fiable et agréable que la DKG en usage quotidien.",
+          problemesConnus: [
+            "Coussinets de bielles : POINT CRITIQUE — remplacement préventif impératif avant 100 000 km (3 800 à 5 000 €)",
+            "Actuateurs de papillons : défaillance fréquente, surtout sur les hauts kilométrages",
+            "Pompe à huile : vérifier la pression régulièrement, sensible aux fortes charges",
+            "Bobines d'allumage : à contrôler lors de l'achat, défaillances fréquentes",
+            "DKG : vidange obligatoire tous les 50 000 km, coûteuse si négligée",
+          ],
+        },
+        cotes: [
+          { label: '2007–2009, 100–150 000 km', prixBas: 22000, prixMoyen: 28000, prixHaut: 35000 },
+          { label: '2010–2011, 60–100 000 km',  prixBas: 28000, prixMoyen: 35000, prixHaut: 45000 },
+          { label: '2012–2013, <60 000 km',      prixBas: 38000, prixMoyen: 48000, prixHaut: 60000 },
+        ],
+        checklistSpecifique: [
+          "Vérifier la pression d'huile moteur à chaud — toute valeur basse est rédhibitoire",
+          "Demander les factures de remplacement des coussinets de bielles ou prévoir le budget",
+          "Tester les actuateurs de papillons : démarrage à froid, pas de ratés ni de voyants",
+          "Vérifier l'historique des vidanges — idéalement toutes les 7 000 km, pas plus",
+          "Sur DKG : tester tous les modes (Normal, Sport, Sport+), pas d'à-coups ni de patinage",
+          "Écouter le bruit de pont à froid lors du premier démarrage",
+        ],
+        options: [
+          {
+            nom: 'Différentiel autobloquant M Variable',
+            description: "Différentiel à glissement limité actif à l'arrière",
+            importance: 'indispensable',
+            avis: "Incontournable sur une propulsion de 420ch. Sans lui, la voiture est bien moins exploitable sur route mouillée et en conduite sportive. À vérifier absolument lors de l'achat.",
+          },
+          {
+            nom: 'Suspension pilotée EDC (amortisseurs adaptatifs)',
+            description: 'Amortisseurs réglables électroniquement avec modes Comfort/Normal/Sport',
+            importance: 'interessante',
+            avis: "Très appréciée pour un usage mixte route/autoroute. Attention : les amortisseurs EDC coûtent 2 à 3x plus cher à remplacer que des amortisseurs classiques. À éviter si budget entretien serré.",
+          },
+          {
+            nom: 'Toit en fibre de carbone',
+            description: 'Toit panoramique remplacé par un toit en carbone pour réduire le centre de gravité',
+            importance: 'interessante',
+            avis: "Abaisse le centre de gravité de 15mm — bénéfice réel sur circuit. En usage route, la différence est subtile. Ajoute du caractère mais attention aux micro-fissures sur les exemplaires anciens.",
+          },
+          {
+            nom: 'Pack M Drive (MDrive)',
+            description: 'Mémorisation des réglages moteur, suspension, DSC sur un bouton dédié',
+            importance: 'interessante',
+            avis: "Pratique pour basculer rapidement en mode sport complet. Pas indispensable mais confortable si vous alternez usage quotidien et conduite sportive.",
+          },
+          {
+            nom: 'Sono Harman Kardon',
+            description: 'Système audio premium 400W avec subwoofer',
+            importance: 'inutile',
+            avis: "Difficile à entendre avec le V8 à plein régime. Confort appréciable au quotidien, mais ne justifie pas un surprix en occasion.",
+          },
+          {
+            nom: 'Jantes 19 pouces',
+            description: 'Jantes forgées 19 pouces en lieu et place des 18 pouces de série',
+            importance: 'inutile',
+            avis: "Les 18 pouces de série offrent un meilleur compromis confort/tenue. Les 19 pouces durcissent la direction et augmentent le coût des pneumatiques. Préférez les 18 pouces.",
+          },
+        ],
+        potentielReprog: {
+          typeMoteur: 'atmospherique',
+          avisGeneral:
+            "Le V8 S65 est un moteur atmosphérique porté à son maximum par BMW dès la sortie d'usine. Contrairement à un moteur turbo, les marges de progression via reprogrammation sont extrêmement limitées. L'argent investi dans une reprog sera toujours mieux dépensé dans l'entretien ou dans des pneumatiques de qualité.",
+          stages: [
+            {
+              nom: 'Stage 1',
+              puissanceGain: 12,
+              coupleGain: 15,
+              puissanceFinal: 432,
+              coupleFinal: 415,
+              cout: '400 – 800 €',
+              avis: "Gain marginal (+12ch) obtenu par optimisation des calages d'allumage et du VANOS. Imperceptible au volant dans 90% des situations. Non recommandé.",
+            },
+            {
+              nom: 'Stage 2',
+              puissanceGain: 0,
+              coupleGain: 0,
+              puissanceFinal: 420,
+              coupleFinal: 400,
+              cout: 'Non applicable',
+              avis: "Il n'existe pas de Stage 2 pertinent sur un V8 atmosphérique. Les modifications nécessaires (admission, échappement, etc.) coûtent très cher pour des gains dérisoires sur une voiture déjà au plafond.",
+            },
+          ],
+          recommandation: 'non',
+          raisonRecommandation:
+            "Moteur atmosphérique déjà au maximum de son potentiel. Budget mieux investi dans : remplacement préventif des coussinets de bielles, révision des actuateurs de papillons, pneumatiques haute performance.",
+        },
+      },
+    ],
+    fiabilite: {
+      note: 3,
+      avisGeneral:
+        "Fiabilité correcte si l'entretien est rigoureux, mais le moteur S65 cache des faiblesses coûteuses. Les coussinets de bielles sont le talon d'Achille de ce moteur — un remplacement préventif avant 100 000 km est fortement recommandé. Réservée aux acheteurs avertis avec un budget entretien conséquent.",
+      pointsSensibles: [
+        "Coussinets de bielles : usure prématurée, remplacement préventif recommandé avant 100 000 km",
+        "Pompe à huile : peut perdre en pression lors de fortes sollicitations — surveiller la pression",
+        "Actuateurs VANOS : ratés à chaud, défaillances capricieuses sur moteur chaud",
+        "Tendeur de chaîne : vieillit mal avec un usage sportif intensif",
+        "Boîte DKG : fiable si vidanges respectées tous les 50 000 km, complexe et coûteuse en réparation",
+        "Pont arrière : bruits de pont à froid, courants mais sans gravité si huile changée régulièrement",
+      ],
+      pannesFrequentes: [
+        "Bobines d'allumage défaillantes (ratés moteur, cylindres manquants)",
+        "Actuateurs de papillons HS (coût : 800 à 1 500 €, très fréquent)",
+        "Fuites d'huile sur cache culasse et joints divers",
+        "Sélecteur DKG : fils internes sectionnés (réparation simple si détectée tôt)",
+        "Défauts ABS/ESP électroniques sporadiques",
+      ],
+    },
+    checklist: checklistGenerique,
+  },
+
+  {
     id: 'citroen-c3-3',
     marque: 'Citroën',
     modele: 'C3 III',
@@ -696,6 +1139,39 @@ export const voitures: Voiture[] = [
           { slug: 'bvm6', designation: 'BVM6', type: 'manuelle' },
           { slug: 'eat6', designation: 'EAT6', type: 'automatique', consommationOfficielle: 5.5 },
         ],
+        options: [
+          {
+            nom: 'Airbumps',
+            description: 'Protections plastique sur les flancs',
+            importance: 'inutile',
+            avis: "Original mais fragilisé avec l'âge. Vérifier l'état — les remplacer coûte cher.",
+          },
+          {
+            nom: 'Climatisation auto',
+            description: 'Climatisation automatique',
+            importance: 'interessante',
+            avis: "Confort réel. Tester le compresseur.",
+          },
+        ],
+        potentielReprog: {
+          typeMoteur: 'turbo',
+          avisGeneral:
+            "Le 1.2 PureTech est reprogrammable mais attention — ce moteur a déjà des problèmes de courroie de distribution. Reprogrammer un moteur fragile n'est pas recommandé.",
+          stages: [
+            {
+              nom: 'Stage 1',
+              puissanceGain: 20,
+              coupleGain: 40,
+              puissanceFinal: 130,
+              coupleFinal: 230,
+              cout: '300 – 500 €',
+              avis: "Techniquement possible mais déconseillé. Le PureTech a des fragilités connues — priorité à l'entretien plutôt qu'à la performance.",
+            },
+          ],
+          recommandation: 'non',
+          raisonRecommandation:
+            "Le 1.2 PureTech souffre déjà de problèmes de courroie de distribution. Toute sollicitation supplémentaire augmente les risques. Budget mieux investi dans la prévention.",
+        },
       },
       {
         slug: '15-bluehdi-100ch',

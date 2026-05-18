@@ -72,17 +72,17 @@ export default function SearchBar({ defaultValue = '', large = false }: Props) {
           font-[family-name:var(--font-dm-sans)]
           transition-all duration-150"
         style={{
-          background: 'var(--accent-gold)',
+          background: '#C9A84C',
           color: '#0D0D0D',
           fontSize: large ? '0.875rem' : '0.8125rem',
           padding: large ? '0 2rem' : '0 1.25rem',
           height: large ? '56px' : 'auto',
         }}
         onMouseEnter={(e) => {
-          (e.currentTarget as HTMLElement).style.background = 'var(--accent-gold-light)'
+          (e.currentTarget as HTMLElement).style.background = '#E8C97A'
         }}
         onMouseLeave={(e) => {
-          (e.currentTarget as HTMLElement).style.background = 'var(--accent-gold)'
+          (e.currentTarget as HTMLElement).style.background = '#C9A84C'
         }}
       >
         Rechercher

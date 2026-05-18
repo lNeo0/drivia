@@ -9,7 +9,7 @@ export default function HomePage() {
   const vedettes = voitures.filter((v) => v.fiabilite.note >= 4).slice(0, 3)
 
   return (
-    <div className="min-h-screen" style={{ background: 'var(--bg-base)', color: 'var(--text-primary)' }}>
+    <div className="min-h-screen bg-base text-primary">
       <NavBar />
 
       {/* Hero */}
@@ -24,35 +24,24 @@ export default function HomePage() {
         />
 
         <div className="relative z-10">
-          <div
-            className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-8
-              border font-[family-name:var(--font-dm-sans)]"
-            style={{
-              background: 'var(--accent-gold-dim)',
-              borderColor: 'var(--accent-gold)',
-              color: 'var(--accent-gold)',
-            }}
-          >
-            <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--accent-gold)' }} />
-            <span className="text-[0.6875rem] font-semibold uppercase tracking-[0.1em]">
+          <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-8
+            border border-gold-dim bg-gold-dim font-body">
+            <span className="w-1.5 h-1.5 rounded-full bg-gold" />
+            <span className="text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-gold">
               Guide achat voiture d'occasion
             </span>
           </div>
 
-          <h1
-            className="font-[family-name:var(--font-cormorant)] font-semibold
-              tracking-[-0.02em] leading-[1.05] mb-6"
-            style={{ fontSize: 'clamp(2.5rem, 6vw, 4rem)', color: 'var(--text-primary)' }}
+          <h1 className="font-display font-semibold tracking-[-0.02em] leading-[1.05] mb-6
+            text-primary"
+            style={{ fontSize: 'clamp(2.5rem, 6vw, 4rem)' }}
           >
             Achetez malin,{' '}
-            <em style={{ color: 'var(--accent-gold)', fontStyle: 'italic' }}>conduisez confiant</em>
+            <em className="text-gold not-italic">conduisez confiant</em>
           </h1>
 
-          <p
-            className="text-[1.0625rem] leading-relaxed mb-12 max-w-md mx-auto
-              font-[family-name:var(--font-dm-sans)]"
-            style={{ color: 'var(--text-secondary)' }}
-          >
+          <p className="text-[1.0625rem] leading-relaxed mb-12 max-w-md mx-auto
+            text-secondary font-body">
             Fiabilité, pannes fréquentes, cotes du marché et checklist de visite — pour chaque modèle.
           </p>
 
@@ -63,26 +52,10 @@ export default function HomePage() {
               <a
                 key={marque}
                 href={`/recherche?q=${encodeURIComponent(marque)}`}
-                className="text-[0.8125rem] px-4 py-1.5 rounded-full border
-                  font-[family-name:var(--font-dm-sans)] font-medium
+                className="text-[0.8125rem] px-4 py-1.5 rounded-full border border-rim
+                  font-body font-medium text-secondary bg-surface
+                  hover:border-gold-dim hover:bg-subtle hover:text-gold
                   transition-all duration-150"
-                style={{
-                  background: 'var(--bg-surface)',
-                  borderColor: 'var(--border-default)',
-                  color: 'var(--text-secondary)',
-                }}
-                onMouseEnter={(e) => {
-                  const el = e.currentTarget as HTMLElement
-                  el.style.borderColor = 'var(--accent-gold-dim)'
-                  el.style.background = 'var(--bg-subtle)'
-                  el.style.color = 'var(--accent-gold)'
-                }}
-                onMouseLeave={(e) => {
-                  const el = e.currentTarget as HTMLElement
-                  el.style.borderColor = 'var(--border-default)'
-                  el.style.background = 'var(--bg-surface)'
-                  el.style.color = 'var(--text-secondary)'
-                }}
               >
                 {marque}
               </a>
@@ -95,15 +68,11 @@ export default function HomePage() {
       <section className="max-w-3xl mx-auto px-6 pb-28">
         <div className="mb-8">
           <p className="text-[0.75rem] font-semibold uppercase tracking-[0.1em] mb-2
-            font-[family-name:var(--font-dm-sans)]"
-            style={{ color: 'var(--text-muted)' }}>
+            text-muted font-body">
             Sélection
           </p>
-          <h2
-            className="font-[family-name:var(--font-cormorant)] font-semibold
-              tracking-[-0.01em]"
-            style={{ fontSize: '2.25rem', color: 'var(--text-primary)' }}
-          >
+          <h2 className="font-display font-semibold tracking-[-0.01em] text-primary"
+            style={{ fontSize: '2.25rem' }}>
             Meilleures fiabilités
           </h2>
         </div>
@@ -118,10 +87,7 @@ export default function HomePage() {
           <a
             href="/recherche"
             className="inline-flex items-center gap-1.5 text-[0.875rem] font-medium
-              font-[family-name:var(--font-dm-sans)] transition-colors duration-150"
-            style={{ color: 'var(--text-secondary)' }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = 'var(--accent-gold)' }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = 'var(--text-secondary)' }}
+              font-body text-secondary hover:text-gold transition-colors duration-150"
           >
             Voir toutes les voitures →
           </a>

@@ -60,9 +60,9 @@
   --color-surface:  var(--bg-surface);
   --color-elevated: var(--bg-elevated);
   --color-subtle:   var(--bg-subtle);
-  /* Borders */
-  --color-border:        var(--border-default);
-  --color-border-strong: var(--border-strong);
+  /* Borders — "rim" avoids the bg-border / border-border ambiguity */
+  --color-rim:      var(--border-default);
+  --color-rim-strong: var(--border-strong);
   /* Text */
   --color-primary:   var(--text-primary);
   --color-secondary: var(--text-secondary);
@@ -71,7 +71,6 @@
   --color-gold:       var(--accent-gold);
   --color-gold-light: var(--accent-gold-light);
   --color-gold-dim:   var(--accent-gold-dim);
-  --color-gold-glow:  var(--accent-gold-glow);
   /* Status */
   --color-success: var(--success);
   --color-warning: var(--warning);
@@ -84,10 +83,7 @@
 }
 
 /* ─── Global base styles ─── */
-html {
-  scroll-behavior: smooth;
-  /* dark class applied immediately to avoid flash */
-}
+html { scroll-behavior: smooth; }
 
 body {
   background-color: var(--bg-base);
@@ -114,10 +110,8 @@ body {
   box-shadow: 0 0 0 3px var(--accent-gold-glow), 0 0 0 1px var(--accent-gold);
 }
 
-/* ─── Decorative grain overlay (dark only) ─── */
-.dark .grain-overlay {
-  display: block;
-}
+/* ─── Grain overlay (dark only) ─── */
+.dark .grain-overlay { display: block; }
 .grain-overlay {
   display: none;
   position: fixed;
@@ -129,9 +123,19 @@ body {
   background-size: 128px;
 }
 
-/* ─── Section fade separator ─── */
+/* ─── Fade separator ─── */
 .sep-fade {
   height: 1px;
   background: var(--border-default);
   mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
+}
+
+/* ─── Card hover ─── */
+.card-hover {
+  transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+  box-shadow: var(--shadow-sm);
+}
+.card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md), 0 0 0 1px var(--border-strong);
 }
