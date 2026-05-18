@@ -29,7 +29,7 @@ export const voitures: Voiture[] = [
     annees: '2012–2020',
     segment: 'Compacte',
     poids: 1205,
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/VW_Golf_VII_1.4_TSI_BlueMotion_Technology_Comfortline_%28facelift%2C_5G1%29_–_Frontansicht%2C_28._März_2015%2C_Ratingen.jpg/1280px-VW_Golf_VII_1.4_TSI_BlueMotion_Technology_Comfortline_%28facelift%2C_5G1%29_–_Frontansicht%2C_28._März_2015%2C_Ratingen.jpg',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/VW_Golf_VII_1.4_TSI_BlueMotion_Technology_Comfortline_%28facelift%2C_5G1%29_%E2%80%93_Frontansicht%2C_28._M%C3%A4rz_2015%2C_Ratingen.jpg/1280px-VW_Golf_VII_1.4_TSI_BlueMotion_Technology_Comfortline_%28facelift%2C_5G1%29_%E2%80%93_Frontansicht%2C_28._M%C3%A4rz_2015%2C_Ratingen.jpg',
     motorisations: [
       {
         slug: '10-tsi-85ch',

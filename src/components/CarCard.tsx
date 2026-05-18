@@ -20,29 +20,32 @@ export default function CarCard({ voiture }: Props) {
       className="group block rounded-2xl overflow-hidden card-hover
         bg-surface border border-rim"
     >
+      {/* Image banner 120px */}
       <CardImage src={voiture.image} alt={`${voiture.marque} ${voiture.modele}`} />
-      <div className="p-6">
-        {/* Header */}
-        <div className="flex items-start justify-between gap-4 mb-4">
+
+      {/* Body */}
+      <div style={{ padding: '20px' }}>
+
+        {/* Header: name left / reliability right */}
+        <div className="flex items-start justify-between gap-4">
           <div>
             <p className="text-[0.7rem] font-semibold uppercase tracking-[0.08em]
-              text-muted mb-1.5 font-body">
+              text-muted mb-1 font-body">
               {voiture.marque}
             </p>
-            <h2 className="font-display text-[1.375rem] font-semibold
+            <h2 className="font-display text-[1.25rem] font-semibold
               text-primary leading-tight
               group-hover:text-gold transition-colors duration-150">
               {voiture.modele}
             </h2>
-            <p className="text-[0.8125rem] text-secondary mt-1 font-body">
+            <p className="text-[0.8rem] text-secondary mt-0.5 font-body">
               {voiture.segment} · {voiture.annees}
             </p>
           </div>
 
-          {/* Score badge */}
-          <div className="shrink-0 flex flex-col items-center gap-1.5">
+          <div className="shrink-0 flex flex-col items-center gap-1">
             <div
-              className="w-[52px] h-[52px] rounded-full flex items-center justify-center
+              className="w-[48px] h-[48px] rounded-full flex items-center justify-center
                 font-display text-[1.125rem] font-bold"
               style={{
                 color: color.text,
@@ -61,12 +64,11 @@ export default function CarCard({ voiture }: Props) {
           </div>
         </div>
 
-        {/* Separator */}
-        <div className="sep-fade mb-4" />
-
-        {/* Specs */}
-        <div className="flex items-center gap-4 text-[0.8125rem] text-secondary
-          font-body mb-4">
+        {/* Specs — separated by a top border */}
+        <div
+          className="flex items-center gap-3 text-[0.8rem] text-secondary font-body mt-4 pt-4"
+          style={{ borderTop: '1px solid var(--border-default)' }}
+        >
           <span>
             <span className="text-primary font-medium">{puissance}</span> ch
           </span>
@@ -78,13 +80,8 @@ export default function CarCard({ voiture }: Props) {
           <span>{voiture.motorisations.length} motorisations</span>
         </div>
 
-        <p className="text-[0.875rem] text-secondary line-clamp-2 leading-relaxed
-          font-body mb-5">
-          {voiture.fiabilite.avisGeneral}
-        </p>
-
-        {/* Bottom row: score badge + CTA */}
-        <div className="flex items-center justify-between gap-3">
+        {/* Footer: score badge + CTA */}
+        <div className="flex items-center justify-between gap-3 mt-4">
           <span
             className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full
               text-[0.6875rem] font-semibold font-body"
@@ -110,6 +107,7 @@ export default function CarCard({ voiture }: Props) {
             <span className="group-hover:translate-x-0.5 transition-transform duration-150">→</span>
           </span>
         </div>
+
       </div>
     </Link>
   )

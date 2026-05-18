@@ -9,11 +9,16 @@ export default function CardImage({ src, alt }: { src?: string; alt: string }) {
   if (!showImage) {
     return (
       <div
-        className="aspect-video flex items-center justify-center"
-        style={{ background: 'var(--bg-elevated)' }}
+        style={{
+          height: '120px',
+          background: 'var(--bg-elevated)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
       >
         <svg
-          width="40" height="40" viewBox="0 0 24 24" fill="none"
+          width="36" height="36" viewBox="0 0 24 24" fill="none"
           stroke="var(--text-muted)" strokeWidth="1.25"
           strokeLinecap="round" strokeLinejoin="round"
         >
@@ -26,16 +31,26 @@ export default function CardImage({ src, alt }: { src?: string; alt: string }) {
   }
 
   return (
-    <div className="relative aspect-video overflow-hidden">
+    <div style={{ height: '120px', overflow: 'hidden', position: 'relative' }}>
       <img
         src={src}
         alt={alt}
-        className="absolute inset-0 w-full h-full object-cover"
+        style={{
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          objectPosition: 'center 40%',
+          display: 'block',
+        }}
         onError={() => setError(true)}
       />
       <div
-        className="absolute inset-0 pointer-events-none"
-        style={{ background: 'linear-gradient(to top, #141414 0%, transparent 60%)' }}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'linear-gradient(to top, #141414 0%, rgba(13,13,13,0.3) 100%)',
+          pointerEvents: 'none',
+        }}
       />
     </div>
   )
