@@ -29,7 +29,7 @@ export const voitures: Voiture[] = [
     annees: '2012–2020',
     segment: 'Compacte',
     poids: 1205,
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Volkswagen_Golf_VII_GTI_front.JPG/1280px-Volkswagen_Golf_VII_GTI_front.JPG',
+    image: '/api/img/wikipedia/commons/thumb/9/9d/Volkswagen_Golf_VII_GTI_front.JPG/1280px-Volkswagen_Golf_VII_GTI_front.JPG',
     motorisations: [
       {
         slug: '10-tsi-85ch',
@@ -253,7 +253,7 @@ export const voitures: Voiture[] = [
     annees: '2012–2019',
     segment: 'Citadine',
     poids: 1095,
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Renault_Clio_IV_Facelift_IMG_0482.jpg/1280px-Renault_Clio_IV_Facelift_IMG_0482.jpg',
+    image: '/api/img/wikipedia/commons/thumb/9/9a/Renault_Clio_IV_Facelift_IMG_0482.jpg/1280px-Renault_Clio_IV_Facelift_IMG_0482.jpg',
     motorisations: [
       {
         slug: '09-tce-75ch',
@@ -410,7 +410,7 @@ export const voitures: Voiture[] = [
     annees: '2013–2021',
     segment: 'Compacte',
     poids: 1210,
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Peugeot_308_II_IMG_3198.jpg/1280px-Peugeot_308_II_IMG_3198.jpg',
+    image: '/api/img/wikipedia/commons/thumb/f/f7/Peugeot_308_II_IMG_3198.jpg/1280px-Peugeot_308_II_IMG_3198.jpg',
     motorisations: [
       {
         slug: '12-puretech-110ch',
@@ -575,7 +575,7 @@ export const voitures: Voiture[] = [
     annees: '2011–2020',
     segment: 'Citadine',
     poids: 1035,
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Toyota_Yaris_Hybrid_%28XP130%29_%E2%80%93_f_18062018.jpg/1280px-Toyota_Yaris_Hybrid_%28XP130%29_%E2%80%93_f_18062018.jpg',
+    image: '/api/img/wikipedia/commons/thumb/6/64/Toyota_Yaris_Hybrid_%28XP130%29_%E2%80%93_f_18062018.jpg/1280px-Toyota_Yaris_Hybrid_%28XP130%29_%E2%80%93_f_18062018.jpg',
     motorisations: [
       {
         slug: '10-vvti-69ch',
@@ -662,7 +662,7 @@ export const voitures: Voiture[] = [
     annees: '2012–2019',
     segment: 'Berline premium',
     poids: 1440,
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/2012_BMW_328i_%28F30%29_luxury_sedan_%282012-10-28%29_02.jpg/1280px-2012_BMW_328i_%28F30%29_luxury_sedan_%282012-10-28%29_02.jpg',
+    image: '/api/img/wikipedia/commons/thumb/6/6a/2012_BMW_328i_%28F30%29_luxury_sedan_%282012-10-28%29_02.jpg/1280px-2012_BMW_328i_%28F30%29_luxury_sedan_%282012-10-28%29_02.jpg',
     motorisations: [
       {
         slug: '316i-136ch',
@@ -798,7 +798,7 @@ export const voitures: Voiture[] = [
     annees: '2012–2020',
     segment: 'Citadine économique',
     poids: 975,
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Dacia_Sandero_II_IMG_0709.jpg/1280px-Dacia_Sandero_II_IMG_0709.jpg',
+    image: '/api/img/wikipedia/commons/thumb/1/1b/Dacia_Sandero_II_IMG_0709.jpg/1280px-Dacia_Sandero_II_IMG_0709.jpg',
     motorisations: [
       {
         slug: '10-sce-65ch',
@@ -893,7 +893,7 @@ export const voitures: Voiture[] = [
     annees: '2017–2023',
     segment: 'Citadine',
     poids: 1060,
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/2017_Ford_Fiesta_%28C1%29_ST-Line_5-door_hatchback_%282018-09-07%29_01.jpg/1280px-2017_Ford_Fiesta_%28C1%29_ST-Line_5-door_hatchback_%282018-09-07%29_01.jpg',
+    image: '/api/img/wikipedia/commons/thumb/1/1e/2017_Ford_Fiesta_%28C1%29_ST-Line_5-door_hatchback_%282018-09-07%29_01.jpg/1280px-2017_Ford_Fiesta_%28C1%29_ST-Line_5-door_hatchback_%282018-09-07%29_01.jpg',
     motorisations: [
       {
         slug: '11-tivct-75ch',
@@ -991,7 +991,7 @@ export const voitures: Voiture[] = [
     annees: '2007–2013',
     segment: 'Sportive',
     poids: 1580,
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/BMW_M3_E92_--_03-25-2010.jpg/1280px-BMW_M3_E92_--_03-25-2010.jpg',
+    image: '/api/img/wikipedia/commons/thumb/c/c9/BMW_M3_E92_--_03-25-2010.jpg/1280px-BMW_M3_E92_--_03-25-2010.jpg',
     motorisations: [
       {
         slug: 'v8-s65-420ch',
@@ -1128,7 +1128,7 @@ export const voitures: Voiture[] = [
     annees: '2016–2023',
     segment: 'Citadine',
     poids: 1050,
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/2019_Citro%C3%ABn_C3_Flair_PureTech_82_in_Emerald_Crystal%2C_front_8.26.19.jpg/1280px-2019_Citro%C3%ABn_C3_Flair_PureTech_82_in_Emerald_Crystal%2C_front_8.26.19.jpg',
+    image: '/api/img/wikipedia/commons/thumb/9/95/2019_Citro%C3%ABn_C3_Flair_PureTech_82_in_Emerald_Crystal%2C_front_8.26.19.jpg/1280px-2019_Citro%C3%ABn_C3_Flair_PureTech_82_in_Emerald_Crystal%2C_front_8.26.19.jpg',
     motorisations: [
       {
         slug: '12-puretech-82ch',

@@ -9,6 +9,14 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async rewrites() {
+    return [
+      {
+        source: '/api/img/:path*',
+        destination: 'https://upload.wikimedia.org/:path*',
+      },
+    ]
+  },
 };
 
 export default nextConfig;
