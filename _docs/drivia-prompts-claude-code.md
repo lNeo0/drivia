@@ -386,3 +386,58 @@ Ajoute OptionsSection et ReprogSection dans /voiture/[id]/[motorisationSlug]/pag
 après "Fiabilité de cette motorisation" et avant la checklist.
 ```
 **Résultat observé :** En attente
+
+---
+
+## PROMPT 8 — Navigation ancre sticky sur fiches motorisation
+**Session :** 2 | **Statut :** ✅ Exécuté avec succès
+
+**Composant créé :** `src/components/AnchorNav.tsx`
+- Position fixed sous la NavBar (top: 64px)
+- Invisible jusqu'à 150px de scroll → fade + slide in
+- IntersectionObserver pour détecter section active
+- Ancres conditionnelles (Options/Reprog/Cotes masquées si données absentes)
+- Barre de progression 3px en bas de page (or #C9A84C)
+- Scroll offset 124px (NavBar + AnchorNav + margin)
+
+**Résultat observé (via Claude in Chrome) :**
+- Barre apparaît au scroll, bien positionnée sous la NavBar ✅
+- Lien actif en or avec soulignement doré ✅
+- Toutes les ancres présentes et correctes ✅
+- Cotes en tableau avec couleurs rouge/or/vert ✅
+- Checklist "Points critiques" surlignée en or ✅
+- Barre de progression non visible (trop fine ?) — mineur ⚠️
+
+---
+
+## PROMPT 9 — Correction bug ancre "Pannes"
+**Session :** 2 | **Statut :** ✅ Exécuté avec succès
+
+**Bug :** Clic sur "Pannes" scrollait vers "Fiabilité" car l'id était imbriqué dans le bloc fiabilité
+
+**Corrections :**
+- Section "Pannes" extraite en `<Section id="pannes">` indépendante au même niveau DOM que les autres sections
+- Style cohérent avec pointsSensibles (card individuelle, icône ✕ rouge)
+- AnchorNav : rootMargin ajusté de `-20% 0px -60% 0px` → `-10% 0px -50% 0px` pour détecter les sections courtes
+
+**Résultat :** Bug corrigé, navigation ancre fonctionnelle sur toutes les sections
+
+---
+
+## PROMPT A — Live search + recherche améliorée
+**Session :** 2 | **Statut :** ✅ Exécuté avec succès (après bugfix overflow-hidden)
+
+**Composants créés/modifiés :**
+- `src/lib/data.ts` — rechercherVoitures() avec aliases (vw, bm, reno, daf...) + recherche floue
+- `src/components/SearchBar.tsx` — live dropdown, debounce 200ms, max 5 suggestions
+- `src/components/NavSearch.tsx` — search compact dans la NavBar (200→300px au focus)
+- `src/app/page.tsx` — overflow-hidden retiré de la section hero (bloquait le dropdown)
+
+**Bug rencontré et corrigé :**
+- Dropdown invisible car la section hero avait `overflow-hidden` qui clippait l'absolu
+- Fix : suppression de `overflow-hidden` sur la section en page.tsx
+
+**Résultat observé (via Claude in Chrome) :**
+- "golf" → dropdown "Volkswagen Golf 7 · 2012–2020" ✅
+- "vw" → alias reconnu, même résultat ✅
+- "bm" dans NavSearch → dropdown dans la barre de nav ✅

@@ -6,6 +6,7 @@ import OptionsSection from '@/components/OptionsSection'
 import ReprogSection from '@/components/ReprogSection'
 import AnchorNav from '@/components/AnchorNav'
 import type { AnchorItem } from '@/components/AnchorNav'
+import ChecklistInteractive from '@/components/ChecklistInteractive'
 import { getVoitureEtMotorisation, getAllMotorisationParams } from '@/lib/data'
 
 export async function generateStaticParams() {
@@ -243,46 +244,12 @@ export default async function MotorisationPage({
 
         {/* Checklist */}
         <Section id="checklist" title="Checklist de visite">
-          <div className="rounded-2xl border border-rim bg-surface overflow-hidden">
-            {motorisation.checklistSpecifique && motorisation.checklistSpecifique.length > 0 && (
-              <div className="p-6 border-b bg-gold-dim"
-                style={{ borderColor: 'var(--accent-gold-dim)' }}>
-                <p className="text-[0.75rem] font-semibold uppercase tracking-[0.1em] mb-4
-                  font-body text-gold">
-                  Points critiques — spécifiques à ce moteur
-                </p>
-                <ul className="space-y-3">
-                  {motorisation.checklistSpecifique.map((item, i) => (
-                    <li key={i} className="flex gap-3 text-[0.9375rem]">
-                      <span className="shrink-0 w-5 h-5 rounded-full flex items-center justify-center
-                        mt-0.5 text-[0.6875rem] font-bold bg-gold-dim text-gold">
-                        !
-                      </span>
-                      <span className="leading-relaxed font-body text-secondary">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            <div className="p-6">
-              <p className="text-[0.75rem] font-semibold uppercase tracking-[0.08em] mb-5
-                font-body text-muted">
-                Points génériques de vérification
-              </p>
-              <ul className="space-y-3">
-                {voiture.checklist.map((item, i) => (
-                  <li key={i} className="flex gap-4 text-[0.9375rem]">
-                    <span className="shrink-0 w-6 h-6 rounded-[6px] flex items-center justify-center
-                      text-[0.75rem] font-semibold border border-rim-strong bg-elevated
-                      font-body text-muted">
-                      {i + 1}
-                    </span>
-                    <span className="leading-relaxed font-body text-secondary">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
+          <ChecklistInteractive
+            voitureId={voiture.id}
+            motorisationSlug={motorisationSlug}
+            checklistSpecifique={motorisation.checklistSpecifique ?? []}
+            checklist={voiture.checklist}
+          />
         </Section>
 
         {/* Footer nav */}

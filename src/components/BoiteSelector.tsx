@@ -51,7 +51,11 @@ export default function BoiteSelector({
             {boites.map((b, idx) => (
               <button
                 key={b.slug}
-                onClick={() => setSelectedIdx(idx)}
+                onClick={() => {
+                  if (idx === selectedIdx) return
+                  const ev = new CustomEvent('drivia:before-boite-change', { cancelable: true })
+                  if (window.dispatchEvent(ev)) setSelectedIdx(idx)
+                }}
                 className="h-[38px] px-5 rounded-[7px] text-[0.875rem] font-semibold
                   cursor-pointer transition-all duration-150
                   font-[family-name:var(--font-dm-sans)]"

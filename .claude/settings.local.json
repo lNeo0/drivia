@@ -17,7 +17,16 @@
       "PowerShell(node -e \"const pkg = require\\('./package.json'\\); console.log\\(JSON.stringify\\({tailwindcss: pkg.dependencies?.tailwindcss || pkg.devDependencies?.tailwindcss, 'next-themes': pkg.dependencies?.['next-themes'] || pkg.devDependencies?.['next-themes']}, null, 2\\)\\)\")",
       "PowerShell(npm install *)",
       "PowerShell(node -e \"require\\('next-themes'\\); console.log\\('ok'\\)\")",
-      "PowerShell(node node_modules/next/dist/bin/next build 2>&1 | Select-Object -Last 35)"
+      "PowerShell(node node_modules/next/dist/bin/next build 2>&1 | Select-Object -Last 35)",
+      "Bash(claude mcp *)",
+      "mcp__github-mcp__get_file_contents",
+      "Bash(npx tsc *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(npx next *)",
+      "Bash(node -e ' *)",
+      "Bash(git commit *)"
     ]
   }
 }

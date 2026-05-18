@@ -9,13 +9,14 @@
 "Comme si t'avais un pote mécanicien dans la poche."
 
 ### Fonctionnalités actuelles
-- Recherche par marque/modèle
-- Fiche voiture : specs, fiabilité générale, points sensibles, pannes fréquentes, motorisations
-- Fiche motorisation détaillée : specs, fiabilité moteur, problèmes connus, cotes marché, checklist, options, potentiel de reprog
+- Recherche par marque/modèle (live search avec dropdown, aliases vw/bm/reno/daf, recherche floue)
+- Fiche voiture : specs, fiabilité générale, points sensibles, pannes fréquentes, motorisations en cards cliquables
+- Fiche motorisation détaillée : specs, fiabilité moteur, problèmes connus, cotes marché, options, reprog, checklist
 - Sélecteur de boîte de vitesses par motorisation
-- Checklist de visite avant achat (points génériques + spécifiques)
-- Section Options (profil-based, conditionnelle)
-- Section Potentiel de reprog (turbo/atmo/hybride, conditionnelle)
+- Navigation ancre sticky sur les fiches motorisation (apparaît au scroll, lien actif en or)
+- Barre de progression lecture en bas de page
+- Sections Options et Reprog conditionnelles (profil-based)
+- Badges fiabilité couleur variable (vert/or/orange/rouge selon note)
 
 ### Stack technique
 - **Next.js 14** (App Router)
@@ -24,19 +25,26 @@
 - **Données mockées** dans `src/lib/data.ts`
 - Pas encore de backend ni Supabase
 
+### Composants clés ajoutés session 2
+- `src/components/NavSearch.tsx` — search compact dans la NavBar
+- `src/components/AnchorNav.tsx` — navigation ancre sticky
+- `src/components/ChecklistInteractive.tsx` — à venir
+- `src/lib/reliability.ts` — helper couleur fiabilité
+
 ### Voitures disponibles (9)
-Golf 7, Clio 4, 308 II, Yaris III, BMW Série 3 F30, Sandero II, Fiesta 7, C3 III, **BMW M3 E92** (ajoutée session 2)
+Golf 7, Clio 4, 308 II, Yaris III, BMW Série 3 F30, Sandero II, Fiesta 7, C3 III, BMW M3 E92
 
 ### Structure des fichiers clés
-- `src/types/index.ts` — Types TypeScript (dont Option, StageReprog, PotentielReprog)
-- `src/lib/data.ts` — 9 voitures, données complètes
+- `src/types/index.ts` — Types TypeScript (Voiture, Motorisation, Option, StageReprog, PotentielReprog...)
+- `src/lib/data.ts` — 9 voitures avec données complètes
 - `src/lib/reliability.ts` — Helper getReliabilityColor(note)
-- `src/components/NavBar.tsx`
-- `src/components/SearchBar.tsx`
-- `src/components/CarCard.tsx`
-- `src/components/MotorisationCards.tsx`
+- `src/components/NavBar.tsx` — Header sticky
+- `src/components/SearchBar.tsx` — Composant client avec useRouter
+- `src/components/CarCard.tsx` — Card cliquable pour les résultats
+- `src/components/MotorisationCards.tsx` — Cards motorisation interactives
 - `src/components/OptionsSection.tsx` — Section options conditionnelle
 - `src/components/ReprogSection.tsx` — Section reprog conditionnelle
+- `src/components/AnchorNav.tsx` — Navigation ancre sticky (NEW)
 - `src/app/page.tsx` — Accueil
 - `src/app/recherche/page.tsx` — Résultats
 - `src/app/voiture/[id]/page.tsx` — Fiche voiture
@@ -59,21 +67,19 @@ Golf 7, Clio 4, 308 II, Yaris III, BMW Série 3 F30, Sandero II, Fiesta 7, C3 II
 - Badges fiabilité couleur variable (vert/or/orange/rouge selon note)
 - Sections Options et Reprog sur toutes les motorisations (profil-based)
 - BMW M3 E92 ajoutée avec données détaillées
+- Navigation ancre sticky sur fiches motorisation (AnchorNav.tsx)
+- Barre de progression lecture
 - MCP GitHub configuré dans Claude Code
-- Workflow établi : maquette HTML → prompt Claude Code → vérification Chrome
+- Workflow : maquette HTML → prompt Claude Code → vérification Chrome
 
-### 🔄 Prochaine étape
-- Navigation ancre sticky sur les fiches motorisation (Option B validée)
-- Voir maquette : `_docs/drivia-maquette-ux-navigation.html`
-
-### 📋 Roadmap (voir drivia-roadmap.md)
-- Filtres page résultats
-- Page "Toutes les voitures" améliorée
-- Checklist interactive exportable
-- Comparateur 2 voitures
-- Supabase + vraie BDD
-- Plus de voitures via Claude API
-- Système contribution utilisateur
+### 📋 Prochaines étapes (par priorité)
+1. **Filtres page de résultats** — segment, moteur, budget, fiabilité min
+2. **Page "Toutes les voitures"** — grille avec tri et filtres
+3. **Checklist interactive exportable** — cases cochables + PDF
+4. **Comparateur 2 voitures**
+5. **Supabase** — vraie base de données
+6. **Plus de voitures** via Claude API
+7. **Système contribution utilisateur** (voir roadmap)
 
 ---
 
@@ -85,13 +91,13 @@ Golf 7, Clio 4, 308 II, Yaris III, BMW Série 3 F30, Sandero II, Fiesta 7, C3 II
 - accent-gold `#C9A84C` / accent-gold-light `#E8C97A` / accent-gold-dim `#7A5E2A`
 - success `#4CAF7A` / warning `#D48C3A` / danger `#C0442E`
 
-### Règle couleur fiabilité (variable selon note)
+### Règle couleur fiabilité
 - Note 5 → vert `#4CAF7A`
 - Note 4 → or `#C9A84C`
 - Note 3 → orange `#D48C3A`
 - Note ≤2 → rouge `#C0442E`
 
-### Règle reprog (profil-based)
+### Règle reprog
 - Turbo → stages chiffrés avec gains réels
 - Atmosphérique → explication honnête, gains marginaux
 - Hybride/Électrique → section masquée
@@ -118,6 +124,11 @@ Golf 7, Clio 4, 308 II, Yaris III, BMW Série 3 F30, Sandero II, Fiesta 7, C3 II
 ## Repo GitHub
 https://github.com/lNeo0/drivia
 
+## Fichiers de suivi
+- `_docs/drivia-contexte-reprise.md` — ce fichier
+- `_docs/drivia-prompts-claude-code.md` — historique des prompts
+- `_docs/drivia-roadmap.md` — évolutions potentielles
+
 ---
 
-*Dernière mise à jour : Session 2 — Options, reprog, M3 E92, design fiabilité, navigation ancre à venir*
+*Dernière mise à jour : Session 2 — Live search fonctionnel, prompt B (checklist interactive) à lancer*
