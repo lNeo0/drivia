@@ -39,7 +39,8 @@
       "Bash(mkdir \"C:\\\\Users\\\\maxim\\\\Documents\\\\1-Project\\\\1 - DRIVIA\\\\drivia\\\\scripts\")",
       "Bash(npx prisma *)",
       "Bash(npx tsx *)",
-      "PowerShell(netstat *)"
+      "PowerShell(netstat *)",
+      "Bash(gh auth *)"
     ]
   }
 }
