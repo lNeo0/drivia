@@ -26,7 +26,20 @@
       "Bash(git push *)",
       "Bash(npx next *)",
       "Bash(node -e ' *)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(node -e \"const p=require\\('./package.json'\\);console.log\\(p.dependencies.next\\)\")",
+      "Bash(curl -v \"http://localhost:3000/api/img/wikipedia/commons/thumb/c/c9/BMW_M3_E92_--_03-25-2010.jpg/800px-BMW_M3_E92_--_03-25-2010.jpg\")",
+      "Bash(curl *)",
+      "Bash(Remove-Item *)",
+      "PowerShell(Remove-Item *)",
+      "WebFetch(domain:vehicleimagery.com)",
+      "PowerShell(New-Item *)",
+      "Bash(npm install *)",
+      "Bash(mkdir \"C:\\\\Users\\\\maxim\\\\Documents\\\\1-Project\\\\1 - DRIVIA\\\\drivia\\\\src\\\\prisma\")",
+      "Bash(mkdir \"C:\\\\Users\\\\maxim\\\\Documents\\\\1-Project\\\\1 - DRIVIA\\\\drivia\\\\scripts\")",
+      "Bash(npx prisma *)",
+      "Bash(npx tsx *)",
+      "PowerShell(netstat *)"
     ]
   }
 }

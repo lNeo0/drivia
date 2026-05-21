@@ -92,7 +92,7 @@ export default async function MotorisationPage({
 
       {/* Hero */}
       <div className="relative h-[160px] md:h-[200px]">
-        <HeroImage src={voiture.image} alt={`${voiture.marque} ${voiture.modele}`} />
+        <HeroImage marque={voiture.marque} modele={voiture.modele} anneeDebut={voiture.anneeDebut} />
         <div className="absolute inset-0 flex flex-col justify-end pointer-events-none">
           <div className="max-w-3xl mx-auto w-full px-6 pb-6 pointer-events-auto">
             <Link

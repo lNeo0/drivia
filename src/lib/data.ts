@@ -27,9 +27,9 @@ export const voitures: Voiture[] = [
     marque: 'Volkswagen',
     modele: 'Golf 7',
     annees: '2012–2020',
+    anneeDebut: 2013,
     segment: 'Compacte',
     poids: 1205,
-    image: '/api/img/wikipedia/commons/thumb/6/6e/Volkswagen_Golf_VII_GTI_%28side%29_white.JPG/960px-Volkswagen_Golf_VII_GTI_%28side%29_white.JPG',
     motorisations: [
       {
         slug: '10-tsi-85ch',
@@ -251,9 +251,9 @@ export const voitures: Voiture[] = [
     marque: 'Renault',
     modele: 'Clio 4',
     annees: '2012–2019',
+    anneeDebut: 2013,
     segment: 'Citadine',
     poids: 1095,
-    image: '/api/img/wikipedia/commons/thumb/6/65/Renault_Clio-IV_Black.JPG/960px-Renault_Clio-IV_Black.JPG',
     motorisations: [
       {
         slug: '09-tce-75ch',
@@ -408,9 +408,9 @@ export const voitures: Voiture[] = [
     marque: 'Peugeot',
     modele: '308 II',
     annees: '2013–2021',
+    anneeDebut: 2014,
     segment: 'Compacte',
     poids: 1210,
-    image: '/api/img/wikipedia/commons/thumb/3/37/2020_-_Peugeot_308_II_%28B%29_-_55.jpg/960px-2020_-_Peugeot_308_II_%28B%29_-_55.jpg',
     motorisations: [
       {
         slug: '12-puretech-110ch',
@@ -573,9 +573,9 @@ export const voitures: Voiture[] = [
     marque: 'Toyota',
     modele: 'Yaris III',
     annees: '2011–2020',
+    anneeDebut: 2012,
     segment: 'Citadine',
     poids: 1035,
-    image: '/api/img/wikipedia/commons/thumb/4/45/DSC00769_Toyota_Yaris%2C_Carabinieri%2C_Front_Left.jpg/960px-DSC00769_Toyota_Yaris%2C_Carabinieri%2C_Front_Left.jpg',
     motorisations: [
       {
         slug: '10-vvti-69ch',
@@ -660,9 +660,9 @@ export const voitures: Voiture[] = [
     marque: 'BMW',
     modele: 'Série 3 F30',
     annees: '2012–2019',
+    anneeDebut: 2013,
     segment: 'Berline premium',
     poids: 1440,
-    image: '/api/img/wikipedia/commons/thumb/6/64/BMW_3_SERIES_SEDAN_%28F30%29_China.jpg/960px-BMW_3_SERIES_SEDAN_%28F30%29_China.jpg',
     motorisations: [
       {
         slug: '316i-136ch',
@@ -796,9 +796,9 @@ export const voitures: Voiture[] = [
     marque: 'Dacia',
     modele: 'Sandero II',
     annees: '2012–2020',
+    anneeDebut: 2013,
     segment: 'Citadine économique',
     poids: 975,
-    image: '/api/img/wikipedia/commons/thumb/a/a4/Dacia_-_Sandero_Stepway_-_Mondial_de_l%27Automobile_de_Paris_2012_-_007.jpg/960px-Dacia_-_Sandero_Stepway_-_Mondial_de_l%27Automobile_de_Paris_2012_-_007.jpg',
     motorisations: [
       {
         slug: '10-sce-65ch',
@@ -891,9 +891,9 @@ export const voitures: Voiture[] = [
     marque: 'Ford',
     modele: 'Fiesta 7',
     annees: '2017–2023',
+    anneeDebut: 2018,
     segment: 'Citadine',
     poids: 1060,
-    image: '/api/img/wikipedia/commons/thumb/7/7d/2017_Ford_Fiesta_Zetec_Turbo_1.0_Front.jpg/960px-2017_Ford_Fiesta_Zetec_Turbo_1.0_Front.jpg',
     motorisations: [
       {
         slug: '11-tivct-75ch',
@@ -989,9 +989,9 @@ export const voitures: Voiture[] = [
     marque: 'BMW',
     modele: 'M3 E92',
     annees: '2007–2013',
+    anneeDebut: 2008,
     segment: 'Sportive',
     poids: 1580,
-    image: '/api/img/wikipedia/commons/thumb/0/06/BMW_M3_Coup%C3%A9_%28E92%29_Washington_DC_Metro_Area%2C_USA.jpg/960px-BMW_M3_Coup%C3%A9_%28E92%29_Washington_DC_Metro_Area%2C_USA.jpg',
     motorisations: [
       {
         slug: 'v8-s65-420ch',
@@ -1126,9 +1126,9 @@ export const voitures: Voiture[] = [
     marque: 'Citroën',
     modele: 'C3 III',
     annees: '2016–2023',
+    anneeDebut: 2017,
     segment: 'Citadine',
     poids: 1050,
-    image: '/api/img/wikipedia/commons/thumb/5/54/2019_Citro%C3%ABn_C3_1.6_VTi_Shine_%28Brazil%29.jpg/960px-2019_Citro%C3%ABn_C3_1.6_VTi_Shine_%28Brazil%29.jpg',
     motorisations: [
       {
         slug: '12-puretech-82ch',

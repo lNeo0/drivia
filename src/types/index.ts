@@ -76,9 +76,9 @@ export type Voiture = {
   marque: string
   modele: string
   annees: string
+  anneeDebut: number
   segment: string
   poids: number
-  image?: string
   motorisations: Motorisation[]
   fiabilite: Fiabilite
   checklist: string[]

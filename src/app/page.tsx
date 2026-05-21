@@ -2,11 +2,13 @@ import NavBar from '@/components/NavBar'
 import SearchBar from '@/components/SearchBar'
 import CarCard from '@/components/CarCard'
 import { voitures } from '@/lib/data'
+import { getAllCarImagesFromDb } from '@/lib/carImageDb'
 
 const marquesMises = ['Volkswagen', 'Renault', 'Toyota', 'BMW', 'Dacia', 'Ford']
 
-export default function HomePage() {
+export default async function HomePage() {
   const vedettes = voitures.filter((v) => v.fiabilite.note >= 4).slice(0, 3)
+  const imageUrls = await getAllCarImagesFromDb()
 
   return (
     <div className="min-h-screen bg-base text-primary">
@@ -79,7 +81,7 @@ export default function HomePage() {
 
         <div className="flex flex-col gap-4">
           {vedettes.map((v) => (
-            <CarCard key={v.id} voiture={v} />
+            <CarCard key={v.id} voiture={v} imageUrl={imageUrls[v.id]} />
           ))}
         </div>
 

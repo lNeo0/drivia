@@ -1,8 +1,10 @@
 import NavBar from '@/components/NavBar'
 import FilterPanel from '@/components/FilterPanel'
 import { voitures } from '@/lib/data'
+import { getAllCarImagesFromDb } from '@/lib/carImageDb'
 
-export default function VoituresPage() {
+export default async function VoituresPage() {
+  const imageUrls = await getAllCarImagesFromDb()
   return (
     <div className="min-h-screen bg-base text-primary">
       <NavBar />
@@ -31,6 +33,7 @@ export default function VoituresPage() {
           voitures={voitures}
           layout="grid"
           defaultSort="fiabilite-desc"
+          imageUrls={imageUrls}
         />
       </div>
     </div>

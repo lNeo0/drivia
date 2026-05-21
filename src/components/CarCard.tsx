@@ -4,9 +4,9 @@ import { getReliabilityColor } from '@/lib/reliability'
 import { getScoreAchat } from '@/lib/score'
 import CardImage from '@/components/CardImage'
 
-type Props = { voiture: Voiture }
+type Props = { voiture: Voiture; imageUrl?: string }
 
-export default function CarCard({ voiture }: Props) {
+export default function CarCard({ voiture, imageUrl }: Props) {
   const color = getReliabilityColor(voiture.fiabilite.note)
   const score = getScoreAchat(voiture)
   const puissances = voiture.motorisations.map((m) => m.puissance)
@@ -21,7 +21,7 @@ export default function CarCard({ voiture }: Props) {
         bg-surface border border-rim"
     >
       {/* Image banner 120px */}
-      <CardImage src={voiture.image} alt={`${voiture.marque} ${voiture.modele}`} />
+      <CardImage marque={voiture.marque} modele={voiture.modele} anneeDebut={voiture.anneeDebut} imageUrl={imageUrl} />
 
       {/* Body */}
       <div style={{ padding: '20px' }}>

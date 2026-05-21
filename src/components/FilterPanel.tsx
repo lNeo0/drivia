@@ -13,6 +13,7 @@ type Props = {
   defaultQuery?: string
   layout?: 'list' | 'grid'
   defaultSort?: Sort
+  imageUrls?: Record<string, string>
 }
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
@@ -130,6 +131,7 @@ export default function FilterPanel({
   defaultQuery = '',
   layout = 'list',
   defaultSort = 'pertinence',
+  imageUrls,
 }: Props) {
   const [segment, setSegment] = useState('')
   const [type, setType]       = useState('')
@@ -240,11 +242,11 @@ export default function FilterPanel({
       {filtered.length > 0 ? (
         layout === 'grid' ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filtered.map(v => <CarCard key={v.id} voiture={v} />)}
+            {filtered.map(v => <CarCard key={v.id} voiture={v} imageUrl={imageUrls?.[v.id]} />)}
           </div>
         ) : (
           <div className="flex flex-col gap-4">
-            {filtered.map(v => <CarCard key={v.id} voiture={v} />)}
+            {filtered.map(v => <CarCard key={v.id} voiture={v} imageUrl={imageUrls?.[v.id]} />)}
           </div>
         )
       ) : (

@@ -6,6 +6,7 @@ import HeroImage from '@/components/HeroImage'
 import { getVoitureById, voitures } from '@/lib/data'
 import { getReliabilityColor } from '@/lib/reliability'
 import { getScoreAchat } from '@/lib/score'
+import { getCarImageFromDb } from '@/lib/carImageDb'
 
 export async function generateStaticParams() {
   return voitures.map((v) => ({ id: v.id }))
@@ -32,6 +33,8 @@ export default async function VoiturePage({ params }: { params: Promise<{ id: st
   const voiture = getVoitureById(id)
   if (!voiture) notFound()
 
+  const dbImageUrl = await getCarImageFromDb(voiture.id)
+
   const color = getReliabilityColor(voiture.fiabilite.note)
   const score = getScoreAchat(voiture)
   const puissances = voiture.motorisations.map((m) => m.puissance)
@@ -44,7 +47,7 @@ export default async function VoiturePage({ params }: { params: Promise<{ id: st
 
       {/* Hero */}
       <div className="relative h-[220px] md:h-[320px]">
-        <HeroImage src={voiture.image} alt={`${voiture.marque} ${voiture.modele}`} />
+        <HeroImage marque={voiture.marque} modele={voiture.modele} anneeDebut={voiture.anneeDebut} imageUrl={dbImageUrl ?? undefined} />
         <div className="absolute inset-0 flex flex-col justify-end pointer-events-none">
           <div className="max-w-3xl mx-auto w-full px-6 pb-8 pointer-events-auto">
             <Link

@@ -1,141 +1,126 @@
-# Drivia — Roadmap & Évolutions potentielles
-
-> Fichier de suivi des idées, fonctionnalités à venir et réflexions produit.
-> Mis à jour à chaque session de travail.
+# Drivia — Roadmap & Évolutions
+> Triée par priorité d'impact. Mise à jour Session 3.
 
 ---
 
-## STATUT ACTUEL
+## 🔴 P0 — Corrections immédiates (quick wins, <2h chacun)
 
-### ✅ En production (données mockées)
-- Recherche par marque/modèle
-- Fiche voiture : specs, fiabilité générale, points sensibles, pannes fréquentes
-- Fiche motorisation : specs techniques, fiabilité moteur, problèmes connus, cotes marché, checklist
-- Sélecteur de boîte de vitesses
-- Section Options par motorisation (profil-based)
-- Section Potentiel de reprog par motorisation (profil-based)
-- 9 voitures : Golf 7, Clio 4, 308 II, Yaris III, BMW Série 3 F30, Sandero II, Fiesta 7, C3 III, M3 E92
+### 1. ⚠️ Retraitement images pipeline (remove.bg + seuil 75)
+Images actuelles = Wikimedia brutes sans bg removal. Seuil trop bas (60→75).
+Solution : remove.bg API (50 img/mois gratuit) + forceReprocess sur les 9 voitures.
+**Prérequis : clé API remove.bg dans .env.local**
 
----
+### 2. Grille 2 colonnes sur l'accueil
+La section "Meilleures fiabilités" passe de liste pleine largeur verticale à une grille 2 colonnes.
+Ajouter un lien "Voir les 9 voitures →" en bas.
+**Impact : densité d'info, donne envie d'explorer**
 
-## ÉVOLUTIONS PRIORITAIRES
+### 3. Bloc "Verdict rapide" en haut de chaque fiche motorisation
+3 lignes avant même les specs :
+- ⚠ Point critique principal (ex: "FAP à surveiller sur trajets courts")
+- 💰 Cote correcte (ex: "9 000 – 13 000 €")
+- ✓ Verdict (ex: "Bon achat si entretien suivi")
+**Impact : répond au besoin de l'utilisateur pressé**
 
-### 🔥 P1 — Impact fort, à faire maintenant
-
-#### 1. Filtres page de résultats
-**Quoi :** Filtrer par segment, type de moteur, budget, note de fiabilité minimum
-**Pourquoi :** C'est la première chose qu'un acheteur utilise
-**Complexité :** Moyenne
-
-#### 2. Page "Toutes les voitures" améliorée
-**Quoi :** Grille responsive avec tri (fiabilité, segment, marque) + filtres
-**Pourquoi :** Le lien existe dans la nav mais la page est basique
-**Complexité :** Faible
-
-#### 3. Checklist interactive exportable
-**Quoi :** Cases cochables pendant la visite + résumé exportable en PDF
-**Pourquoi :** Usage mobile sur place, vraie valeur ajoutée vs concurrents
-**Complexité :** Moyenne
-
-#### 4. Base de données Supabase
-**Quoi :** Remplacer les données mockées par une vraie BDD
-**Pourquoi :** Permettre d'ajouter des voitures sans toucher au code
-**Complexité :** Élevée
+### 4. Bouton "Préparer ma visite →" sur la fiche voiture
+Sur la page /voiture/[id], ajouter un CTA visible qui pointe vers la motorisation recommandée + section checklist.
+**Impact : guide l'utilisateur vers l'outil le plus précieux**
 
 ---
 
-### ⚡ P2 — Impact moyen, étape suivante
+## 🟠 P1 — Features à fort impact (prochaines sessions)
 
-#### 5. Comparateur 2 voitures
-**Quoi :** Comparer côte à côte fiabilité, prix, consommation, reprog, options
-**Pourquoi :** Très utile pour un acheteur hésitant entre deux modèles
-**Complexité :** Moyenne
+### 5. Questionnaire "Aide-moi à choisir"
+5-6 questions : budget, usage (ville/route), carburant, nombre de places, kilométrage cible, importance fiabilité vs plaisir.
+Résultat : 2-3 recommandations personnalisées avec explication.
+Point d'entrée sur la page d'accueil — bouton bien visible.
+**Impact : couvre le parcours "je ne sais pas quoi acheter" — majorité des visiteurs**
 
-#### 6. Plus de voitures via Claude API
-**Quoi :** Générer des fiches automatiquement via l'API Claude
-**Pourquoi :** 9 voitures c'est trop peu — objectif 50+ modèles
-**Complexité :** Élevée
+### 6. Voitures similaires / alternatives
+En bas de chaque fiche voiture : "Si vous aimez la Golf 7, regardez aussi..."
+2-3 alternatives du même segment, triées par fiabilité.
+Calcul automatique basé sur le segment et la cote de fiabilité.
+**Impact : rétention + aide à la comparaison sans quitter l'app**
 
-#### 7. Coût d'entretien annuel estimé
-**Quoi :** Révision, consommables, pièces d'usure — coût annuel moyen par modèle
-**Pourquoi :** Donnée absente partout, très recherchée par les acheteurs
-**Complexité :** Faible (données mockées) → Élevée (données réelles)
+### 7. Mode visite mobile optimisé
+Vue dédiée de la checklist pour mobile : grands boutons, police agrandie, mode plein écran possible.
+Accessible via le bouton "Préparer ma visite" (voir P0 #4).
+Points critiques en rouge très visibles, points génériques groupés.
+**Impact : killer feature — personne ne le fait bien sur le marché**
 
-#### 8. Mode visite mobile
-**Quoi :** Vue simplifiée de la checklist optimisée mobile, grands boutons, mode plein écran
-**Pourquoi :** L'app doit être utilisable sur place lors de l'inspection
-**Complexité :** Faible
-
----
-
-### 💡 P3 — Valeur ajoutée différenciante
-
-#### 9. Système de contribution utilisateur ⭐
-**Quoi :** Permettre aux utilisateurs de contribuer aux sections vides ou d'enrichir les données existantes
-**Pourquoi :** La communauté peut enrichir les fiches bien plus vite qu'une équipe éditoriale
-
-**Réflexions sur l'implémentation :**
-- **Option A — Formulaire par section** : bouton "Compléter cette section" sur chaque bloc vide (options, reprog, fiabilité). Formulaire contextuel avec les champs de la section. Soumission → modération avant publication.
-- **Option B — Signalement enrichi** : bouton "Suggérer une correction / un ajout" global sur chaque fiche. Formulaire libre avec catégorie (options, reprog, panne, cote...). Plus simple à implémenter.
-- **Option C — Votes communautaires** : les utilisateurs votent pour valider/invalider des infos existantes. Système de score de confiance par donnée.
-
-**Questions ouvertes :**
-- Modération : automatique (seuil de votes) ou manuelle ?
-- Authentification nécessaire ou contribution anonyme ?
-- Récompense pour les contributeurs (badge, profil) ?
-- Comment éviter le spam et les données fausses ?
-
-**Recommandation :** Commencer par l'Option B (signalement simple) sans auth, puis évoluer vers l'Option A (formulaire par section) une fois Supabase en place.
-
-**Complexité :** Moyenne (Option B) → Élevée (Option A + modération)
-
-#### 10. Alertes prix
-**Quoi :** L'utilisateur s'inscrit pour recevoir une alerte quand une voiture passe sous un certain prix
-**Pourquoi :** Fonctionnalité d'engagement forte
-**Complexité :** Élevée (nécessite scraping + backend + email)
-
-#### 11. Historique des rappels constructeur
-**Quoi :** Afficher les rappels officiels (NHTSA, données constructeur) par modèle
-**Pourquoi :** Information critique souvent ignorée des acheteurs
-**Complexité :** Moyenne (APIs publiques disponibles)
-
-#### 12. "Ma liste de voitures"
-**Quoi :** Sauvegarder des fiches en favoris, comparer, noter
-**Pourquoi :** Engagement utilisateur, sessions multiples
-**Complexité :** Faible (localStorage) → Moyenne (compte utilisateur)
+### 8. Accès rapide checklist depuis la fiche voiture
+Lien/bouton direct depuis les cards motorisation vers la checklist de cette motorisation.
+Évite à l'utilisateur de scroller toute la fiche motorisation pour atteindre la checklist.
+**Impact : fluidité du parcours de visite**
 
 ---
 
-## DÉCISIONS TECHNIQUES PRISES
+## 🟡 P2 — Enrichissement contenu & fonctionnel
 
-### Architecture données
-- **Profil de voiture** : determine quelles sections afficher
-  - `sportive` → Options complètes + Reprog complète
-  - `compacte` → Options simplifiées + Reprog si version turbo/GTI
-  - `citadine` → Options essentielles, Reprog masquée
-  - `economique` → Options minimalistes, Reprog masquée
-- **Sections conditionnelles** : une section n'apparaît que si les données existent (pas de "données non dispo")
-- **Champs optionnels** : `options?` et `potentielReprog?` dans l'interface Motorisation
+### 9. Comparateur 2 voitures
+Sélectionner 2 modèles, comparer côte à côte :
+fiabilité, cote, poids, conso, options recommandées, potentiel reprog.
+**Impact : fort pour l'acheteur hésitant entre 2 modèles**
 
-### Règle reprog
-- Moteur turbo → stages chiffrés (gains réels)
-- Moteur atmosphérique → explication honnête, gains marginaux affichés clairement
-- Moteur hybride/électrique → section masquée ou "non applicable"
+### 10. Coût d'entretien annuel estimé
+Révision, consommables, pièces d'usure — coût annuel moyen par modèle.
+Donnée absente partout sur le web, très recherchée.
+Données mockées dans un premier temps.
+**Impact : différenciant fort**
 
----
+### 11. Plus de voitures via Claude API
+Générer des fiches automatiquement via l'API Claude avec un prompt structuré.
+Objectif : passer de 9 à 30-50 modèles.
+**Impact : crédibilité et couverture du catalogue**
 
-## NOTES PRODUIT
-
-### Ce que Drivia n'est PAS
-- Pas une marketplace (pas d'annonces, pas de mise en relation vendeur)
-- Pas un forum (pas de commentaires libres non modérés)
-- Pas un comparateur de prix en temps réel
-
-### Ce que Drivia EST
-- Un guide d'achat de référence, éditorial et fiable
-- Un outil pratique utilisé pendant la visite (checklist)
-- Une source d'info différenciante (reprog, options, coût entretien)
+### 12. Historique personnel (localStorage)
+"Mes voitures consultées" — liste des fiches visitées.
+"Mes checklists" — checklists commencées avec progression.
+Accessible depuis la nav, sans compte utilisateur.
+**Impact : engagement multi-sessions**
 
 ---
 
-*Dernière mise à jour : Session 2*
+## 🔵 P3 — Évolutions structurantes (moyen terme)
+
+### 13. Rappels constructeur
+Afficher les rappels officiels par modèle (données publiques DGCCRF / NHTSA).
+Information critique souvent ignorée des acheteurs.
+**Impact : différenciant éditorial**
+
+### 15. ✅ Pipeline images automatique (fait — Session 6)
+Wikimedia Commons → scoring Claude Haiku Vision → normalisation Sharp 1600×900 → Vercel Blob → Prisma CarImage.
+9/9 voitures traitées. Background removal isolé pour compatibilité WSL2. Idempotent (forceReprocess).
+Images branchées dans les composants — Session 7. ✅
+**Impact : images propres et maîtrisées, pas de dépendance externe à la livraison**
+
+### 14. ✅ BDD PostgreSQL Neon + Prisma (fait — Session 5)
+PostgreSQL sur Neon.tech avec Prisma ORM 7. Migration initiale appliquée, 9 voitures seedées.
+Prochaine étape : brancher les pages sur la BDD (remplacer `src/lib/data.ts` par des requêtes Prisma).
+Données mockées conservées en parallèle — aucune régression.
+**Impact : scalabilité, base pour le contenu dynamique**
+
+### 15. Système de contribution utilisateur
+Bouton "Suggérer une correction / un ajout" sur chaque fiche (Option B — signalement simple, sans auth).
+Formulaire libre avec catégorie (panne, option, cote...).
+Évolution possible vers formulaires par section une fois Supabase en place.
+**Impact : enrichissement communautaire du contenu**
+
+### 16. Refonte DA Direction D+
+Palette #141416, accent cyan #2DD4BF, Syne + DM Sans.
+Hero avec preview fiche motorisation, cards avec glow cursor, stats band.
+Maquette disponible : `_docs/drivia-da-D-plus.html`
+**Impact : modernisation visuelle — en pause, pas urgent**
+
+---
+
+## ❄️ Backlog — Idées futures
+
+- Alertes prix (scraping + email) — nécessite backend
+- "Ma liste" / favoris — nécessite compte utilisateur
+- Chat IA par modèle — fort potentiel mais moins prioritaire que l'aide à la décision
+- Vues éclatées pièces + références OEM — API payante (HaynesPro/7zap), réserver pour plus tard
+
+---
+
+*Dernière mise à jour : Session 6 — Pipeline images automatique (9/9 voitures)*

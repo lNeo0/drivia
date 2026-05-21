@@ -1,12 +1,21 @@
 'use client'
 
 import { useState } from 'react'
+import { getCarImageUrl } from '@/lib/carImage'
 
-export default function CardImage({ src, alt }: { src?: string; alt: string }) {
+interface CardImageProps {
+  marque: string
+  modele: string
+  anneeDebut: number
+  imageUrl?: string
+  alt?: string
+}
+
+export default function CardImage({ marque, modele, anneeDebut, imageUrl, alt }: CardImageProps) {
   const [error, setError] = useState(false)
-  const showImage = Boolean(src) && !error
+  const src = imageUrl ?? getCarImageUrl(marque, modele, anneeDebut)
 
-  if (!showImage) {
+  if (error) {
     return (
       <div
         style={{
@@ -34,8 +43,7 @@ export default function CardImage({ src, alt }: { src?: string; alt: string }) {
     <div style={{ height: '120px', overflow: 'hidden', position: 'relative' }}>
       <img
         src={src}
-        alt={alt}
-        referrerPolicy="no-referrer"
+        alt={alt ?? `${marque} ${modele}`}
         style={{
           width: '100%',
           height: '100%',

@@ -1,21 +1,31 @@
 'use client'
 
-import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
 
 export function ThemeToggle() {
-  const { resolvedTheme, setTheme } = useTheme()
+  const [isDark, setIsDark] = useState(true)
   const [mounted, setMounted] = useState(false)
 
-  useEffect(() => setMounted(true), [])
+  useEffect(() => {
+    const stored = localStorage.getItem('theme')
+    const dark = stored !== 'light'
+    setIsDark(dark)
+    document.documentElement.classList.toggle('dark', dark)
+    setMounted(true)
+  }, [])
+
+  function toggle() {
+    const next = !isDark
+    setIsDark(next)
+    localStorage.setItem('theme', next ? 'dark' : 'light')
+    document.documentElement.classList.toggle('dark', next)
+  }
 
   if (!mounted) return <div className="w-9 h-9" />
 
-  const isDark = resolvedTheme === 'dark'
-
   return (
     <button
-      onClick={() => setTheme(isDark ? 'light' : 'dark')}
+      onClick={toggle}
       aria-label={isDark ? 'Passer en mode clair' : 'Passer en mode sombre'}
       className="w-9 h-9 rounded-full flex items-center justify-center
         text-[var(--text-secondary)] hover:text-[var(--text-primary)]

@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drivia — Direction D+</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #141416;
+  --surface: #1C1C1F;
+  --elevated: #242428;
+  --subtle: #2C2C30;
+  --border: rgba(255,255,255,0.06);
+  --border-hover: rgba(255,255,255,0.12);
+  --text: #EEEEF0;
+  --text-sec: rgba(255,255,255,0.5);
+  --text-muted: rgba(255,255,255,0.22);
+  --cyan: #2DD4BF;
+  --cyan-dim: rgba(45,212,191,0.12);
+  --cyan-glow: rgba(45,212,191,0.06);
+  --green: #4ADE80;
+  --green-dim: rgba(74,222,128,0.1);
+  --amber: #FCD34D;
+  --amber-dim: rgba(252,211,77,0.1);
+  --red: #F87171;
+  --red-dim: rgba(248,113,113,0.1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ========== NAV ========== */
+nav {
+  position: sticky; top: 0; z-index: 50;
+  height: 56px;
+  background: rgba(20,20,22,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px;
+}
+
+.logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 1rem; font-weight: 800;
+  letter-spacing: -0.03em; color: var(--text);
+  display: flex; align-items: center; gap: 1px;
+}
+
+.logo-dot {
+  display: inline-block;
+  width: 6px; height: 6px;
+  background: var(--cyan);
+  border-radius: 50%;
+  margin-left: 1px;
+  margin-bottom: 8px;
+}
+
+.nav-center {
+  display: flex; gap: 2px;
+}
+
+.nav-link {
+  padding: 6px 14px;
+  font-size: 0.78rem; font-weight: 500;
+  color: var(--text-muted);
+  text-decoration: none; border-radius: 6px;
+  transition: color 150ms, background 150ms;
+}
+.nav-link:hover { color: var(--text-sec); background: rgba(255,255,255,0.04); }
+.nav-link.active { color: var(--text); }
+
+.nav-search {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 14px;
+  width: 220px;
+  cursor: text;
+  transition: border-color 200ms;
+}
+.nav-search:hover { border-color: var(--border-hover); }
+.nav-search-icon { color: var(--text-muted); font-size: 0.85rem; }
+.nav-search input {
+  flex: 1; border: none; background: transparent;
+  font-size: 0.78rem; font-family: 'DM Sans', sans-serif;
+  color: var(--text); outline: none;
+}
+.nav-search input::placeholder { color: var(--text-muted); }
+.nav-search-kbd {
+  background: var(--elevated); border: 1px solid var(--border);
+  border-radius: 4px; padding: 1px 6px;
+  font-size: 0.6rem; color: var(--text-muted); font-family: monospace;
+}
+
+/* ========== HERO ========== */
+.hero {
+  max-width: 1200px; margin: 0 auto;
+  padding: 64px 32px 48px;
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.hero-left {}
+
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-bottom: 24px;
+}
+
+.hero-tag-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--cyan); }
+  50% { opacity: 0.6; box-shadow: 0 0 4px var(--cyan); }
+}
+
+.hero-tag-text {
+  font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--cyan);
+}
+
+.hero-h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: 3.6rem; font-weight: 800;
+  letter-spacing: -0.04em; line-height: 0.95;
+  color: var(--text); margin-bottom: 20px;
+}
+
+.hero-h1 em {
+  font-style: normal;
+  color: var(--cyan);
+}
+
+.hero-sub {
+  font-size: 0.95rem; font-weight: 400;
+  color: var(--text-sec); line-height: 1.65;
+  max-width: 400px; margin-bottom: 36px;
+}
+
+.hero-search {
+  display: flex; gap: 0;
+  background: var(--surface);
+  border: 1px solid var(--border-hover);
+  border-radius: 10px; overflow: hidden;
+  max-width: 460px;
+  transition: border-color 200ms, box-shadow 200ms;
+}
+
+.hero-search:focus-within {
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 3px rgba(45,212,191,0.08);
+}
+
+.hero-search input {
+  flex: 1; border: none; background: transparent;
+  padding: 14px 18px; font-size: 0.9rem;
+  font-family: 'DM Sans', sans-serif; color: var(--text); outline: none;
+}
+.hero-search input::placeholder { color: var(--text-muted); }
+
+.hero-search-btn {
+  padding: 14px 20px; background: var(--cyan); color: #0D1514;
+  border: none; font-size: 0.8rem; font-weight: 700;
+  font-family: 'DM Sans', sans-serif; cursor: pointer;
+  white-space: nowrap; transition: background 150ms;
+  letter-spacing: 0.02em;
+}
+.hero-search-btn:hover { background: #5EEAD4; }
+
+.hero-brands {
+  display: flex; gap: 6px; flex-wrap: wrap; margin-top: 16px;
+}
+
+.brand-pill {
+  padding: 5px 12px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 100px; font-size: 0.72rem; font-weight: 500;
+  color: var(--text-muted); cursor: pointer;
+  transition: all 150ms;
+}
+.brand-pill:hover { border-color: var(--cyan); color: var(--cyan); background: var(--cyan-dim); }
+
+/* Hero right — preview card */
+.hero-right {
+  position: relative;
+}
+
+.hero-preview {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.5), 0 0 0 1px var(--border);
+}
+
+.preview-header {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.preview-title { font-size: 0.72rem; font-weight: 600; color: var(--text-muted); letter-spacing: 0.04em; }
+
+.preview-badge {
+  font-size: 0.62rem; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; padding: 3px 10px; border-radius: 100px;
+  background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(252,211,77,0.2);
+}
+
+.preview-car-name {
+  padding: 18px 18px 6px;
+  font-family: 'Syne', sans-serif;
+  font-size: 1.6rem; font-weight: 800;
+  letter-spacing: -0.03em; color: var(--text);
+}
+
+.preview-car-sub {
+  padding: 0 18px 16px;
+  font-size: 0.75rem; color: var(--text-muted);
+}
+
+.preview-stats {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1px; background: var(--border); margin: 0 18px 16px;
+  border-radius: 8px; overflow: hidden;
+}
+
+.preview-stat {
+  background: var(--elevated); padding: 12px 14px;
+}
+
+.preview-stat-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.3rem; font-weight: 700;
+  color: var(--cyan); letter-spacing: -0.03em; display: block;
+}
+
+.preview-stat-label {
+  font-size: 0.62rem; color: var(--text-muted); margin-top: 1px;
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
+
+.preview-issues {
+  padding: 0 18px 18px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+
+.preview-issue {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.75rem; color: var(--text-sec);
+  background: var(--elevated); border: 1px solid var(--border);
+  border-radius: 6px; padding: 8px 12px;
+}
+
+.issue-icon { font-size: 0.65rem; }
+.issue-icon.warn { color: var(--amber); }
+.issue-icon.danger { color: var(--red); }
+
+/* Floating card derrière */
+.hero-preview-back {
+  position: absolute;
+  top: 24px; right: -20px;
+  background: var(--elevated);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 16px;
+  width: 180px;
+  z-index: -1;
+  opacity: 0.5;
+}
+
+/* ========== STATS BAND ========== */
+.stats-band {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 20px 32px;
+  display: flex; gap: 0;
+  max-width: 1200px; margin: 0 auto;
+}
+
+.stat-item {
+  flex: 1; padding: 0 32px; border-right: 1px solid var(--border);
+  display: flex; align-items: center; gap: 14px;
+}
+.stat-item:first-child { padding-left: 0; }
+.stat-item:last-child { border-right: none; }
+
+.stat-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.8rem; font-weight: 700;
+  color: var(--text); letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.stat-num span { color: var(--cyan); }
+
+.stat-info {}
+.stat-label { font-size: 0.78rem; font-weight: 500; color: var(--text-sec); }
+.stat-sub { font-size: 0.7rem; color: var(--text-muted); margin-top: 1px; }
+
+/* ========== SECTION ========== */
+.section {
+  max-width: 1200px; margin: 0 auto;
+  padding: 48px 32px;
+}
+
+.section-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.section-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: -0.02em; color: var(--text); }
+.section-see { font-size: 0.78rem; font-weight: 600; color: var(--cyan); cursor: pointer; }
+
+/* Filtres */
+.filters { display: flex; gap: 6px; margin-bottom: 24px; }
+
+.filter-btn {
+  padding: 6px 14px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 100px; font-size: 0.72rem; font-weight: 500;
+  color: var(--text-muted); cursor: pointer;
+  transition: all 150ms;
+}
+.filter-btn:hover { border-color: var(--border-hover); color: var(--text-sec); }
+.filter-btn.active { background: var(--cyan-dim); border-color: rgba(45,212,191,0.3); color: var(--cyan); }
+
+/* ========== GRID CARDS ========== */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px; overflow: hidden;
+  cursor: pointer; position: relative;
+  transition: border-color 200ms, transform 200ms, box-shadow 200ms;
+}
+
+.card::before {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: 12px;
+  background: radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(45,212,191,0.04), transparent 60%);
+  opacity: 0;
+  transition: opacity 300ms;
+  pointer-events: none; z-index: 0;
+}
+
+.card:hover::before { opacity: 1; }
+
+.card:hover {
+  border-color: rgba(45,212,191,0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(45,212,191,0.1);
+}
+
+.card-img {
+  height: 120px; background: var(--elevated);
+  overflow: hidden; position: relative;
+}
+
+.card-img img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center 40%;
+  display: block;
+  filter: saturate(0.7) brightness(0.75);
+  transition: filter 300ms;
+}
+
+.card:hover .card-img img { filter: saturate(0.9) brightness(0.85); }
+
+.card-img-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, var(--surface) 0%, transparent 70%);
+}
+
+.card-body { padding: 14px 16px 16px; position: relative; z-index: 1; }
+
+.card-top {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.card-info {}
+.card-brand {
+  font-size: 0.6rem; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--text-muted); margin-bottom: 2px;
+}
+.card-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 1rem; font-weight: 700;
+  letter-spacing: -0.02em; color: var(--text);
+}
+.card-meta { font-size: 0.68rem; color: var(--text-muted); margin-top: 1px; }
+
+.card-rel { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
+
+.rel-circle {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 700;
+}
+
+.rel-circle.s5 { background: var(--green-dim); color: var(--green); border: 1px solid rgba(74,222,128,0.2); }
+.rel-circle.s4 { background: var(--cyan-dim); color: var(--cyan); border: 1px solid rgba(45,212,191,0.2); }
+.rel-circle.s3 { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(252,211,77,0.15); }
+.rel-circle.s2 { background: var(--red-dim); color: var(--red); border: 1px solid rgba(248,113,113,0.2); }
+
+.rel-label { font-size: 0.58rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+.rel-label.s5 { color: var(--green); }
+.rel-label.s4 { color: var(--cyan); }
+.rel-label.s3 { color: var(--amber); }
+
+.card-specs {
+  display: flex; gap: 12px; font-size: 0.72rem;
+  color: var(--text-muted); padding-top: 10px;
+  border-top: 1px solid var(--border); margin-top: 4px;
+}
+.card-specs strong { color: rgba(255,255,255,0.6); font-weight: 600; }
+
+.card-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border);
+}
+
+.score-badge {
+  font-size: 0.62rem; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; padding: 3px 10px; border-radius: 100px;
+}
+.score-badge.bon { background: var(--green-dim); color: var(--green); border: 1px solid rgba(74,222,128,0.2); }
+.score-badge.col { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(252,211,77,0.15); }
+.score-badge.risk { background: var(--red-dim); color: var(--red); border: 1px solid rgba(248,113,113,0.2); }
+.score-badge.study { background: var(--cyan-dim); color: var(--cyan); border: 1px solid rgba(45,212,191,0.2); }
+
+.card-btn {
+  font-size: 0.7rem; font-weight: 600; color: var(--text-muted);
+  background: none; border: none; cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: color 150ms;
+}
+.card:hover .card-btn { color: var(--cyan); }
+
+/* ========== FEATURED CARD (plus grande) ========== */
+.grid-featured {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 12px;
+}
+
+.card-featured {
+  grid-column: 1;
+}
+
+.card-featured .card-img { height: 180px; }
+.card-featured .card-name { font-size: 1.2rem; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">drivia<span class="logo-dot"></span></div>
+  <div class="nav-center">
+    <a class="nav-link active" href="#">Accueil</a>
+    <a class="nav-link" href="#">Catalogue</a>
+    <a class="nav-link" href="#">Comparer</a>
+  </div>
+  <div class="nav-search">
+    <span class="nav-search-icon">⌕</span>
+    <input type="text" placeholder="Rechercher un modèle...">
+    <span class="nav-search-kbd">⌘K</span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-left">
+    <div class="hero-tag">
+      <div class="hero-tag-dot"></div>
+      <span class="hero-tag-text">Guide achat voiture d'occasion</span>
+    </div>
+    <h1 class="hero-h1">Achète mieux.<br><em>Conduis confiant.</em></h1>
+    <p class="hero-sub">Fiabilité, pannes fréquentes, cotes marché et checklist de visite — pour chaque modèle et chaque motorisation.</p>
+    <div class="hero-search">
+      <input type="text" placeholder="Golf 7, BMW M3 E92, Clio 4...">
+      <button class="hero-search-btn">Rechercher →</button>
+    </div>
+    <div class="hero-brands">
+      <div class="brand-pill">Volkswagen</div>
+      <div class="brand-pill">Renault</div>
+      <div class="brand-pill">Toyota</div>
+      <div class="brand-pill">BMW</div>
+      <div class="brand-pill">Dacia</div>
+      <div class="brand-pill">Ford</div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-preview">
+      <div class="preview-header">
+        <span class="preview-title">Fiche motorisation</span>
+        <span class="preview-badge">★ Collector</span>
+      </div>
+      <div class="preview-car-name">BMW M3 E92</div>
+      <div class="preview-car-sub">V8 S65 420ch · BVM6 · 2007–2013</div>
+      <div class="preview-stats">
+        <div class="preview-stat">
+          <span class="preview-stat-num">420</span>
+          <span class="preview-stat-label">chevaux</span>
+        </div>
+        <div class="preview-stat">
+          <span class="preview-stat-num">3/5</span>
+          <span class="preview-stat-label">fiabilité</span>
+        </div>
+        <div class="preview-stat">
+          <span class="preview-stat-num">38k€</span>
+          <span class="preview-stat-label">cote moy.</span>
+        </div>
+      </div>
+      <div class="preview-issues">
+        <div class="preview-issue">
+          <span class="issue-icon danger">⚠</span>
+          Coussinets de bielles — remplacement préventif
+        </div>
+        <div class="preview-issue">
+          <span class="issue-icon warn">▲</span>
+          Actuateurs papillons — défaillance fréquente
+        </div>
+        <div class="preview-issue">
+          <span class="issue-icon warn">▲</span>
+          Pompe à huile — surveiller la pression
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS BAND -->
+<div class="stats-band">
+  <div class="stat-item">
+    <div class="stat-num">09<span>+</span></div>
+    <div class="stat-info">
+      <div class="stat-label">Modèles disponibles</div>
+      <div class="stat-sub">Golf, BMW, Toyota, Renault...</div>
+    </div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">38<span>+</span></div>
+    <div class="stat-info">
+      <div class="stat-label">Motorisations détaillées</div>
+      <div class="stat-sub">Fiabilité par moteur & boîte</div>
+    </div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">18</div>
+    <div class="stat-info">
+      <div class="stat-label">Points de vérification</div>
+      <div class="stat-sub">Checklist adaptée à chaque moteur</div>
+    </div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">100<span>%</span></div>
+    <div class="stat-info">
+      <div class="stat-label">Indépendant</div>
+      <div class="stat-sub">Pas de pub, pas de biais</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION CATALOGUE -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-title">Meilleures fiabilités</div>
+    <span class="section-see">Voir tout le catalogue →</span>
+  </div>
+  <div class="filters">
+    <div class="filter-btn active">Tous</div>
+    <div class="filter-btn">Essence</div>
+    <div class="filter-btn">Diesel</div>
+    <div class="filter-btn">Hybride</div>
+    <div class="filter-btn">≥4 Bonne</div>
+  </div>
+
+  <div class="grid-featured">
+    <!-- FEATURED -->
+    <div class="card card-featured">
+      <div class="card-img">
+        <img src="" alt="" onerror="this.style.display='none'">
+        <div class="card-img-overlay"></div>
+      </div>
+      <div class="card-body">
+        <div class="card-top">
+          <div class="card-info">
+            <div class="card-brand">Toyota</div>
+            <div class="card-name">Yaris III</div>
+            <div class="card-meta">Citadine · 2011–2020</div>
+          </div>
+          <div class="card-rel">
+            <div class="rel-circle s5">5</div>
+            <div class="rel-label s5">Excellente</div>
+          </div>
+        </div>
+        <div class="card-specs">
+          <div><strong>69–100</strong> ch</div>
+          <div><strong>1035</strong> kg</div>
+          <div><strong>4</strong> motorisations</div>
+        </div>
+        <div class="card-footer">
+          <span class="score-badge bon">✓ Bon achat</span>
+          <button class="card-btn">Voir la fiche →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 2 -->
+    <div class="card">
+      <div class="card-img">
+        <img src="" alt="" onerror="this.style.display='none'">
+        <div class="card-img-overlay"></div>
+      </div>
+      <div class="card-body">
+        <div class="card-top">
+          <div class="card-info">
+            <div class="card-brand">Volkswagen</div>
+            <div class="card-name">Golf 7</div>
+            <div class="card-meta">Compacte · 2012–2020</div>
+          </div>
+          <div class="card-rel">
+            <div class="rel-circle s4">4</div>
+            <div class="rel-label s4">Bonne</div>
+          </div>
+        </div>
+        <div class="card-specs">
+          <div><strong>85–150</strong> ch</div>
+          <div><strong>1205</strong> kg</div>
+          <div><strong>5</strong> moteurs</div>
+        </div>
+        <div class="card-footer">
+          <span class="score-badge bon">✓ Bon achat</span>
+          <button class="card-btn">Voir →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 3 -->
+    <div class="card">
+      <div class="card-img">
+        <img src="" alt="" onerror="this.style.display='none'">
+        <div class="card-img-overlay"></div>
+      </div>
+      <div class="card-body">
+        <div class="card-top">
+          <div class="card-info">
+            <div class="card-brand">BMW</div>
+            <div class="card-name">M3 E92</div>
+            <div class="card-meta">Sportive · 2007–2013</div>
+          </div>
+          <div class="card-rel">
+            <div class="rel-circle s3">3</div>
+            <div class="rel-label s3">Moyenne</div>
+          </div>
+        </div>
+        <div class="card-specs">
+          <div><strong>420</strong> ch</div>
+          <div><strong>1580</strong> kg</div>
+          <div><strong>1</strong> moteur</div>
+        </div>
+        <div class="card-footer">
+          <span class="score-badge col">★ Collector</span>
+          <button class="card-btn">Voir →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 2 -->
+  <div class="grid" style="margin-top:12px;">
+    <div class="card">
+      <div class="card-img"><img src="" alt="" onerror="this.style.display='none'"><div class="card-img-overlay"></div></div>
+      <div class="card-body">
+        <div class="card-top">
+          <div class="card-info"><div class="card-brand">Dacia</div><div class="card-name">Sandero II</div><div class="card-meta">Économique · 2012–2020</div></div>
+          <div class="card-rel"><div class="rel-circle s4">4</div><div class="rel-label s4">Bonne</div></div>
+        </div>
+        <div class="card-specs"><div><strong>65–90</strong> ch</div><div><strong>975</strong> kg</div><div><strong>4</strong> moteurs</div></div>
+        <div class="card-footer"><span class="score-badge bon">✓ Bon achat</span><button class="card-btn">Voir →</button></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img"><img src="" alt="" onerror="this.style.display='none'"><div class="card-img-overlay"></div></div>
+      <div class="card-body">
+        <div class="card-top">
+          <div class="card-info"><div class="card-brand">Ford</div><div class="card-name">Fiesta 7</div><div class="card-meta">Citadine · 2017–2023</div></div>
+          <div class="card-rel"><div class="rel-circle s4">4</div><div class="rel-label s4">Bonne</div></div>
+        </div>
+        <div class="card-specs"><div><strong>75–125</strong> ch</div><div><strong>1060</strong> kg</div><div><strong>4</strong> moteurs</div></div>
+        <div class="card-footer"><span class="score-badge bon">✓ Bon achat</span><button class="card-btn">Voir →</button></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img"><img src="" alt="" onerror="this.style.display='none'"><div class="card-img-overlay"></div></div>
+      <div class="card-body">
+        <div class="card-top">
+          <div class="card-info"><div class="card-brand">Renault</div><div class="card-name">Clio 4</div><div class="card-meta">Citadine · 2012–2019</div></div>
+          <div class="card-rel"><div class="rel-circle s3">3</div><div class="rel-label s3">Moyenne</div></div>
+        </div>
+        <div class="card-specs"><div><strong>75–120</strong> ch</div><div><strong>1095</strong> kg</div><div><strong>5</strong> moteurs</div></div>
+        <div class="card-footer"><span class="score-badge study">⚡ À étudier</span><button class="card-btn">Voir →</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Effet glow cursor sur les cards
+document.querySelectorAll('.card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    card.style.setProperty('--mouse-x', x + '%');
+    card.style.setProperty('--mouse-y', y + '%');
+  });
+});
+
+// Pills filtres
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
+// Brand pills
+document.querySelectorAll('.brand-pill').forEach(pill => {
+  pill.addEventListener('click', () => pill.style.borderColor = '#2DD4BF');
+});
+</script>
+</body>
+</html>

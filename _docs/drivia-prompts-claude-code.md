@@ -1,468 +1,254 @@
-# Drivia — Historique des prompts Claude Code
-
-> Tous les prompts envoyés à Claude Code, avec date, objectif et résultat observé.
 
 ---
 
-## PROMPT 1 — Structure initiale du projet
-**Session :** 1 | **Statut :** ✅ Exécuté avec succès
+## PROMPT BUG-FIX — Boucle rechargement HMR (ThemeProvider)
+**Session :** 4 | **Statut :** ✅ Exécuté avec succès
+
+**Bug :** La page se rechargait en boucle toutes les ~2 secondes (864 requêtes réseau en 5 secondes).
+
+**Cause :** `next-themes` (ThemeProvider) injecte un script inline au chargement pour détecter le thème système/localStorage et modifier le DOM avant hydration. Ce script interférait avec le HMR de Next.js, créant un cycle rechargement → invalidation → rechargement infini.
+
+**Fix appliqué par Claude Code :**
+- `ThemeProvider.tsx` — supprimé (plus de dépendance à next-themes)
+- `layout.tsx` — ThemeProvider retiré, `suppressHydrationWarning` retiré, `dark` ajouté directement dans `className` de `<html>` (mode sombre garanti côté serveur)
+- `ThemeToggle.tsx` — réécrit sans next-themes : `useEffect` lit localStorage au montage et bascule `document.documentElement.classList` directement
+
+**Résultat :** Boucle stoppée, toggle dark/light fonctionnel ✅
+
+---
+
+## ACTION À FAIRE — Remplacer customer ID Imagin.studio
+**Session :** 4 | **Statut :** ⬜ En attente inscription
+
+**Problème :** Customer ID `hrjavascript-mastery` est un compte de démo → watermark "IMAG Z studio" visible sur toutes les photos.
+
+**Action requise :**
+1. S'inscrire sur https://www.imagin.studio/solutions/api
+2. Récupérer le customer ID
+3. Envoyer ce prompt à Claude Code :
 
 ```
-Je construis une application web appelée Drivia. C'est un guide pratique pour les acheteurs de voitures d'occasion.
-L'app doit permettre de : rechercher une voiture par marque et modèle, consulter une fiche détaillée, voir les infos de fiabilité, avoir une checklist de vérifications.
-Stack : Next.js 14, TypeScript, Tailwind CSS
-Crée la structure + pages principales avec données mockées.
+Dans src/lib/carImage.ts, remplace le customer ID Imagin.studio :
+- Remplace : customer: 'hrjavascript-mastery'
+- Par : customer: 'TON-NOUVEAU-CUSTOMER-ID'
+
+C'est la seule modification à faire.
 ```
 
-**Résultat :** src/types/index.ts, src/lib/data.ts (8 voitures), NavBar, SearchBar, CarCard, pages accueil/recherche/fiche
-
 ---
 
-## PROMPT 2 — Motorisations détaillées + sélecteur de boîte
-**Session :** 1 | **Statut :** ✅ Exécuté avec succès
+## PROMPT P0-A2 — Migration photos → Vehicle Imagery API
+**Session :** 4 | **Statut :** ⬜ À exécuter
+
+**Contexte :** Imagin.studio nécessite un RDV commercial. Remplacement par vehicleimagery.com qui propose un trial gratuit immédiat sans carte bancaire.
+**Clé API obtenue :** `VI-a96ce1f9b8c74e1497cb4c1bb8d377c50fec6aba82254f1e`
 
 ```
-Améliorer la navigation dans les fiches voiture :
-- Cards motorisations cliquables avec sélecteur de boîte de vitesses
-- Page /voiture/[id]/[motorisation-slug] avec specs, fiabilité moteur, problèmes connus, cotes marché, checklist adaptée
-- Enrichir Golf 7, Clio 4, 308 II avec données complètes
-```
+Dans src/lib/carImage.ts, migre l'API photos de Imagin.studio vers Vehicle Imagery API.
 
-**Résultat :** Types enrichis, data.ts à 757 lignes, MotorisationCards.tsx, page motorisation créée
+La nouvelle API fonctionne ainsi :
+- Base URL : https://api.vehicleimagery.com/api/{make}/{model}/{year}/{angle}
+- Header requis : x-api-key: VI-a96ce1f9b8c74e1497cb4c1bb8d377c50fec6aba82254f1e
+- L'endpoint retourne un JSON avec un champ image_url (tableau)
 
----
+Problème : on ne peut pas mettre un header sur une balise <img> en HTML.
+Solution : créer une route API Next.js proxy à /api/car-image qui appelle Vehicle Imagery avec le header, et retourne un redirect vers l'image_url.
 
-## PROMPT 3 — Premier redesign (dark mode orange)
-**Session :** 1 | **Statut :** ✅ Exécuté, résultat jugé insuffisant
+## 1. Mapping des 9 voitures (make/model/year)
 
-Direction : dark mode, accent orange #F97316, style Apple/Airbnb
+volkswagen / golf / 2013
+renault / clio / 2013
+peugeot / 308 / 2014
+toyota / yaris / 2012
+bmw / m3 / 2008
+bmw / 3-series / 2013
+dacia / sandero / 2013
+ford / fiesta / 2018
+citroen / c3 / 2017
 
-**Résultat observé :** Structure améliorée mais accent orange mal appliqué, design jugé insuffisant
+## 2. Créer src/app/api/car-image/route.ts
 
----
+Route GET qui accepte ?make=X&model=Y&year=Z&angle=front-left
+- Appelle https://api.vehicleimagery.com/api/{make}/{model}/{year}/{angle} avec le header x-api-key
+- Si l'image existe : redirect 302 vers data[0].image_url
+- Si erreur/vide : retourne 404
 
-## PROMPT 4 — Corrections couleurs ciblées (orange)
-**Session :** 1 | **Statut :** ✅ Exécuté, améliorations partielles
+La clé API doit être dans une variable d'environnement VEHICLE_IMAGERY_API_KEY (à ajouter dans .env.local).
 
-Corrections couleurs : badges fiabilité, titre modèle, badges motorisation, bouton rechercher
+## 3. Mettre à jour src/lib/carImage.ts
 
-**Résultat observé :** Badges motorisation en orange OK, mais design toujours insatisfaisant. Décision : changer de direction visuelle
+La fonction getCarImageUrl(make, model, year) retourne désormais :
+/api/car-image?make={make}&model={model}&year={year}&angle=front-left
 
----
+## 4. Créer/mettre à jour .env.local
 
-## PROMPT 5 — Refonte complète selon charte graphique
-**Session :** 1 | **Statut :** ✅ Exécuté avec succès
+Ajouter : VEHICLE_IMAGERY_API_KEY=VI-a96ce1f9b8c74e1497cb4c1bb8d377c50fec6aba82254f1e
 
-Charte complète : dark mode premium, accent or #C9A84C, Cormorant Garamond + DM Sans
+## 5. Mettre à jour next.config.ts si nécessaire
 
-**Résultat observé (Session 2 via Claude in Chrome) :**
-- Logo Drivia en or ✅
-- Typographie Cormorant Garamond sur les titres ✅
-- Chiffres stats en or ✅
-- Ambiance générale premium et sobre ✅
-- Badges fiabilité en vert partout (à corriger — doit être variable) ❌
-- Bouton "Voir la fiche" parfois sans style or ❌
-- Étoiles fiabilité en vert (doit être variable) ❌
+S'assurer que api.vehicleimagery.com est dans les remotePatterns autorisés.
 
----
-
-## PROMPT 6 — Corrections design ciblées (fiabilité variable + boutons)
-**Session :** 2 | **Statut :** 🔄 À envoyer
-
-**Maquette HTML validée :** `_docs/drivia-maquette-corrections.html`
-
-```
-Applique ces corrections design précises sur Drivia. Ne touche pas à la logique ni aux données.
-
-## 1. Couleur fiabilité VARIABLE (règle globale)
-
-Partout où une note de fiabilité est affichée (cards, fiches, blocs), la couleur doit dépendre de la note :
-- Note 5 (Excellente) → vert : text #4CAF7A, bg rgba(76,175,122,0.12), border rgba(76,175,122,0.2)
-- Note 4 (Bonne) → or : text #C9A84C, bg rgba(201,168,76,0.08), border rgba(201,168,76,0.2)
-- Note 3 (Moyenne) → orange : text #D48C3A, bg rgba(212,140,58,0.12), border rgba(212,140,58,0.2)
-- Note ≤2 (Mauvaise) → rouge : text #C0442E, bg rgba(192,68,46,0.12), border rgba(192,68,46,0.2)
-
-Crée un helper TypeScript getReliabilityColor(note: number) qui retourne ces valeurs, et utilise-le partout.
-
-## 2. Badge fiabilité dans les CarCards
-
-Le badge (cercle + label) doit utiliser la couleur variable ci-dessus.
-Structure :
-- Cercle 52px, fond teinté, bordure 1.5px, chiffre en Cormorant Garamond
-- Label en dessous : uppercase, 0.6rem, même couleur que le cercle
-
-## 3. Bloc fiabilité sur la fiche voiture (/voiture/[id])
-
-Le bloc fiabilité générale doit avoir :
-- Fond teinté selon la note (règle ci-dessus)
-- Bordure 1px teintée
-- Cercle score à gauche (56px)
-- Titre "Bonne fiabilité" / "Excellente fiabilité" etc. dans la couleur correspondante
-- Étoiles colorées selon la note (pas toujours vertes)
-
-## 4. Bouton "Voir la fiche" dans les cards
-
-Style outline doré :
-- Border : 1px solid #7A5E2A
-- Texte : #C9A84C
-- Hover : fond #C9A84C, texte #0D0D0D
-- Font DM Sans, 0.75rem, uppercase, letter-spacing 0.06em
-
-## 5. Bouton "Rechercher" sur la page d'accueil
-
-- Fond : #C9A84C (or plein)
-- Texte : #0D0D0D
-- Hover : #E8C97A
-- Pas de fond blanc ni transparent
+Ne pas toucher aux composants CardImage.tsx et HeroImage.tsx — ils utilisent déjà getCarImageUrl() donc la mise à jour sera automatique.
 ```
 
 **Résultat observé :** En attente
 
 ---
 
-## OBSERVATIONS VISUELLES (Claude in Chrome)
+## PROMPT SESSION 5 — PostgreSQL Neon + Prisma ORM 7
+**Session :** 5 | **Statut :** ✅ Exécuté avec succès
 
-### Session 2 — État après Prompt 5
-**Page d'accueil :**
-- Hero avec titre Cormorant Garamond ✅
-- Dégradé radial doré en arrière-plan ✅
-- Barre de recherche propre ✅
-- Pills marques bien stylées ✅
-- Section "Meilleures fiabilités" avec cards ✅
+**Objectif :** Intégrer PostgreSQL (Neon.tech) + Prisma ORM dans le projet Drivia.
 
-**Fiche voiture (volkswagen-golf-7) :**
-- URL correcte : `/voiture/volkswagen-golf-7` ✅
-- Chiffres stats en or (Cormorant Garamond) ✅
-- Points sensibles avec icônes triangle ✅
-- Pannes fréquentes avec icônes ✕ ✅
-- Cards motorisation visibles ✅
-- Badges fiabilité en vert partout (pas variable) ❌
-- Étoiles en vert (pas variable) ❌
+**Breaking changes Prisma 7 rencontrés et résolus :**
+- `datasource.url` dans `schema.prisma` n'est plus supporté → déplacé dans `prisma.config.ts`
+- Le nouveau moteur "client" de Prisma 7 exige un driver adapter → `@prisma/adapter-pg` + `pg` installés
+- `prisma.config.ts` est chargé avant le fichier `.env` → dotenv chargé manuellement dans `prisma.config.ts`
+
+**Fichiers créés :**
+- `prisma.config.ts` — Config Prisma 7 (datasource url, schema path), charge `.env` / `.env.local` via dotenv
+- `src/prisma/schema.prisma` — Modèles Car, Motorisation, CarImage
+- `src/prisma/migrations/20260521204302_init/` — Migration initiale appliquée
+- `src/lib/db.ts` — Singleton PrismaClient avec `PrismaPg` adapter
+- `scripts/seed.ts` — Seed des 9 voitures + motorisations (upsert idempotent)
+- `.env` — DATABASE_URL (gitignored, lu par Prisma CLI)
+
+**Scripts ajoutés dans package.json :**
+```json
+"db:studio": "prisma studio --schema src/prisma/schema.prisma",
+"db:migrate": "prisma migrate dev --schema src/prisma/schema.prisma",
+"db:seed": "tsx scripts/seed.ts",
+"db:generate": "prisma generate --schema src/prisma/schema.prisma"
+```
+
+**Résultat :**
+- Migration appliquée sur Neon ✅
+- 9 voitures et leurs motorisations (37 au total) seedées ✅
+- `npm run db:studio` ouvre Prisma Studio avec les données ✅
+- Aucune page existante cassée ✅
+- `src/lib/data.ts` conservé intact ✅
 
 ---
 
-## PROMPT 7 — Options + Reprog sur toutes les voitures
-**Session :** 2 | **Statut :** 🔄 À envoyer
+## PROMPT SESSION 6 — Pipeline images automatique
+**Session :** 6 | **Statut :** ✅ Exécuté avec succès
+
+**Objectif :** Pipeline complet Wikimedia → Claude Vision → Sharp → Vercel Blob → Prisma.
+
+**Problèmes rencontrés et résolus :**
+- Modules Prisma/Anthropic initialisés avant `dotenv` (import hoisting esbuild) → clients rendus lazy
+- URLs Wikimedia non accessibles par l'API Anthropic → téléchargement manuel + encodage base64
+- `@imgly/background-removal-node` segfault (exit 139) en WSL2 → worker process isolé avec `spawnSync`
+- IDs voitures incohérents entre `data.ts` et le pipeline (`peugeot-308-2` ≠ `peugeot-308-ii`, etc.) → corrigés
+
+**Fichiers créés :**
+- `src/lib/pipeline/types.ts`, `search.ts`, `score.ts`, `normalize.ts`, `storage.ts`, `pipeline.ts`
+- `src/app/api/process-image/route.ts` — Route POST protégée par `PIPELINE_SECRET`
+- `scripts/process-all-cars.ts` — Script CLI
+- `scripts/_bg-remove-worker.ts` — Worker isolé background removal
+
+**Variables d'env ajoutées :**
+- `ANTHROPIC_API_KEY` (`.env.local`)
+- `BLOB_READ_WRITE_TOKEN` (`.env.local`)
+- `PIPELINE_SECRET=drivia-pipeline-secret-2026` (`.env`)
+
+**Résultat (9/9) :**
+- volkswagen-golf-7 ✅ score=80.6
+- renault-clio-4 ✅ score=71.6
+- peugeot-308-2 ✅ score=71.6
+- toyota-yaris-3 ✅ score=63.8
+- bmw-m3-e92 ✅ score=79.8
+- bmw-serie3-f30 ✅ score=72.8
+- dacia-sandero-2 ✅ score=70.2
+- ford-fiesta-7 ✅ score=72.2
+- citroen-c3-3 ✅ score=72.8
+
+Images Vercel Blob : `https://lxxjokqnswpqjunx.public.blob.vercel-storage.com/car-images/{carId}.webp`
+Background removal : fallback sharp-only (segfault WSL2, fallback silencieux)
+Prochaine étape : brancher `carImage.publicUrl` dans les composants. ✅ Fait — Session 7
+
+---
+
+## PROMPT SESSION 8 — Retraitement images avec remove.bg (À EXÉCUTER)
+**Session :** 8 | **Statut :** ⬜ À exécuter
+
+**Contexte :** Les images actuelles sont des photos Wikimedia brutes sans suppression de fond.
+- `@imgly/background-removal-node` a segfault sur Windows/WSL2 → fallback silencieux
+- Seuil scoring 60/100 trop permissif → voitures de dos acceptées
+
+**Prérequis :** Avoir créé un compte remove.bg et ajouté `REMOVE_BG_API_KEY` dans `.env.local`
 
 ```
-Ajoute les sections "Options" et "Potentiel de reprog" à toutes les voitures de Drivia.
+## Objectif
+Corriger le pipeline images pour utiliser remove.bg API (suppression de fond cloud)
+et relever le seuil de scoring à 75/100.
 
-## Règles d'affichage (à implémenter dans les composants)
-- Une section n'apparaît QUE si les données existent dans le modèle
-- Pas de "données non disponibles" — si vide, la section est masquée
-- Le profil de la voiture détermine la profondeur des données
+## 1. Mettre à jour src/lib/pipeline/normalize.ts
 
-## 1. Mise à jour des types (src/types/index.ts)
+Remplacer @imgly/background-removal-node par un appel HTTP à l'API remove.bg :
 
-Ajoute ces interfaces :
+async function removeBackground(imageBuffer: Buffer): Promise<Buffer> {
+  const formData = new FormData()
+  formData.append('image_file', new Blob([imageBuffer]), 'car.jpg')
+  formData.append('size', 'auto')
 
-type ImportanceOption = 'indispensable' | 'interessante' | 'inutile'
-type TypeMoteurReprog = 'turbo' | 'atmospherique' | 'hybride' | 'electrique'
-type RecommandationReprog = 'oui' | 'non' | 'selon_usage'
+  const response = await fetch('https://api.remove.bg/v1.0/removebg', {
+    method: 'POST',
+    headers: { 'X-Api-Key': process.env.REMOVE_BG_API_KEY! },
+    body: formData,
+  })
 
-interface Option {
-  nom: string
-  description: string
-  importance: ImportanceOption
-  avis: string
+  if (!response.ok) throw new Error(`remove.bg error: ${response.status}`)
+  const arrayBuffer = await response.arrayBuffer()
+  return Buffer.from(arrayBuffer)
 }
 
-interface StageReprog {
-  nom: string
-  puissanceGain: number
-  coupleGain: number
-  puissanceFinal: number
-  coupleFinal: number
-  cout: string
-  avis: string
-}
+Remplacer l'appel à @imgly dans normalizeCarImage() par cette fonction.
+Supprimer l'import de @imgly/background-removal-node.
 
-interface PotentielReprog {
-  typeMoteur: TypeMoteurReprog
-  avisGeneral: string
-  stages: StageReprog[]
-  recommandation: RecommandationReprog
-  raisonRecommandation: string
-}
+## 2. Mettre à jour src/lib/pipeline/score.ts
 
-Ajoute dans Motorisation :
-  options?: Option[]
-  potentielReprog?: PotentielReprog
+Changer le seuil minimum de 60 à 75 :
+Dans selectBestImage(), remplacer minScore = 60 par minScore = 75
 
-## 2. Données par voiture
+## 3. Mettre à jour scripts/process-all-cars.ts
 
-### Volkswagen Golf 7 (compacte)
+Appeler processCar(carId, true) au lieu de processCar(carId) pour forcer le retraitement.
+(forceReprocess = true)
 
-Motorisation 1.6 TDI 90ch :
-options: [
-  { nom: "Radar de recul", importance: 'interessante', description: "Capteurs de stationnement arrière", avis: "Utile au quotidien, vérifier le bon fonctionnement des 4 capteurs lors de la visite." },
-  { nom: "GPS natif", importance: 'inutile', description: "Système de navigation d'origine", avis: "Vieilli et lent. Préférez CarPlay/Android Auto si disponible, ou un support téléphone." },
-  { nom: "Régulateur de vitesse adaptatif", importance: 'interessante', description: "ACC avec maintien de distance", avis: "Appréciable sur autoroute. Vérifier le bon fonctionnement du radar avant." }
-],
-potentielReprog: {
-  typeMoteur: 'turbo',
-  avisGeneral: "Le 1.6 TDI répond bien à la reprog — gains modérés mais réels, surtout en couple. Améliore la souplesse en ville sans dégrader la fiabilité si réalisée sérieusement.",
-  stages: [
-    { nom: "Stage 1", puissanceGain: 25, coupleGain: 60, puissanceFinal: 115, coupleFinal: 310, cout: "300 – 500 €", avis: "Bon rapport qualité/prix. Le moteur gagne vraiment en souplesse. À faire chez un préparateur reconnu uniquement." },
-    { nom: "Stage 2", puissanceGain: 35, coupleGain: 80, puissanceFinal: 125, coupleFinal: 330, cout: "800 – 1200 €", avis: "Nécessite échangeur et modifications. Peu pertinent sur ce moteur — préférez le Stage 1." }
-  ],
-  recommandation: 'selon_usage',
-  raisonRecommandation: "Stage 1 intéressant pour un usage quotidien — le couple supplémentaire se ressent vraiment. Stage 2 non recommandé sur ce moteur."
-}
+## 4. Vérifier .env.local
 
-Motorisation 2.0 TDI 150ch :
-options: [
-  { nom: "DSG7 (boîte automatique)", importance: 'interessante', description: "Boîte à double embrayage 7 rapports", avis: "Confortable mais surveiller les saccades à froid. Préférez la BVM6 si vous aimez conduire." },
-  { nom: "Phares full LED", importance: 'interessante', description: "Éclairage LED adaptatif", avis: "Vraie différence de sécurité la nuit. À privilégier si disponible." },
-  { nom: "Toit ouvrant panoramique", importance: 'inutile', description: "Toit vitré électrique", avis: "Source de pannes potentielles sur les exemplaires anciens. Tester l'ouverture/fermeture lors de la visite." }
-],
-potentielReprog: {
-  typeMoteur: 'turbo',
-  avisGeneral: "Le 2.0 TDI est une base excellente pour la reprog. Gains significatifs en puissance et couple avec un impact minimal sur la fiabilité si réalisée correctement.",
-  stages: [
-    { nom: "Stage 1", puissanceGain: 40, coupleGain: 80, puissanceFinal: 190, coupleFinal: 420, cout: "350 – 600 €", avis: "Très recommandé. Le moteur passe dans une autre dimension en souplesse et reprise. ROI excellent." },
-    { nom: "Stage 2", puissanceGain: 60, coupleGain: 110, puissanceFinal: 210, coupleFinal: 450, cout: "900 – 1500 €", avis: "Possible avec échangeur et downpipe. Risque accru sur l'embrayage et la boîte DSG. Réservé aux passionnés." }
-  ],
-  recommandation: 'oui',
-  raisonRecommandation: "Le 2.0 TDI est l'un des meilleurs moteurs à reprogrammer. Stage 1 fortement recommandé pour quiconque veut plus de dynamisme sans sacrifier la fiabilité."
-}
+Confirmer que REMOVE_BG_API_KEY est présent.
 
----
+## 5. Lancer le retraitement
 
-### Renault Clio 4 (citadine)
+npx tsx scripts/process-all-cars.ts
 
-Motorisation 0.9 TCe 90ch :
-options: [
-  { nom: "Climatisation automatique", importance: 'interessante', description: "Climatisation bi-zone automatique", avis: "Confort réel. Tester le compresseur lors de la visite." },
-  { nom: "GPS R-Link", importance: 'inutile', description: "Système multimédia Renault intégré", avis: "Très vieilli et peu réactif. Ignorez-le, un support téléphone avec CarPlay vaut bien mieux." }
-],
-potentielReprog: {
-  typeMoteur: 'turbo',
-  avisGeneral: "Le 0.9 TCe est reprogrammable mais les gains restent limités par la petite taille du turbo. Intérêt modéré sur une citadine.",
-  stages: [
-    { nom: "Stage 1", puissanceGain: 15, coupleGain: 30, puissanceFinal: 105, coupleFinal: 175, cout: "250 – 400 €", avis: "Gain perceptible en ville mais modeste. À faire uniquement si vous gardez longtemps le véhicule." }
-  ],
-  recommandation: 'selon_usage',
-  raisonRecommandation: "Intérêt limité sur une citadine. Budget mieux investi dans l'entretien ou des pneumatiques de qualité."
-}
+Reporter les résultats (score obtenu + confirmation bg supprimé).
 
----
-
-### Peugeot 308 II (compacte)
-
-Motorisation 1.6 BlueHDi 120ch :
-options: [
-  { nom: "Pack GT Line", importance: 'interessante', description: "Sellerie, inserts, look sportif extérieur", avis: "Ajoute du caractère sans impacter la fiabilité. Apprécié à la revente." },
-  { nom: "Vitres surteintées", importance: 'inutile', description: "Vitres arrieres teintées d'usine", avis: "Agréable en été mais aucun impact sur la valeur de revente." }
-],
-potentielReprog: {
-  typeMoteur: 'turbo',
-  avisGeneral: "Le 1.6 BlueHDi répond très bien à la reprog. Un des meilleurs rapports gains/prix du marché des compactes diesel.",
-  stages: [
-    { nom: "Stage 1", puissanceGain: 35, coupleGain: 70, puissanceFinal: 155, coupleFinal: 370, cout: "300 – 550 €", avis: "Excellente transformation. Le moteur perd son côté mou et gagne en plaisir de conduite. Recommandé." },
-    { nom: "Stage 2", puissanceGain: 55, coupleGain: 100, puissanceFinal: 175, coupleFinal: 400, cout: "800 – 1300 €", avis: "Possible mais surveiller l'embrayage. Réservé à un usage non quotidien." }
-  ],
-  recommandation: 'oui',
-  raisonRecommandation: "Le 1.6 BlueHDi est une excellente base. Stage 1 très recommandé — transforme vraiment le caractère de la voiture."
-}
-
----
-
-### Toyota Yaris III (citadine)
-
-Motorisation 1.5 Hybrid 100ch :
-options: [
-  { nom: "Pack Design", importance: 'interessante', description: "Jantes alliage, inserts colorés", avis: "Esthétique uniquement. Vérifier l'état des jantes." },
-  { nom: "Caméra de recul", importance: 'indispensable', description: "Caméra arrière intégrée", avis: "Très utile sur une citadine. Vérifier la qualité de l'image — les caméras vieillissent mal." }
-]
-// Pas de reprog sur hybride — section masquée
-
-Motorisation 1.0 VVT-i 69ch :
-options: [
-  { nom: "Climatisation", importance: 'indispensable', description: "Climatisation manuelle", avis: "Indispensable pour la revente. Vérifier le bon fonctionnement." }
-]
-// Pas de reprog sur moteur atmo 69ch — section masquée
-
----
-
-### Dacia Sandero II (économique)
-
-Motorisation 0.9 TCe 90ch :
-options: [
-  { nom: "Climatisation", importance: 'indispensable', description: "Climatisation manuelle", avis: "Première option à vérifier — impacte fortement la valeur de revente." },
-  { nom: "GPS MediaNav", importance: 'inutile', description: "GPS Dacia intégré", avis: "Dépassé. Un support téléphone fait mieux pour 20€." }
-],
-potentielReprog: {
-  typeMoteur: 'turbo',
-  avisGeneral: "Le 0.9 TCe Renault se reprogramme facilement. Gains modestes mais réels sur une plateforme économique.",
-  stages: [
-    { nom: "Stage 1", puissanceGain: 15, coupleGain: 35, puissanceFinal: 105, coupleFinal: 170, cout: "250 – 400 €", avis: "Transforme agréablement le moteur pour un usage quotidien. Coût raisonnable." }
-  ],
-  recommandation: 'selon_usage',
-  raisonRecommandation: "Intéressant si vous gardez le véhicule longtemps. Peu pertinent si vous comptez revendre rapidement."
-}
-
----
-
-### BMW Série 3 F30 (berline premium)
-
-Motorisation 318d 143ch :
-options: [
-  { nom: "Pack M Sport", importance: 'indispensable', description: "Jantes, carrosserie, volant M, sièges sport", avis: "Très recherché à la revente — une F30 sans Pack M perd 15-20% de valeur. À privilégier absolument." },
-  { nom: "GPS Professional", importance: 'interessante', description: "iDrive avec carte HD et mise à jour", avis: "Bien plus agréable que le système de base. Vérifier la version du logiciel." },
-  { nom: "Toit ouvrant", importance: 'inutile', description: "Toit ouvrant électrique panoramique", avis: "Source de fuites potentielles. Tester systématiquement lors de la visite." }
-],
-potentielReprog: {
-  typeMoteur: 'turbo',
-  avisGeneral: "Le 318d B47 est une très bonne base de reprog. Gains sérieux en couple, transforme le caractère de la voiture.",
-  stages: [
-    { nom: "Stage 1", puissanceGain: 35, coupleGain: 80, puissanceFinal: 178, coupleFinal: 460, cout: "350 – 600 €", avis: "Excellent. Le moteur devient vraiment plaisant — les reprises sont dans une autre catégorie." },
-    { nom: "Stage 2", puissanceGain: 55, coupleGain: 110, puissanceFinal: 198, coupleFinal: 490, cout: "900 – 1500 €", avis: "Possible avec échangeur. Surveiller l'embrayage et la boîte automatique si équipée." }
-  ],
-  recommandation: 'oui',
-  raisonRecommandation: "Stage 1 fortement recommandé. Le 318d devient un moteur vraiment agréable et économique à la fois."
-}
-
----
-
-### Ford Fiesta 7 (citadine)
-
-Motorisation 1.0 EcoBoost 100ch :
-options: [
-  { nom: "B&O Audio", importance: 'inutile', description: "Système audio Bang & Olufsen", avis: "Bonne qualité mais pas worth le surprix en occasion." },
-  { nom: "Aide au stationnement", importance: 'interessante', description: "Capteurs avant et arrière", avis: "Utile sur une citadine urbaine. Tester les 6 capteurs." }
-],
-potentielReprog: {
-  typeMoteur: 'turbo',
-  avisGeneral: "Le 1.0 EcoBoost Ford est l'un des moteurs 3 cylindres les plus aboutis du marché. Il répond très bien à la reprog malgré sa petite cylindrée.",
-  stages: [
-    { nom: "Stage 1", puissanceGain: 25, coupleGain: 50, puissanceFinal: 125, coupleFinal: 220, cout: "300 – 500 €", avis: "Très bonne transformation. Le moteur perd son côté creux à bas régime. Recommandé." }
-  ],
-  recommandation: 'oui',
-  raisonRecommandation: "Le 1.0 EcoBoost est une excellente base. Stage 1 recommandé — rapport qualité/prix très bon sur ce moteur."
-}
-
----
-
-### Citroën C3 III (citadine)
-
-Motorisation 1.2 PureTech 110ch :
-options: [
-  { nom: "Airbumps", importance: 'inutile', description: "Protections plastique sur les flancs", avis: "Original mais fragilisé avec l'âge. Vérifier l'état — les remplacer coûte cher." },
-  { nom: "Climatisation auto", importance: 'interessante', description: "Climatisation automatique", avis: "Confort réel. Tester le compresseur." }
-],
-potentielReprog: {
-  typeMoteur: 'turbo',
-  avisGeneral: "Le 1.2 PureTech est reprogrammable mais attention — ce moteur a déjà des problèmes de courroie de distribution. Reprogrammer un moteur fragile n'est pas recommandé.",
-  stages: [
-    { nom: "Stage 1", puissanceGain: 20, coupleGain: 40, puissanceFinal: 130, coupleFinal: 230, cout: "300 – 500 €", avis: "Techniquement possible mais déconseillé. Le PureTech a des fragilités connues — priorité à l'entretien plutôt qu'à la performance." }
-  ],
-  recommandation: 'non',
-  raisonRecommandation: "Le 1.2 PureTech souffre déjà de problèmes de courroie de distribution. Toute sollicitation supplémentaire augmente les risques. Budget mieux investi dans la prévention."
-}
-
----
-
-## 3. Composants à créer
-
-### src/components/OptionsSection.tsx
-- Affichage conditionnel (si options.length > 0 uniquement)
-- 3 groupes distincts par importance avec couleurs :
-  - indispensable → success color, label "Indispensable ✓"
-  - interessante → accent-gold color, label "Intéressante"
-  - inutile → text-muted, label "Sans intérêt"
-- Chaque item : nom + description + avis en italique
-
-### src/components/ReprogSection.tsx
-- Affichage conditionnel (si potentielReprog existe uniquement)
-- Badge type moteur visible (Turbo / Atmosphérique / Hybride)
-- Avis général en intro
-- Tableau des stages : nom | gains | puissance finale | coût | avis
-- Si gain = 0 : afficher "Non applicable" sans chiffres
-- Badge recommandation final : vert=oui, orange=selon_usage, rouge=non
-
-## 4. Intégration page motorisation
-Ajoute OptionsSection et ReprogSection dans /voiture/[id]/[motorisationSlug]/page.tsx
-après "Fiabilité de cette motorisation" et avant la checklist.
+## 6. Mettre à jour _docs/drivia-contexte-reprise.md, _docs/drivia-prompts-claude-code.md et _docs/drivia-roadmap.md
 ```
-**Résultat observé :** En attente
 
----
+**Session :** 7 | **Statut :** ✅ Exécuté avec succès
 
-## PROMPT 8 — Navigation ancre sticky sur fiches motorisation
-**Session :** 2 | **Statut :** ✅ Exécuté avec succès
+**Objectif :** Remplacer l'API Vehicle Imagery par les images Vercel Blob (stockées en DB) dans tous les composants d'affichage.
 
-**Composant créé :** `src/components/AnchorNav.tsx`
-- Position fixed sous la NavBar (top: 64px)
-- Invisible jusqu'à 150px de scroll → fade + slide in
-- IntersectionObserver pour détecter section active
-- Ancres conditionnelles (Options/Reprog/Cotes masquées si données absentes)
-- Barre de progression 3px en bas de page (or #C9A84C)
-- Scroll offset 124px (NavBar + AnchorNav + margin)
+**Fichiers créés :**
+- `src/lib/carImageDb.ts` — Fonctions server-side `getCarImageFromDb(carId)` et `getAllCarImagesFromDb()` via Prisma
 
-**Résultat observé (via Claude in Chrome) :**
-- Barre apparaît au scroll, bien positionnée sous la NavBar ✅
-- Lien actif en or avec soulignement doré ✅
-- Toutes les ancres présentes et correctes ✅
-- Cotes en tableau avec couleurs rouge/or/vert ✅
-- Checklist "Points critiques" surlignée en or ✅
-- Barre de progression non visible (trop fine ?) — mineur ⚠️
+**Fichiers modifiés :**
+- `src/components/HeroImage.tsx` — Ajout prop optionnelle `imageUrl?` (prioritaire sur `getCarImageUrl()`)
+- `src/components/CardImage.tsx` — Ajout prop optionnelle `imageUrl?`
+- `src/components/CarCard.tsx` — Ajout prop optionnelle `imageUrl?`, passée à `CardImage`
+- `src/components/FilterPanel.tsx` — Ajout prop optionnelle `imageUrls?: Record<string, string>`, passée à `CarCard`
+- `src/app/voiture/[id]/page.tsx` — `getCarImageFromDb(voiture.id)` → `imageUrl` passé à `HeroImage`
+- `src/app/voitures/page.tsx` — `getAllCarImagesFromDb()` → `imageUrls` passé à `FilterPanel`
+- `src/app/page.tsx` — `getAllCarImagesFromDb()` → `imageUrls[v.id]` passé à chaque `CarCard`
 
----
+**Architecture :**
+- Les pages serveur (async) interrogent la DB Prisma pour les URLs
+- Fallback automatique sur `getCarImageUrl()` (Vehicle Imagery) si la DB retourne null
+- `HeroImage` et `CardImage` restent des client components (useState pour gestion erreur)
+- Aucune modification de `src/lib/carImage.ts` ni de la route `/api/car-image`
 
-## PROMPT 9 — Correction bug ancre "Pannes"
-**Session :** 2 | **Statut :** ✅ Exécuté avec succès
-
-**Bug :** Clic sur "Pannes" scrollait vers "Fiabilité" car l'id était imbriqué dans le bloc fiabilité
-
-**Corrections :**
-- Section "Pannes" extraite en `<Section id="pannes">` indépendante au même niveau DOM que les autres sections
-- Style cohérent avec pointsSensibles (card individuelle, icône ✕ rouge)
-- AnchorNav : rootMargin ajusté de `-20% 0px -60% 0px` → `-10% 0px -50% 0px` pour détecter les sections courtes
-
-**Résultat :** Bug corrigé, navigation ancre fonctionnelle sur toutes les sections
-
----
-
-## PROMPT A — Live search + recherche améliorée
-**Session :** 2 | **Statut :** ✅ Exécuté avec succès (après bugfix overflow-hidden)
-
-**Composants créés/modifiés :**
-- `src/lib/data.ts` — rechercherVoitures() avec aliases (vw, bm, reno, daf...) + recherche floue
-- `src/components/SearchBar.tsx` — live dropdown, debounce 200ms, max 5 suggestions
-- `src/components/NavSearch.tsx` — search compact dans la NavBar (200→300px au focus)
-- `src/app/page.tsx` — overflow-hidden retiré de la section hero (bloquait le dropdown)
-
-**Bug rencontré et corrigé :**
-- Dropdown invisible car la section hero avait `overflow-hidden` qui clippait l'absolu
-- Fix : suppression de `overflow-hidden` sur la section en page.tsx
-
-**Résultat observé (via Claude in Chrome) :**
-- "golf" → dropdown "Volkswagen Golf 7 · 2012–2020" ✅
-- "vw" → alias reconnu, même résultat ✅
-- "bm" dans NavSearch → dropdown dans la barre de nav ✅
-
----
-
-## PROMPT B — Checklist interactive
-**Session :** 2 | **Statut :** ✅ Exécuté avec succès
-
-**Composants créés/modifiés :**
-- `src/components/ChecklistInteractive.tsx` — checklist cochable avec localStorage
-- `src/components/BoiteSelector.tsx` — patch CustomEvent pour coordination boîte/checklist
-
-**Fonctionnalités :**
-- Items cochables (button), état via Set<string> React
-- Points critiques : label "CRITIQUE", fond or, bordure gauche or → grise au check
-- Points génériques : badge numéroté → ✓ doré au check
-- Compteur "X / Y points vérifiés" + barre 4px animée
-- Message "✓ Inspection complète" quand tout est coché
-- localStorage : clé drivia-checklist-[voitureId]-[motorisationSlug]
-- Bouton "Réinitialiser" visible si au moins 1 item coché
-- Confirmation window.confirm() si changement de boîte avec checklist en cours
-
-**Résultat observé (via Claude in Chrome) :**
-- Compteur "1 / 23 points vérifiés" mis à jour instantanément ✅
-- Barre de progression dorée fonctionnelle ✅
-- Item coché : ✓ doré + texte barré + fond assombri ✅
-- Points critiques bien distincts visuellement ✅
+**Résultat :** Images Vercel Blob affichées sur `/`, `/voitures`, `/voiture/[id]` ✅
