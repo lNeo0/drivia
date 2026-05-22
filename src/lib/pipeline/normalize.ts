@@ -1,78 +1,129 @@
 import sharp from 'sharp'
-import { spawnSync } from 'node:child_process'
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const WORKER = path.resolve(__dirname, '../../../scripts/_bg-remove-worker.ts')
+const BG_COLOR = { r: 13, g: 13, b: 13, alpha: 1 }
+const OUTPUT_WIDTH = 1600
+const OUTPUT_HEIGHT = 900
+const PADDING_PERCENT = 0.08
 
-const TARGET_W = 1600
-const TARGET_H = 900
-const FIT_PCT = 0.85
-const VERTICAL_OFFSET_PCT = 0.03
-const BG_COLOR = { r: 13, g: 13, b: 13, alpha: 1 } as const
+async function removeBackground(imageBuffer: Buffer): Promise<Buffer> {
+  const blob = new Blob([imageBuffer], { type: 'image/jpeg' })
+  const form = new FormData()
+  form.append('image_file', blob, 'car.jpg')
+  form.append('size', 'auto')
+  form.append('format', 'png')
 
-async function tryRemoveBackground(imageUrl: string): Promise<Buffer | null> {
-  try {
-    const result = spawnSync(
-      'npx',
-      ['tsx', WORKER, imageUrl],
-      { maxBuffer: 50 * 1024 * 1024, timeout: 120_000, encoding: 'buffer' }
-    )
-    if (result.status === 0 && result.stdout.length > 0) {
-      return Buffer.from(result.stdout.toString(), 'base64')
-    }
-    console.warn(`  [normalize] Background removal failed (exit ${result.status}), using original`)
-    return null
-  } catch (err) {
-    console.warn(`  [normalize] Background removal error: ${err}, using original`)
-    return null
+  const response = await fetch('https://api.remove.bg/v1.0/removebg', {
+    method: 'POST',
+    headers: {
+      'X-Api-Key': process.env.REMOVE_BG_API_KEY!,
+    },
+    body: form,
+    signal: AbortSignal.timeout(30000),
+  })
+
+  if (!response.ok) {
+    const errorText = await response.text()
+    throw new Error(`remove.bg error ${response.status}: ${errorText}`)
   }
+
+  const arrayBuffer = await response.arrayBuffer()
+  const result = Buffer.from(arrayBuffer)
+
+  if (result.length < 1000) {
+    throw new Error('remove.bg returned suspiciously small file')
+  }
+
+  console.log(`  [normalize] remove.bg OK — ${(result.length / 1024).toFixed(0)}KB PNG`)
+  return result
 }
 
 export async function normalizeCarImage(imageUrl: string): Promise<Buffer> {
-  console.log(`  [normalize] Fetching image…`)
-  const res = await fetch(imageUrl, {
-    headers: { 'User-Agent': 'Drivia/1.0 (https://github.com/lNeo0/drivia)' },
-  })
-  if (!res.ok) throw new Error(`HTTP ${res.status} fetching ${imageUrl}`)
-  const arrayBuffer = await res.arrayBuffer()
-  const sourceBuffer = Buffer.from(arrayBuffer)
+  console.log(`  [normalize] Downloading...`)
+  const response = await fetch(imageUrl, { signal: AbortSignal.timeout(20000) })
+  if (!response.ok) throw new Error(`Failed to fetch: ${response.status}`)
+  const inputBuffer = Buffer.from(await response.arrayBuffer())
+  console.log(`  [normalize] Downloaded ${(inputBuffer.length / 1024).toFixed(0)}KB`)
 
-  console.log(`  [normalize] Removing background (isolated process)…`)
-  const nobgBuffer = await tryRemoveBackground(imageUrl)
-  const workBuffer = nobgBuffer ?? sourceBuffer
-
-  console.log(`  [normalize] Trimming and resizing…`)
-  const trimmed = await sharp(workBuffer)
-    .trim({ threshold: nobgBuffer ? 10 : undefined })
+  const resizedForBg = await sharp(inputBuffer)
+    .resize(2000, 2000, { fit: 'inside', withoutEnlargement: true })
+    .jpeg({ quality: 92 })
     .toBuffer()
 
-  const fitW = Math.round(TARGET_W * FIT_PCT)
-  const fitH = Math.round(TARGET_H * FIT_PCT)
+  console.log(`  [normalize] Calling remove.bg...`)
+  const transparentBuffer = await removeBackground(resizedForBg)
 
-  const resized = await sharp(trimmed)
-    .resize(fitW, fitH, { fit: 'inside', withoutEnlargement: false })
+  const { data, info } = await sharp(transparentBuffer)
+    .raw()
+    .toBuffer({ resolveWithObject: true })
+
+  let minX = info.width, maxX = 0, minY = info.height, maxY = 0
+  const channels = info.channels
+
+  for (let y = 0; y < info.height; y++) {
+    for (let x = 0; x < info.width; x++) {
+      const alpha = data[(y * info.width + x) * channels + 3]
+      if (alpha > 20) {
+        if (x < minX) minX = x
+        if (x > maxX) maxX = x
+        if (y < minY) minY = y
+        if (y > maxY) maxY = y
+      }
+    }
+  }
+
+  const carWidth = maxX - minX
+  const carHeight = maxY - minY
+
+  if (carWidth < 50 || carHeight < 50) {
+    throw new Error('Car bounding box too small — remove.bg may have failed')
+  }
+
+  console.log(`  [normalize] Car bbox: ${carWidth}×${carHeight}px`)
+
+  const paddingX = Math.round(OUTPUT_WIDTH * PADDING_PERCENT)
+  const paddingY = Math.round(OUTPUT_HEIGHT * PADDING_PERCENT)
+  const targetCarWidth = OUTPUT_WIDTH - paddingX * 2
+  const targetCarHeight = OUTPUT_HEIGHT - paddingY * 2
+
+  const scaleX = targetCarWidth / carWidth
+  const scaleY = targetCarHeight / carHeight
+  const scale = Math.min(scaleX, scaleY)
+
+  const scaledCarWidth = Math.round(carWidth * scale)
+  const scaledCarHeight = Math.round(carHeight * scale)
+
+  const offsetX = Math.round((OUTPUT_WIDTH - scaledCarWidth) / 2)
+  const offsetY = Math.round((OUTPUT_HEIGHT - scaledCarHeight) / 2) + Math.round(OUTPUT_HEIGHT * 0.02)
+
+  const carCropped = await sharp(transparentBuffer)
+    .extract({
+      left: Math.max(0, minX - 5),
+      top: Math.max(0, minY - 5),
+      width: Math.min(carWidth + 10, info.width - minX),
+      height: Math.min(carHeight + 10, info.height - minY),
+    })
+    .resize(scaledCarWidth, scaledCarHeight, { fit: 'fill' })
     .toBuffer()
 
-  const { width: rW = fitW, height: rH = fitH } = await sharp(resized).metadata()
-
-  const left = Math.round((TARGET_W - rW) / 2)
-  const topBase = Math.round((TARGET_H - rH) / 2)
-  const top = Math.min(Math.round(topBase + TARGET_H * VERTICAL_OFFSET_PCT), TARGET_H - rH)
-
-  console.log(`  [normalize] Compositing ${rW}×${rH} onto ${TARGET_W}×${TARGET_H} dark canvas…`)
-  const final = await sharp({
+  const finalImage = await sharp({
     create: {
-      width: TARGET_W,
-      height: TARGET_H,
-      channels: 4,
+      width: OUTPUT_WIDTH,
+      height: OUTPUT_HEIGHT,
+      channels: 3,
       background: BG_COLOR,
     },
   })
-    .composite([{ input: resized, left, top }])
-    .webp({ quality: 90 })
+    .composite([
+      {
+        input: carCropped,
+        left: offsetX,
+        top: Math.max(0, offsetY),
+        blend: 'over',
+      },
+    ])
+    .webp({ quality: 92, effort: 4 })
     .toBuffer()
 
-  return final
+  console.log(`  [normalize] Final WebP: ${(finalImage.length / 1024).toFixed(0)}KB`)
+  return finalImage
 }

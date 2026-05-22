@@ -17,6 +17,7 @@ export async function uploadCarImage(carId: string, buffer: Buffer): Promise<str
   const blob = await put(`car-images/${carId}.webp`, buffer, {
     access: 'public',
     contentType: 'image/webp',
+    allowOverwrite: true,
   })
 
   console.log(`  [storage] Saving URL to DB…`)

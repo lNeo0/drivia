@@ -5,10 +5,8 @@
 
 ## 🔴 P0 — Corrections immédiates (quick wins, <2h chacun)
 
-### 1. ⚠️ Retraitement images pipeline (remove.bg + seuil 75)
-Images actuelles = Wikimedia brutes sans bg removal. Seuil trop bas (60→75).
-Solution : remove.bg API (50 img/mois gratuit) + forceReprocess sur les 9 voitures.
-**Prérequis : clé API remove.bg dans .env.local**
+### 1. ✅ Retraitement images pipeline (remove.bg + scoring amélioré) — Session 8
+remove.bg API intégrée dans `normalize.ts`, nouveau prompt scoring détaillé (malus tuning/angles/coupe), seuil 68 avec fallback 40. 9/9 voitures retraitées avec fond supprimé.
 
 ### 2. Grille 2 colonnes sur l'accueil
 La section "Meilleures fiabilités" passe de liste pleine largeur verticale à une grille 2 colonnes.
@@ -123,4 +121,4 @@ Maquette disponible : `_docs/drivia-da-D-plus.html`
 
 ---
 
-*Dernière mise à jour : Session 6 — Pipeline images automatique (9/9 voitures)*
+*Dernière mise à jour : Session 8 — Retraitement images remove.bg (9/9 voitures, fond supprimé)*

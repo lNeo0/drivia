@@ -47,13 +47,12 @@ Golf 7, Clio 4, 308 II, Yaris III, BMW Série 3 F30, Sandero II, Fiesta 7, C3 II
 - `scripts/seed.ts` — Script de seed (tsx scripts/seed.ts)
 - `src/lib/pipeline/types.ts` — Types pipeline (CarImageCandidate, ScoredCandidate, PipelineResult)
 - `src/lib/pipeline/search.ts` — Recherche Wikimedia Commons (10 images/requête, 2 requêtes/voiture)
-- `src/lib/pipeline/score.ts` — Scoring Claude Vision Haiku (base64, batch 3, seuil 60)
-- `src/lib/pipeline/normalize.ts` — Normalisation Sharp (1600×900, #0D0D0D, WebP 90)
-- `src/lib/pipeline/storage.ts` — Upload Vercel Blob + upsert CarImage Prisma
+- `src/lib/pipeline/score.ts` — Scoring Claude Vision Haiku (base64, batch 3, seuil 68, fallback 40)
+- `src/lib/pipeline/normalize.ts` — remove.bg API + Sharp crop bounding box (1600×900, #0D0D0D, WebP 92)
+- `src/lib/pipeline/storage.ts` — Upload Vercel Blob (allowOverwrite) + upsert CarImage Prisma
 - `src/lib/pipeline/pipeline.ts` — Orchestrateur (processCar / processAllCars)
 - `src/app/api/process-image/route.ts` — Route POST protégée PIPELINE_SECRET
-- `scripts/process-all-cars.ts` — Script CLI pour traiter les 9 voitures
-- `scripts/_bg-remove-worker.ts` — Worker isolé background removal (segfault-safe)
+- `scripts/process-all-cars.ts` — Script CLI pour traiter les 9 voitures (forceReprocess=true)
 - `src/lib/reliability.ts` — Helper getReliabilityColor(note)
 - `src/lib/score.ts` — Helper getScoreAchat(voiture)
 - `src/lib/carImage.ts` — Helper getCarImageUrl() → /api/car-image (proxy Vehicle Imagery)
@@ -137,24 +136,10 @@ Golf 7, Clio 4, 308 II, Yaris III, BMW Série 3 F30, Sandero II, Fiesta 7, C3 II
 
 ### 🔄 P0 restante
 1. ✅ Photos sans watermark (Vehicle Imagery API)
-2. ⬜ **Images pipeline à retraiter** (voir bloc ⚠️ ci-dessous)
+2. ✅ **Images pipeline retraitées avec remove.bg** (Session 8)
 3. ⬜ Grille 2 colonnes sur la page d'accueil + lien "Voir les 9 voitures →"
 4. ⬜ Bloc "Verdict rapide" en haut de chaque fiche motorisation
 5. ⬜ Bouton "Préparer ma visite →" sur la fiche voiture
-
-### ⚠️ Problème actif — Images pipeline à retraiter
-Les images affichées sont les images Wikimedia **brutes** sans suppression de fond.
-Causes :
-- `@imgly/background-removal-node` segfault Windows/WSL2 → fallback silencieux sans bg removal
-- Seuil scoring trop bas (60/100) → voitures de dos/côté ont passé le filtre
-
-**Plan de reprise (prochaine session) :**
-1. Créer compte **remove.bg** → clé API gratuite (50 images/mois)
-2. Ajouter `REMOVE_BG_API_KEY` dans `.env.local`
-3. Mettre à jour `src/lib/pipeline/normalize.ts` pour appeler remove.bg API
-4. Relever seuil score à **75/100** dans `src/lib/pipeline/score.ts`
-5. Relancer `npx tsx scripts/process-all-cars.ts` avec `forceReprocess: true`
-→ Claude Code a le prompt prêt à générer dès que la clé remove.bg est disponible
 
 ### 📋 Roadmap complète (voir drivia-roadmap.md)
 
@@ -223,4 +208,4 @@ https://github.com/lNeo0/drivia
 
 ---
 
-*Dernière mise à jour : Session 7 — Images Vercel Blob branchées dans les composants (/, /voitures, /voiture/[id]) — ⚠️ retraitement images nécessaire (remove.bg + seuil 75)*
+*Dernière mise à jour : Session 8 — Retraitement images 9/9 avec remove.bg + scoring Claude Vision amélioré (seuil 68, nouveau prompt détaillé)*
