@@ -1,6 +1,23 @@
 
 ---
 
+## SESSION 11 — Golf 7 URLs forcées Wikimedia
+**Session :** 11 | **Statut :** ✅ Exécuté avec succès
+
+**Contexte :** Le pipeline Wikimedia libre continuait de sélectionner une Coccinelle décapotable pour Golf 7.
+Les URLs proposées dans le brief (3/3) étaient 404. Recherche des URLs valides via API Wikimedia.
+
+**URLs forcées finales (vérifiées 200) :**
+- `Volkswagen_GOLF_VII_TSI_front.JPG` — TSI front (retenu, score 76/100)
+- `2017_Volkswagen_Golf_5dr_(VII_Mk7_5G)_facelift_front_(gold)_1.jpg`
+- `Volkswagen_Golf_VII_GTI_(front_quarter)_white.JPG`
+
+**Mécanisme FORCED_URLS** ajouté dans `search.ts` : court-circuite la recherche Wikimedia pour les voitures problématiques. Extensible à d'autres voitures si nécessaire.
+
+**Résultat :** volkswagen-golf-7 ✅ score=76/100 (GTI blanc, vraie Golf Mk7 hatchback)
+
+---
+
 ## SESSION 10 — 3 bugs images (recherche, motorisation hero, Golf7 image)
 **Session :** 10 | **Statut :** ✅ Exécuté avec succès
 

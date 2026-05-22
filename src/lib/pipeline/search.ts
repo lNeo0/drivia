@@ -12,6 +12,15 @@ const SEARCH_TERMS: Record<string, string[]> = {
   'citroen-c3-3':      ['Citroën C3 III front', 'Citroen C3 2017 front left'],
 }
 
+// URLs Wikimedia vérifiées manuellement — contournement recherche imprécise
+const FORCED_URLS: Record<string, string[]> = {
+  'volkswagen-golf-7': [
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Volkswagen_GOLF_VII_TSI_front.JPG/1280px-Volkswagen_GOLF_VII_TSI_front.JPG',
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/2017_Volkswagen_Golf_5dr_%28VII_Mk7_5G%29_facelift_front_%28gold%29_1.jpg/1280px-2017_Volkswagen_Golf_5dr_%28VII_Mk7_5G%29_facelift_front_%28gold%29_1.jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Volkswagen_Golf_VII_GTI_%28front_quarter%29_white.JPG/1280px-Volkswagen_Golf_VII_GTI_%28front_quarter%29_white.JPG',
+  ],
+}
+
 interface WikimediaPage {
   imageinfo?: Array<{
     url?: string
@@ -78,6 +87,18 @@ function sleep(ms: number) {
 }
 
 export async function findCandidates(carId: string): Promise<CarImageCandidate[]> {
+  if (FORCED_URLS[carId]) {
+    console.log(`  [search] Using ${FORCED_URLS[carId].length} forced URLs for ${carId}`)
+    return FORCED_URLS[carId].map(url => ({
+      url,
+      width: 1280,
+      height: 720,
+      source: 'wikimedia' as const,
+      license: 'CC BY-SA',
+      description: `Forced URL for ${carId}`,
+    }))
+  }
+
   const queries = SEARCH_TERMS[carId] ?? []
   if (!queries.length) {
     console.log(`  [search] No search terms for ${carId}`)

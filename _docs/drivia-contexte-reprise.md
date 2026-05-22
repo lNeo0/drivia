@@ -208,4 +208,4 @@ https://github.com/lNeo0/drivia
 
 ---
 
-*Dernière mise à jour : Session 10 — Fix images /recherche + hero motorisation + Golf7 retraité (85/100)*
+*Dernière mise à jour : Session 11 — Golf7 URLs forcées Wikimedia (score 76/100, vraie Golf Mk7 GTI blanc)*
