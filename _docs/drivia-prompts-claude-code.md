@@ -1,6 +1,24 @@
 
 ---
 
+## SESSION 9 — Bug 404 motorisations + retraitement Golf 7 / Clio 4
+**Session :** 9 | **Statut :** ✅ Exécuté avec succès
+
+**Bug 404 motorisations :**
+Cause : cache Turbopack corrompu (.next/dev). Le routing Next.js 16 résolvait `/_not-found` alors que les données étaient correctes (getVoitureEtMotorisation retournait voiture+motorisation trouvés).
+Fix : édition du page.tsx a déclenché un hot-reload Turbopack → recompilation → 200 OK.
+Note : le slug BMW M3 dans les exemples du brief (`40-v8-420ch`) était incorrect → vrai slug data.ts : `v8-s65-420ch`.
+
+**Retraitement Golf 7 et Clio 4 :**
+Les images S8 étaient une décapotable noire (Golf 7) et une photo capot ouvert (Clio 4).
+Fix : nouveaux SEARCH_TERMS dans `search.ts` avec termes plus spécifiques ("hatchback 2013", "exterior front").
+
+Résultats :
+- volkswagen-golf-7 ✅ score=83 (vraie Golf Mk7 hatchback), remove.bg OK
+- renault-clio-4 ✅ score=87 (Clio IV hatchback propre), remove.bg OK
+
+---
+
 ## PROMPT BUG-FIX — Boucle rechargement HMR (ThemeProvider)
 **Session :** 4 | **Statut :** ✅ Exécuté avec succès
 
