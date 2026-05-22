@@ -208,4 +208,4 @@ https://github.com/lNeo0/drivia
 
 ---
 
-*Dernière mise à jour : Session 8 — Retraitement images 9/9 avec remove.bg + scoring Claude Vision amélioré (seuil 68, nouveau prompt détaillé)*
+*Dernière mise à jour : Session 10 — Fix images /recherche + hero motorisation + Golf7 retraité (85/100)*

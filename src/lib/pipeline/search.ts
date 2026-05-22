@@ -1,7 +1,7 @@
 import type { CarImageCandidate } from './types'
 
 const SEARCH_TERMS: Record<string, string[]> = {
-  'volkswagen-golf-7': ['Volkswagen Golf VII hatchback 2013', 'VW Golf 7 GTI front three quarter', 'Volkswagen Golf Mk7 exterior front'],
+  'volkswagen-golf-7': ['Volkswagen Golf VII 2013 hatchback', 'VW Golf Mk7 2014 front exterior', 'Volkswagen Golf 7 2015 five door'],
   'renault-clio-4':    ['Renault Clio IV hatchback 2013', 'Renault Clio 4 front exterior', 'Renault Clio 2013 front three quarter'],
   'peugeot-308-2':     ['Peugeot 308 II front', 'Peugeot 308 2014 front'],
   'toyota-yaris-3':    ['Toyota Yaris III front', 'Toyota Yaris 2012 front left'],

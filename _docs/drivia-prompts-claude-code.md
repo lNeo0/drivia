@@ -1,6 +1,25 @@
 
 ---
 
+## SESSION 10 — 3 bugs images (recherche, motorisation hero, Golf7 image)
+**Session :** 10 | **Statut :** ✅ Exécuté avec succès
+
+**Bug 1 — Page /recherche sans images :**
+`recherche/page.tsx` n'appelait pas `getAllCarImagesFromDb()` → pas de `imageUrls` passé à `FilterPanel`.
+Fix : import + appel + prop `imageUrls` ajoutés.
+
+**Bug 2 — Fiches motorisation sans image hero :**
+`voiture/[id]/[motorisationSlug]/page.tsx` n'appelait pas `getCarImageFromDb()`.
+Fix : import + `const imageUrl = await getCarImageFromDb(voiture.id)` + `imageUrl={imageUrl ?? undefined}` sur `HeroImage`.
+
+**Bug 3 — Golf 7 encore mauvaise image :**
+Nouveaux SEARCH_TERMS dans `search.ts` : "Golf VII 2013 hatchback", "Golf Mk7 2014 front exterior", "Golf 7 2015 five door".
+Résultat : score 85/100, bonne Golf Mk7.
+
+**Fix bonus :** `normalize.ts` — `new Blob([imageBuffer])` remplacé par `new Blob([new Uint8Array(imageBuffer)])` pour corriger erreur TypeScript.
+
+---
+
 ## SESSION 9 — Bug 404 motorisations + retraitement Golf 7 / Clio 4
 **Session :** 9 | **Statut :** ✅ Exécuté avec succès
 

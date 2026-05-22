@@ -6,7 +6,7 @@ const OUTPUT_HEIGHT = 900
 const PADDING_PERCENT = 0.08
 
 async function removeBackground(imageBuffer: Buffer): Promise<Buffer> {
-  const blob = new Blob([imageBuffer], { type: 'image/jpeg' })
+  const blob = new Blob([new Uint8Array(imageBuffer)], { type: 'image/jpeg' })
   const form = new FormData()
   form.append('image_file', blob, 'car.jpg')
   form.append('size', 'auto')

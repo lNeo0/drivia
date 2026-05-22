@@ -2,6 +2,7 @@ import NavBar from '@/components/NavBar'
 import SearchBar from '@/components/SearchBar'
 import FilterPanel from '@/components/FilterPanel'
 import { voitures } from '@/lib/data'
+import { getAllCarImagesFromDb } from '@/lib/carImageDb'
 
 export default async function RecherchePage({
   searchParams,
@@ -9,6 +10,7 @@ export default async function RecherchePage({
   searchParams: Promise<{ q?: string }>
 }) {
   const { q = '' } = await searchParams
+  const imageUrls = await getAllCarImagesFromDb()
 
   return (
     <div className="min-h-screen bg-base text-primary">
@@ -24,6 +26,7 @@ export default async function RecherchePage({
           defaultQuery={q}
           layout="list"
           defaultSort="pertinence"
+          imageUrls={imageUrls}
         />
       </div>
     </div>

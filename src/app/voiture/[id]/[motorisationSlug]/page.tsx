@@ -9,6 +9,7 @@ import AnchorNav from '@/components/AnchorNav'
 import type { AnchorItem } from '@/components/AnchorNav'
 import ChecklistInteractive from '@/components/ChecklistInteractive'
 import { getVoitureEtMotorisation, getAllMotorisationParams } from '@/lib/data'
+import { getCarImageFromDb } from '@/lib/carImageDb'
 
 export async function generateStaticParams() {
   return getAllMotorisationParams()
@@ -63,6 +64,8 @@ export default async function MotorisationPage({
   const { voiture, motorisation } = getVoitureEtMotorisation(id, motorisationSlug)
   if (!voiture || !motorisation) notFound()
 
+  const imageUrl = await getCarImageFromDb(voiture.id)
+
   const defaultBoiteSlug =
     motorisation.boites.find((b) => b.slug === boiteSlug)?.slug ?? motorisation.boites[0].slug
 
@@ -92,7 +95,7 @@ export default async function MotorisationPage({
 
       {/* Hero */}
       <div className="relative h-[160px] md:h-[200px]">
-        <HeroImage marque={voiture.marque} modele={voiture.modele} anneeDebut={voiture.anneeDebut} />
+        <HeroImage marque={voiture.marque} modele={voiture.modele} anneeDebut={voiture.anneeDebut} imageUrl={imageUrl ?? undefined} />
         <div className="absolute inset-0 flex flex-col justify-end pointer-events-none">
           <div className="max-w-3xl mx-auto w-full px-6 pb-6 pointer-events-auto">
             <Link
